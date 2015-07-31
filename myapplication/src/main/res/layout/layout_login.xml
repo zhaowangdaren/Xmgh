@@ -1,0 +1,160 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivityLogin">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--Logo-->
+        <ImageView
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:id="@+id/imageView_login_logo"
+            android:src="@drawable/ic_launcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- UserName-->
+        <LinearLayout
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:textAppearance="@style/CustomeText"
+                android:text="@string/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:ems="10"
+                android:id="@+id/editText_username_phone_number"
+                android:layout_weight="1.04"
+                android:hint="@string/phone_number"
+                android:singleLine="true"
+                android:textColorHighlight="@color/editTextHightLight"
+                android:textColor="@color/editTextHightLight"
+                android:textColorHint="@color/textColorHint"
+                />
+
+        </LinearLayout>
+
+        <!-- Password-->
+        <LinearLayout
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textAppearance="@style/CustomeText"
+                android:text="@string/password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/editText_password"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:textColor="#000"
+                android:textColorHighlight="@color/editTextHightLight"
+                android:hint="@string/password"
+                android:textColorHint="@color/textColorHint"
+                />
+        </LinearLayout>
+
+        <!--forget password-->
+        <TextView
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:textColor="@color/offical_blue_dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forget_password"
+            android:id="@+id/textView_forget_password"
+            android:layout_gravity="right" />
+
+        <!--Login button-->
+        <Button
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/button_phone_login"
+            android:background="@drawable/button_style" />
+
+
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/view_margin"
+            android:gravity="center_horizontal"
+            android:id="@+id/textView_sigin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sigin"
+            android:textColor="@color/holo_blue_light"/>
+
+
+        <!-- Third Login-->
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayout_qq_login"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/ic_qq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textColor="@color/gray"
+                    android:text="@string/qq_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_weibo_login"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_gravity="center_horizontal"
+                    android:src="@mipmap/weibo_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:textColor="@color/gray"
+                    android:text="@string/weibo_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:background="#e0e0e0"
+    android:layout_height="match_parent" tools:context="com.example.ustc_pc.fragment.MainFragment3">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+    <!-- TODO: Update blank fragment layout -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--预测分数区域-->
+            <LinearLayout
+                android:id="@+id/linearLayout_assessment_score"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/grade_bg_heigh"
+                android:background="@color/offical_blue"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/predict_grade"
+                    android:textColor="@color/white"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textView_grade"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text=" ?"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/grade_font_size"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:text="@string/cn_grade"
+                        android:textColor="@color/white"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+            <!--个性化-->
+            <RelativeLayout
+                android:id="@+id/relativeLayout_individuation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/click_style_bg_rounded_rectangle_white_gray"
+                android:layout_margin="@dimen/view_margin"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:text="@string/individuation_content"
+                    android:layout_margin="@dimen/view_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/imageView_individuation"
+                    android:layout_toStartOf="@+id/imageView_individuation" />
+                <ImageView
+                    android:id="@+id/imageView_individuation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/bg_percent_paper"/>
+            </RelativeLayout>
+
+            <ListView
+                android:background="@drawable/bg_rounded_rectangle_white"
+                android:layout_margin="@dimen/view_margin"
+                android:id="@+id/listView_knoweledge_tree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></ListView>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

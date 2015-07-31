@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivitySetting">
+
+    <android.support.v7.widget.Toolbar
+        android:elevation="10dp"
+        android:id="@+id/my_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/toolbar_color"
+        android:titleTextAppearance="?android:attr/text"
+        android:layout_alignParentTop="true"
+        />
+
+    <TextView
+        android:padding="@dimen/activity_horizontal_margin"
+        android:id="@+id/textView_check_update"
+        android:text="@string/check_update"
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"/>
+
+    <TextView
+        android:padding="@dimen/activity_horizontal_margin"
+        android:id="@+id/textView_about_app"
+        android:text="@string/about"
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/textView_check_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"/>
+</RelativeLayout>

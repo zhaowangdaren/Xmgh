@@ -1,0 +1,63 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!--<item name="android:windowActionBar">false</item>-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--&lt;!&ndash;Control Title color and menu color&ndash;&gt;-->
+        <item name="android:textColor">#000</item>
+        <item name="android:textColorPrimary">#fff</item>
+
+        <!--<item name="android:actionMenuTextColor">#fff</item>-->
+        <!--<item name="actionMenuTextColor">#fff</item>-->
+
+        <!--Control actionBar background color-->
+        <!--<item name="android:colorPrimaryDark">@color/offical_blue</item>-->
+        <!--<item name="colorPrimaryDark">@color/offical_blue</item>-->
+
+        <!--&lt;!&ndash;Control logo background color&ndash;&gt;-->
+        <!--<item name="android:colorControlNormal">#fff</item>-->
+        <!--<item name="colorControlNormal">#fff</item>-->
+
+        <!--&lt;!&ndash;全局控制高亮颜色，如点击后效果&ndash;&gt;-->
+        <!--<item name="android:colorControlHighlight">@color/blue</item>-->
+        <!--<item name="colorControlHighlight">@color/blue</item>-->
+
+        <!--&lt;!&ndash;Control shadow&ndash;&gt;-->
+        <!--<item name="android:elevation">2dp</item>-->
+        <!--<item name="elevation">2dp</item>-->
+
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="android:colorAccent">@color/holo_blue_dark</item>
+        <item name="colorAccent">@color/holo_blue_dark</item>
+
+        <!--<item name="android:windowAnimationStyle">@style/ActivitySwitchAnimation</item>-->
+    </style>
+
+    <style name="ActivitySwitchAnimation">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_in</item>
+        <!--<item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>-->
+        <!--<item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>-->
+        <!--<item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>-->
+    </style>
+
+    <style name="AppThemeDark" parent="android:Theme" />
+
+    <style name="AppThemeDark.FullScreen" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+    <style name="PhotoGridLayout">
+        <item name="android:drawSelectorOnTop">true</item>
+        <item name="android:listSelector">@drawable/photogrid_list_selector</item>
+    </style>
+
+    <style name="ActivityPaperTheme" parent="AppTheme">
+        <item name="android:textColorPrimary">#fff</item>
+    </style>
+
+    <style name="CustomeText" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/primary_text</item>
+        <item name="android:textColor">#616161</item>
+    </style>
+
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:paddingTop="@dimen/view_margin_half"
+    android:paddingBottom="@dimen/view_margin_half">
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:id="@+id/imageView_tree_open_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:src="@android:drawable/presence_online"
+        android:layout_alignBottom="@+id/textView_knowledge_point"
+        android:layout_alignTop="@+id/textView_knowledge_point" />
+
+    <TextView
+        android:layout_marginLeft="@dimen/view_margin"
+        android:id="@+id/textView_knowledge_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/imageView_tree_open_close"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:text="Knowledege Point"
+        android:layout_toLeftOf="@+id/imageView_write"
+        android:layout_toStartOf="@+id/imageView_write"
+        android:layout_alignBottom="@+id/imageView_write"
+        android:layout_alignTop="@+id/imageView_write" />
+
+    <ImageView
+        android:id="@+id/imageView_write"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_pencil"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"/>
+</RelativeLayout>

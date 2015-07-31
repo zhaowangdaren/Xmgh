@@ -1,0 +1,58 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin_half">8dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin_half">8dp</dimen>
+
+    <dimen name="view_margin">5dp</dimen>
+    <dimen name="view_margin_half">3dp</dimen>
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+         https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="half_navigation_drawer_width">120dp</dimen>
+
+    <dimen name="grade_font_size">90sp</dimen>
+    <dimen name="grade_bg_heigh">180dp</dimen>
+    
+    <dimen name="tree_indention">10dp</dimen>
+    <dimen name="option_size">30dp</dimen>
+    
+    <dimen name="score_percent_diameter">200dp</dimen>
+    <dimen name="score_percent_radius">100dp</dimen>
+    <dimen name="score_percent_inner_radius">50dp</dimen>
+    <dimen name="text_size_score">25sp</dimen>
+
+    <dimen name="new_message">20dp</dimen>
+
+    <dimen name="head_photo_size">50dp</dimen>
+    <dimen name="paper_percent_size">50dp</dimen>
+
+    <dimen name="mm_up_arrow_margin">-16dp</dimen>
+    <dimen name="option_inner_text_size">20sp</dimen>
+    <dimen name="select_photo">100dp</dimen>
+
+    <dimen name="image_thumbnail_size">100dp</dimen>
+    <dimen name="image_thumbnail_spacing">2dp</dimen>
+    <dimen name="answer_sheet_option_size">25dp</dimen>
+
+    <dimen name="circular_progress_radius">50dp</dimen>
+    <dimen name="drawable_ring_width">4dip</dimen>
+    
+    
+    <dimen name="status_bar">24dp</dimen>
+    <dimen name="toolbar">56dp</dimen>
+    <dimen name="space_between_content_areas">8dp</dimen>
+    <dimen name="list_item_height">72dp</dimen>
+    <dimen name="screen_edge_left_and_right_margins">16dp</dimen>
+    <dimen name="icon_or_avatar_left_margin">72dp</dimen>
+    <dimen name="subtitle_height">48dp</dimen>
+    <dimen name="account_menu_and_list_item">48dp</dimen>
+    <dimen name="touch_target_height">48dp</dimen>
+    <dimen name="button_height">36dp</dimen>
+
+
+    <!--Text Size-->
+    <dimen name="primary_text">24sp</dimen>
+    <dimen name="subtext">14sp</dimen>
+</resources>

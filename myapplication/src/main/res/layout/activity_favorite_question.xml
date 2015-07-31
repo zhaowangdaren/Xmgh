@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivityFavoriteBook">
+
+
+    <android.support.v7.widget.Toolbar
+        android:elevation="4dp"
+        android:id="@+id/my_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/toolbar_color"
+        android:titleTextAppearance="?android:attr/text"
+        />
+
+    <ListView
+        android:paddingLeft="@dimen/activity_horizontal_margin_half"
+        android:paddingRight="@dimen/activity_horizontal_margin_half"
+        android:paddingTop="@dimen/activity_vertical_margin_half"
+        android:paddingBottom="@dimen/activity_vertical_margin_half"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView_favorite_questions_kp" />
+</RelativeLayout>

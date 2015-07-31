@@ -1,0 +1,158 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivityPersonal">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:elevation="10dp"
+            android:id="@+id/my_toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/toolbar_color"
+            android:titleTextAppearance="?android:attr/text"
+            />
+
+        <!-- head -->
+        <RelativeLayout
+            android:id="@+id/relativeLayout_personal_head"
+            android:padding="@dimen/view_margin"
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.example.ustc_pc.myapplication.imageView.CircleImageView
+                android:id="@+id/imageView_personal_head"
+                android:background="@drawable/bg_percent_paper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <LinearLayout
+                android:padding="@dimen/view_margin"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imageView_personal_head"
+                android:layout_toEndOf="@+id/imageView_personal_head">
+
+                <TextView
+                    android:id="@+id/textView_personal_nick_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="name"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textView_personal_account_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gray"
+                    android:hint="number" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/imageView_personal_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_ab_go_holo_light_am"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+        <!--chat-->
+        <!--<RelativeLayout-->
+            <!--android:padding="@dimen/view_margin"-->
+            <!--android:id="@+id/relativeLayout_personal_chat"-->
+            <!--android:background="#fff"-->
+            <!--android:layout_marginTop="@dimen/view_margin"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<ImageView-->
+                <!--android:src="@drawable/ic_chat"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/imageView_personal_message_icon"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_alignParentLeft="true"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/textView_personal_chat"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/chat" android:layout_centerVertical="true"-->
+                <!--android:layout_toRightOf="@+id/imageView_personal_message_icon"-->
+                <!--android:layout_toEndOf="@+id/imageView_personal_message_icon" />-->
+
+
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView_personal_chat_go_icon"-->
+                <!--android:src="@drawable/ic_ab_go_holo_light_am"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/textView_personal_new_message"-->
+                <!--android:text="12"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:background="@drawable/bg_new_message"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_toLeftOf="@+id/imageView_personal_chat_go_icon"-->
+                <!--android:layout_toStartOf="@+id/imageView_personal_chat_go_icon"-->
+                <!--android:visibility="gone"-->
+                <!--/>-->
+        <!--</RelativeLayout>-->
+
+        <!--Setting-->
+        <RelativeLayout
+            android:padding="@dimen/view_margin"
+            android:id="@+id/relativeLayout_personal_setting"
+            android:background="#fff"
+            android:layout_marginTop="@dimen/view_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@android:drawable/ic_menu_manage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageBiew_personal_set"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:text="@string/action_settings"
+                android:id="@+id/textView_pseronal_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/imageBiew_personal_set"
+                android:layout_toEndOf="@+id/imageBiew_personal_set" />
+            <!--<ImageView-->
+                <!--android:id="@+id/imageView_personal_set_go_icon"-->
+                <!--android:src="@drawable/ic_ab_go_holo_light_am"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true" />-->
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

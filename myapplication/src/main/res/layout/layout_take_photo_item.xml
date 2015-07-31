@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="4dp">
+
+    <RelativeLayout
+        android:layout_width="@dimen/select_photo"
+        android:layout_height="@dimen/select_photo">
+        <com.example.ustc_pc.myapplication.heightPerformanceImageView.RecyclingImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_centerInParent="true"
+            android:src="@android:drawable/ic_menu_camera" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/take_photo"
+            android:id="@+id/textView2"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:textColor="#e0ffffff"/>
+    </RelativeLayout>
+</RelativeLayout>

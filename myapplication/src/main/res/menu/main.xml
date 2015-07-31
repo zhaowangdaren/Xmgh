@@ -1,0 +1,44 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/action_settings" android:title="@string/action_more"
+        android:orderInCategory="100" app:showAsAction="always"
+        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        >
+        <!--<menu >-->
+            <!--<item-->
+                <!--android:id = "@+id/action_wrong_book"-->
+                <!--app:showAsAction="always"-->
+                <!--android:icon="@drawable/ic_error_book_dark"-->
+                <!--android:title="@string/wrong_book"/>-->
+            <!--<item-->
+                <!--android:id = "@+id/action_wrong_test"-->
+                <!--app:showAsAction="always"-->
+                <!--android:icon="@drawable/ic_error_test_dark"-->
+                <!--android:title="@string/wrong_test"/>-->
+            <!--<item-->
+                <!--android:id = "@+id/action_test_histroy"-->
+                <!--app:showAsAction="always"-->
+                <!--android:icon="@drawable/ic_test_history_dark"-->
+                <!--android:title="@string/test_history"/>-->
+            <!--<item-->
+                <!--android:id = "@+id/action_histroy_zhenti"-->
+                <!--app:showAsAction="always"-->
+                <!--android:icon="@drawable/ic_zhen_ti_dark"-->
+                <!--android:title="@string/history_zhenti"/>-->
+            <!--<item-->
+
+                <!--android:id = "@+id/action_note_question"-->
+                <!--app:showAsAction="always"-->
+                <!--android:icon="@drawable/ic_note_book_dark"-->
+                <!--android:title="@string/note_question"/>-->
+            <!--<item-->
+                <!--android:id="@+id/action_favorite_question"-->
+                <!--app:showAsAction="always"-->
+                <!--android:icon="@drawable/ic_favorite_dark"-->
+                <!--android:title="@string/action_favorite_question"/>-->
+
+        <!--</menu>-->
+    </item>
+</menu>

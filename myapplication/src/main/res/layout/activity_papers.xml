@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivityPapers">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/toolbar_color"
+        android:titleTextAppearance="?android:attr/text"
+        />
+
+    <!--No Network-->
+    <LinearLayout
+        android:layout_below="@+id/relativeLayout_papers_title"
+        android:id="@+id/linearLayout_no_network"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_network"/>
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:text="@string/no_network_click_refresh"
+            android:textColor="@color/gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:id="@+id/relativeLayout_papers_title">
+
+        <TextView
+            android:id="@+id/textView_knowledge_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="5dp"
+            android:text="Knowledge Point Title"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_papers_progress"
+            android:orientation="vertical"
+            android:layout_width="@dimen/paper_percent_size"
+            android:layout_height="@dimen/paper_percent_size"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_percent_paper"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:padding="@dimen/activity_vertical_margin_half"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relativeLayout_papers_title">
+
+            <ListView
+                android:id="@+id/listView_papers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerHeight="@dimen/view_margin"
+                android:divider="#00000000"
+                >
+            </ListView>
+
+
+
+        </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_drawable"
+        android:layout_width="@dimen/circular_progress_radius"
+        android:layout_height="@dimen/circular_progress_radius"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp" />
+</RelativeLayout>

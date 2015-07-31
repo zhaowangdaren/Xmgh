@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval" >
+    <stroke android:color="@color/holo_blue_light"
+        android:dashWidth="2dp" android:dashGap="3dp"
+        android:width="1dp"/>
+    <!--
+    <solid android:color="#33ccff"/>
+    -->
+    <!--圆或椭圆-->
+    <size android:width="50dp"
+        android:height="50dp"/>
+</shape>

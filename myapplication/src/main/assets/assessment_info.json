@@ -1,0 +1,27 @@
+{
+    "sum_assessment_score":60,
+    "first_kp_num":10,
+    "done_kps":[
+            {
+            "kp_id":"1100",
+            "kp_name":"已做知识点（一级）名",
+            "assessment_score":0.2
+            },
+            {
+            "kp_id":"1200",
+            "kp_name":"已做知识点（一级）名",
+             "assessment_score":0.6
+            },
+            {
+            "kp_id":"1300",
+             "kp_name":"已做知识点（一级）名",
+             "assessment_score":0.8
+            },
+            {
+             "kp_id":"1300",
+             "kp_name":"已做知识点（一级）名",
+              "assessment_score":1.0
+             }
+        ],
+    "general_comment":""
+}

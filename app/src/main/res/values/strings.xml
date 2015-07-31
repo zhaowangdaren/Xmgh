@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Xmgh</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="left_menu_open">Open Left menu</string>
+    <string name="left_menu_close">Close Left Menu</string>
+    <string name="title_activity_recycle_view">RecycleViewActivity</string>
+</resources>

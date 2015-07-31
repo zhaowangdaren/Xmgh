@@ -1,0 +1,142 @@
+{
+    "courses": [
+        {
+            "id": 1,
+            "name": "英语一",
+            "knowledgePoints": [
+                {
+                    "id": "1100",
+                    "name": "知识点名1100",
+                    "level": 1,
+                    "fatherKP_id": -1,
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "1110",
+                    "name": "知识点名1110",
+                    "level": 2,
+                    "fatherKP_id": "1100",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "1120",
+                    "name": "知识点名1120",
+                    "level": 2,
+                    "fatherKP_id": "1100",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "1121",
+                    "name": "知识点名1121",
+                    "level": 3,
+                    "fatherKP_id": "1120",
+                    "hasChild": false,
+                    "isExpand": false
+                },
+                {
+                    "id": "1200",
+                    "name": "知识点名1200",
+                    "level": 1,
+                    "fatherKP_id": -1,
+                    "hasChild": true,
+                    "isExpand": false
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "英语二",
+            "knowledgePoints": [
+                {
+                    "id": "2100",
+                    "name": "知识点名2100",
+                    "level": 1,
+                    "fatherKP_id": -1,
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "2110",
+                    "name": "知识点名2110",
+                    "level": 2,
+                    "fatherKP_id": "2100",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "2120",
+                    "name": "知识点名2120",
+                    "level": 2,
+                    "fatherKP_id": "2100",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "2121",
+                    "name": "知识点名2121",
+                    "level": 3,
+                    "fatherKP_id": "2120",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "2200",
+                    "name": "知识点名2200",
+                    "level": 1,
+                    "fatherKP_id": -1,
+                    "hasChild": true,
+                    "isExpand": false
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "政治",
+            "knowledgePoints": [
+                {
+                    "id": "3100",
+                    "name": "知识点名3100",
+                    "level": 1,
+                    "fatherKP_id": -1,
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "3110",
+                    "name": "知识点名3110",
+                    "level": 2,
+                    "fatherKP_id": "3100",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "3120",
+                    "name": "知识点名3120",
+                    "level": 2,
+                    "fatherKP_id": "3100",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "3121",
+                    "name": "知识点名3121",
+                    "level": 3,
+                    "fatherKP_id": "3120",
+                    "hasChild": true,
+                    "isExpand": false
+                },
+                {
+                    "id": "3200",
+                    "name": "知识点名3200",
+                    "level": 1,
+                    "fatherKP_id": -1,
+                    "hasChild": true,
+                    "isExpand": false
+                }
+            ]
+        }
+    ]
+}

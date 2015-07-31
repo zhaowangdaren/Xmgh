@@ -1,0 +1,49 @@
+{
+    "papers": [
+        {
+            "id": "31101",
+            "name": "31101新手篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31102",
+            "name": "31102进阶篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31103",
+            "name": "31103高阶篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31111",
+            "name": "31111新手篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31112",
+            "name": "31112进阶篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31113",
+            "name": "31113高阶篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31201",
+            "name": "31201新手篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31202",
+            "name": "31202进阶篇",
+            "numOfQuestion":5
+        },
+        {
+            "id": "31203",
+            "name": "31203高阶篇",
+            "numOfQuestion":5
+        }
+    ]
+}

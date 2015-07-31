@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivityViewAssessment"
+    tools:ignore="MergeRootFrame"
+    android:background="#e0e0e0"
+    >
+
+    <android.support.v7.widget.Toolbar
+        android:elevation="10dp"
+        android:id="@+id/my_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/toolbar_color"
+        android:titleTextAppearance="?android:attr/text"
+        />
+
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:paddingLeft="@dimen/activity_horizontal_margin_half"
+        android:paddingRight="@dimen/activity_horizontal_margin_half"
+        android:paddingTop="@dimen/activity_horizontal_margin_half"
+        android:paddingBottom="@dimen/activity_horizontal_margin_half"
+        android:layout_below="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipe_refresh">
+        <ScrollView
+            android:scrollbarStyle="outsideOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--No Network-->
+                    <LinearLayout
+                        android:id="@+id/linearLayout_no_network"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        >
+
+                        <ImageView
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/no_network"/>
+
+                        <TextView
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/pull_to_refresh"
+                            android:textColor="@color/gray"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                            <!--score percent circle-->
+                            <RelativeLayout
+                                android:id="@+id/relativeLayout_score_percent_circle"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:background="@drawable/bg_score_circle_gray"
+                                    android:id="@+id/linearLayout_score_percent"
+                                    android:layout_width="@dimen/score_percent_diameter"
+                                    android:layout_height="@dimen/score_percent_diameter"
+                                    android:layout_gravity="center_horizontal"
+                                    android:orientation="horizontal"/>
+
+                                <TextView
+                                    android:textSize="@dimen/text_size_score"
+                                    android:text="Score"
+                                    android:gravity="center"
+                                    android:layout_centerInParent="true"
+                                    android:background="@drawable/bg_score_textview_circle_white"
+                                    android:id="@+id/textView_score"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    />
+
+                            </RelativeLayout>
+
+                            <ListView
+                                android:layout_below="@id/relativeLayout_score_percent_circle"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/view_margin_half"
+                                android:id="@+id/listView_score_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"></ListView>
+
+                        <!--<TextView-->
+                            <!--android:layout_marginTop="@dimen/view_margin"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/general_comment"-->
+                            <!--android:textAppearance="?android:attr/textAppearanceMedium"/>-->
+
+                        <!--<TextView-->
+                            <!--android:background="#fff"-->
+                            <!--android:padding="@dimen/view_margin_half"-->
+                            <!--android:id="@+id/textView_general_comment"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:hint="总体评价的内容..."/>-->
+                    </RelativeLayout>
+                </LinearLayout>
+
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

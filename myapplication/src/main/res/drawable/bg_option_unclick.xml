@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="oval" >
+        <stroke android:color="#35b6e5"
+            android:width="2dp"/>
+
+        <!--中间透明-->
+        <solid android:color="#eee"/>
+        <!--圆或椭圆-->
+        <size android:width="@dimen/option_size"
+        android:height="@dimen/option_size"/>
+    </shape>

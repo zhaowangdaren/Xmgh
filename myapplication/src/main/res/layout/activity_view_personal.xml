@@ -1,0 +1,458 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.ActivityViewPersonal">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:elevation="10dp"
+            android:id="@+id/my_toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/toolbar_color"
+            android:titleTextAppearance="?android:attr/text"
+            />
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin_half"
+            android:paddingRight="@dimen/activity_horizontal_margin_half"
+            android:paddingTop="@dimen/activity_vertical_margin_half"
+            android:paddingBottom="@dimen/activity_vertical_margin_half"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <!--head -->
+        <com.example.ustc_pc.myapplication.imageView.CircleImageView
+            android:layout_margin="@dimen/view_margin"
+            android:id="@+id/imageView_personal_head"
+            android:src="@mipmap/default_header"
+            android:background="@drawable/bg_head_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:background="@drawable/bg_rounded_rectangle_white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--nick name-->
+            <RelativeLayout
+                android:padding="@dimen/view_margin"
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_nick_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/nick_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_nick_name"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="nick name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+            <!--Account number-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_account_number"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/account_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_account_number"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="account number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <!--Sex-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_gender"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_gender"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="woman/man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <!--Email-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_email"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_email"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <!--About me-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_about_me"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/about_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_about_me"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/about_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/activity_vertical_margin_half"
+            android:background="@drawable/bg_rounded_rectangle_white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--Source college-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_source_college"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/source_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_source_college"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/source_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <!--Source Majot-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_source_major"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/source_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_source_major"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/source_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/activity_vertical_margin_half"
+            android:background="@drawable/bg_rounded_rectangle_white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--First target college-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_first_target_college"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/first_target_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_first_target_college"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/first_target_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <!--First target majot-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_first_target_major"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/first_target_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_first_target_major"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/first_target_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <!--Second target major-->
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_second_target_college"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/second_target_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_second_target_college"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/second_target_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_second_target_major"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/second_target_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_second_target_major"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/second_target_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_marginTop="@dimen/activity_vertical_margin_half"
+                android:background="@drawable/bg_rounded_rectangle_white"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_accepted_college"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/accepted_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_accepted_college"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/accepted_college"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <View
+                android:layout_margin="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@android:color/darker_gray"/>
+
+            <RelativeLayout
+                android:background="@drawable/click_style_bg_rectangle"
+                android:id="@+id/relativeLayout_accepted_major"
+                android:padding="@dimen/view_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/accepted_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    />
+                <TextView
+                    android:id="@+id/textView_accepted_major"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/accepted_major"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+        </LinearLayout>
+        <Button
+            android:id="@+id/button_log_out"
+            android:layout_margin="@dimen/view_margin"
+            android:text="@string/log_out"
+            android:textColor="@android:color/white"
+            android:background="@drawable/click_style_rounded_button_red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+    </LinearLayout>
+
+</ScrollView>

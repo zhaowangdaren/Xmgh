@@ -1,0 +1,19 @@
+{
+    "account_number":"13088888888",
+    "nick_name":"我是昵称",
+    "gender":0,
+    "user_email":"admin@ustc.edu.cn",
+    "about_me":"About me用户的个人简介",
+    "user_type":0,
+    "source_college":"",
+    "source_major":"",
+    "first_target_college":"",
+    "first_target_major":"",
+    "second_target_college":"",
+    "second_target_major":"",
+    "accepted_college":"",
+    "accepted_major":"",
+
+    "sum_assessment_score":60,
+
+}

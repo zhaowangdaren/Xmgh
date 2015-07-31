@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context="com.example.ustc_pc.myapplication.activity.SelecteCourseActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:elevation="10dp"
+        android:id="@+id/my_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/toolbar_color"
+        android:titleTextAppearance="?android:attr/text">
+
+    </android.support.v7.widget.Toolbar>
+    <GridView
+        android:layout_below="@id/my_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridView_courses"
+        android:layout_centerHorizontal="true"
+        android:numColumns="4"
+        android:verticalSpacing="@dimen/activity_horizontal_margin"
+        android:horizontalSpacing="@dimen/activity_horizontal_margin"
+        android:choiceMode="multipleChoice"
+        android:layout_above="@+id/button_finished" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finished"
+        android:id="@+id/button_finished"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
