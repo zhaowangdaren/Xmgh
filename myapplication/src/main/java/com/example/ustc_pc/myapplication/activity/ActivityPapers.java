@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.adapter.ActivityPapersAdapter;
 import com.example.ustc_pc.myapplication.db.DBHelper;
 import com.example.ustc_pc.myapplication.myInterface.DownloadFinishedInterface;
-import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.unit.Paper;
 import com.example.ustc_pc.myapplication.unit.Strings;
@@ -63,8 +62,8 @@ public class ActivityPapers extends ActionBarActivity implements AdapterView.OnI
         kpID = intent.getStringExtra("ID");
         kpName = intent.getStringExtra("NAME");
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         initData();
@@ -144,7 +143,7 @@ public class ActivityPapers extends ActionBarActivity implements AdapterView.OnI
     private void initData(){
         //Paper(int id, String name, int num, String course , String firstKP, String secondKP, String thirdKP)
         fileName = "kp_papers_"+kpID + ".json";
-        if(!NetUtil.isConnect(this)){//No Network
+        if(!Util.isConnect(this)){//No Network
             File file = new File(FileOperation.APP_PATH + fileName);
             if(!file.exists()){//paper file is not exist
                 //show no network

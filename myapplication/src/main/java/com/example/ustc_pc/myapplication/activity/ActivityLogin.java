@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
-import com.example.ustc_pc.myapplication.CourseActivity;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
@@ -44,9 +42,6 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
 
         initView();
     }
@@ -278,7 +273,7 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                     userSharedPreference.setStrThirdID(params1);
                     userSharedPreference.setStrUserName(params2);
                 }
-
+                userSharedPreference.setIsLogin(true);
                 //get user selected course
                 GetCoursesAsync getCoursesAsync = new GetCoursesAsync(context);
                 getCoursesAsync.execute();

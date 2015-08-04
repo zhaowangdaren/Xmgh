@@ -3,20 +3,24 @@ package com.example.ustc_pc.myapplication.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.activity.BaseTestActivity;
 import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.db.KPsDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
@@ -43,6 +47,7 @@ public class CourseFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private int mICourseID;
 
+    private int mScreenHeight;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -90,6 +95,13 @@ public class CourseFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        mScreenHeight = metrics.heightPixels;
+    }
     private void initKPs() {
         mAllKPses = new ArrayList<>();
         mShowingKPs = new ArrayList<>();
@@ -97,7 +109,7 @@ public class CourseFragment extends Fragment {
         getCourseKPsAsyncTask.execute(mICourseID);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mKPsAdapter = new KPsAdapter());
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -174,8 +186,10 @@ public class CourseFragment extends Fragment {
         protected void onPostExecute(List<KPs> result){
             progressDialog.dismiss();
             if(result != null && !result.isEmpty()) mAllKPses = result;
-            mShowingKPs = add1LevelKPs(mAllKPses);
-            mKPsAdapter.notifyDataSetChanged();
+            List<KPs> firstLevelKPs = add1LevelKPs(mAllKPses);
+            if(firstLevelKPs != null && !firstLevelKPs.isEmpty())mShowingKPs.addAll(firstLevelKPs);
+            mKPsAdapter = new KPsAdapter();
+            mRecyclerView.setAdapter(mKPsAdapter);
         }
     }
 
@@ -189,12 +203,14 @@ public class CourseFragment extends Fragment {
         if(allKPses == null || allKPses.isEmpty())return showingKPses;
         if(showingKPses == null )showingKPses = new ArrayList<>();
 
-        for(KPs kPs : allKPses){
+        int size = allKPses.size();
+        for(int i=0; i<size; i++){
+            KPs kPs = allKPses.get(i);
             if(kPs.getILevel() == Util.FIRST_LEVEL_KP){
                 showingKPses.add(kPs);
-                allKPses.remove(kPs);
             }
         }
+        allKPses.removeAll(showingKPses);
         return showingKPses;
     }
 
@@ -217,24 +233,31 @@ public class CourseFragment extends Fragment {
 
         String currentKPID = currentKP.getStrKPID();
         int currentPostion = position;
-        for(KPs kPs : allKPs){
+        int size = allKPs.size();
+        for(int i=0; i<size; i++){
+            KPs kPs = allKPs.get(i);
             if(kPs.getILevel() == nextLevel && kPs.getStrFatherKPID().equals(currentKPID)){
                 currentPostion = currentPostion + 1;
                 showingKPs.add(currentPostion, kPs);
-                mKPsAdapter.notifyItemChanged(currentPostion);
-                allKPs.remove(kPs);
             }
         }
+        allKPs.removeAll(showingKPs);
+        mKPsAdapter.notifyDataSetChanged();
     }
 
+    public void removeNextLevelKPs(List<KPs> showingKPs, int index, List<KPs> allKPs){
+        recursionNextLevelKPs(showingKPs, index, allKPs);
+        showingKPs.removeAll(allKPs);
+        mKPsAdapter.notifyDataSetChanged();
+    }
     /**
      * recursion remove all son kps
      * @param showingKPs
-     * @param position
+     * @param index
      * @param allKPs
      */
-    public void removeNextLevelKPs(List<KPs> showingKPs, int position, List<KPs> allKPs){
-        KPs currentKP = showingKPs.get(position);
+    public void recursionNextLevelKPs(List<KPs> showingKPs, int index, List<KPs> allKPs){
+        KPs currentKP = showingKPs.get(index);
         currentKP.setIsExpand(false);
         //No child
         if(!currentKP.getHasChild())return;
@@ -248,10 +271,9 @@ public class CourseFragment extends Fragment {
         for(int i = 0; i< size; i++){
             KPs kps = showingKPs.get(i);
             if(kps.getILevel() == nextLevel && kps.getStrFatherKPID().equals(strCurrentKPID)){
-                removeNextLevelKPs(showingKPs, i, allKPs);
+                recursionNextLevelKPs(showingKPs, i, allKPs);
                 allKPs.add(kps);
-                showingKPs.remove(i);
-                mKPsAdapter.notifyItemChanged(i);
+
             }
         }
     }
@@ -264,10 +286,15 @@ public class CourseFragment extends Fragment {
         @Override
         public KPsAdapter.KPsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             KPsViewHolder holder;
+            View view;
             if(viewType == TYPE_HEADER){
-                holder = new KPsViewHolder(View.inflate(getActivity(),R.layout.layout_kps_header, null),viewType);
+                view = View.inflate(getActivity(),R.layout.layout_kps_header, null);
+                float displayHeight = ((float)mScreenHeight) * 7 / 16;
+                view.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)displayHeight ));
+                holder = new KPsViewHolder(view,viewType);
             }else{
-                holder = new KPsViewHolder(View.inflate(getActivity(),R.layout.layout_kps_item, null),viewType);
+                view = View.inflate(getActivity(),R.layout.layout_kps_item, null);
+                holder = new KPsViewHolder(view,viewType);
             }
             return holder;
         }
@@ -278,16 +305,36 @@ public class CourseFragment extends Fragment {
             if (getItemViewType(position) == TYPE_HEADER) {
                 // TODO : Set score
                 holder.contentTV.setText("0");
-            } else {
-                holder.contentTV.setText(mShowingKPs.get(position).getStrName());
-                if(mShowingKPs.get(position).getIsExpand()){
-                    holder.itemIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_circle_outline_black_24dp));
+            } else {//KP item
+                int index = position - 1;
+
+                holder.contentTV.setText(getItem(index).getStrName());
+                holder.contentTV.setOnClickListener(new OnItemContentTVClickListener(index));
+                if(mShowingKPs.get(index).getIsExpand()){
+                    holder.openCloseitemIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_circle_outline_black_24dp));
+
                 }else{
-                    holder.itemIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
+                    holder.openCloseitemIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
                 }
-                holder.itemIV.setOnClickListener(new OnItemIVClickListener(position));
+                holder.openCloseitemIV.setOnClickListener(new OnOpenCloseItemIVClickListener(index));
+                holder.downloafIV.setOnClickListener(new OnItemDownloadIVClickListener(index));
+                // Let different level kp on different offset
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+                float offset = getResources().getDimension(R.dimen.activity_horizontal_margin);
+                offset = offset + (getItem(index).getILevel() - 1) * offset;
+                lp.setMargins((int) offset, lp.topMargin, lp.rightMargin, lp.bottomMargin);
+                holder.openCloseitemIV.setLayoutParams(lp);
+
+                if(!mShowingKPs.get(index).getHasChild())holder.openCloseitemIV.setVisibility(View.INVISIBLE);
             }
         }
+
+        public KPs getItem(int index){
+            if(index > mShowingKPs.size())return null;
+            return mShowingKPs.get(index);
+        }
+
         @Override
         public int getItemViewType(int position){
             if(position == 0)return TYPE_HEADER;
@@ -296,38 +343,84 @@ public class CourseFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mAllKPses.size();
+            return mShowingKPs.size() + 1;
         }
 
-        private class OnItemIVClickListener implements View.OnClickListener{
-            private int position ;
-            public OnItemIVClickListener(int position){
-                this.position = position;
+        private class OnOpenCloseItemIVClickListener implements View.OnClickListener{
+            private int index ;
+            public OnOpenCloseItemIVClickListener(int index){
+                this.index = index;
             }
             @Override
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.id.imageView_kps_item:
-                        if(mShowingKPs.get(position).getIsExpand())removeNextLevelKPs(mShowingKPs, position, mAllKPses);
-                        else addNextLevelKPs(mShowingKPs, position, mAllKPses);
+                        if(mShowingKPs.get(index).getIsExpand())removeNextLevelKPs(mShowingKPs, index, mAllKPses);
+                        else addNextLevelKPs(mShowingKPs, index, mAllKPses);
                 }
+            }
+        }
+
+        /**
+         *Start test activity
+         */
+        private class OnItemContentTVClickListener implements View.OnClickListener{
+
+            private int index;
+            public OnItemContentTVClickListener(int index){
+                this.index = index;
+            }
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), BaseTestActivity.class);
+                String strKPID = mShowingKPs.get(index).getStrKPID();
+                intent.putExtra("iCourseID", mICourseID);
+                intent.putExtra("iQuestionType", Util.BASIC_TEST);
+                intent.putExtra("strKPName",mShowingKPs.get(index).getStrName());
+                intent.putExtra("strKPID", strKPID);
+
+                startActivity(intent);
+            }
+        }
+
+
+
+        private class OnItemDownloadIVClickListener implements View.OnClickListener {
+            private int index;
+
+            public OnItemDownloadIVClickListener(int index) {
+                this.index = index;
+            }
+
+            @Override
+            public void onClick(View view) {
+//                String strCourseID = String.valueOf(mICourseID);
+//                String strQuestionType = String.valueOf(Util.BASIC_TEST);
+//                String strKPID = mShowingKPs.get(index).getStrKPID();
+//                DownloadQuestionsAsyncTask downloadQuestionsAsyncTask = new DownloadQuestionsAsyncTask(getActivity());
+//                downloadQuestionsAsyncTask.execute(strCourseID, strQuestionType, strKPID);
             }
         }
 
         public class KPsViewHolder extends RecyclerView.ViewHolder {
 
-            //Item
-            private ImageView itemIV;
+            //open or close kp Item
+            private ImageView openCloseitemIV;
             //header score TextView's id same as item kp's name TextView
             private TextView contentTV;
+            //Download questions
+            private ImageView downloafIV;
 
             public KPsViewHolder(View itemView, int iType) {
                 super(itemView);
                 contentTV = (TextView) itemView.findViewById(R.id.textView_kps_content);
                 if(iType == TYPE_ITEM){
-                    itemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
+                    openCloseitemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
+                    downloafIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_donwload);
                 }
             }
         }
     }
+
+
 }

@@ -20,7 +20,6 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVOSCloud;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
-import com.example.ustc_pc.myapplication.net.NetUtil;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
 
@@ -95,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if(!NetUtil.isConnect(this)){
+        if(!Util.isConnect(this)){
             Toast.makeText(this,getString(R.string.no_network_try_again), Toast.LENGTH_SHORT).show();
         }
 
@@ -123,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, getString(R.string.phone_number_mismatch_condition), Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!NetUtil.isConnect(this)){
+        if(!Util.isConnect(this)){
             Toast.makeText(this,getString(R.string.no_network_try_again), Toast.LENGTH_SHORT).show();
             return;
         }

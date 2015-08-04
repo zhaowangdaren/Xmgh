@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +21,7 @@ import com.example.ustc_pc.myapplication.adapter.ActivityHistoryAdapter;
 import com.example.ustc_pc.myapplication.db.DBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.Paper;
 import com.example.ustc_pc.myapplication.unit.Strings;
 
@@ -43,8 +43,8 @@ public class ActivityHistoryTest extends ActionBarActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_test);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         iCourseID = getIntent().getIntExtra(MainActivity.ARG_SECTION_NUMBER,1);
@@ -165,7 +165,7 @@ public class ActivityHistoryTest extends ActionBarActivity implements AdapterVie
                 activityHistoryAdapter.notifyDataSetChanged();
                 mNoNetLL.setVisibility(View.GONE);
             }else{
-                if(NetUtil.isConnect(ActivityHistoryTest.this))mNoNetLL.setVisibility(View.GONE);
+                if(Util.isConnect(ActivityHistoryTest.this))mNoNetLL.setVisibility(View.GONE);
             }
             progressDialog.dismiss();
         }

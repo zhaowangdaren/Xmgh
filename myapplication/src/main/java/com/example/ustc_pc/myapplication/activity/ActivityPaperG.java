@@ -23,7 +23,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.internal.view.menu.MenuView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +41,7 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.DBHelper;
 import com.example.ustc_pc.myapplication.fragment.ScreenSlidePageFragment;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.unit.Paper;
 import com.example.ustc_pc.myapplication.unit.Question;
@@ -75,8 +75,8 @@ public class ActivityPaperG extends ActionBarActivity implements View.OnClickLis
         super.onCreate(bundle);
         setContentView(R.layout.activity_paper);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -250,7 +250,7 @@ public class ActivityPaperG extends ActionBarActivity implements View.OnClickLis
         else {
             String fileName = "paper_" + _strPaperID + ".json";
             String filePath = FileOperation.APP_PATH + fileName;
-            if (!NetUtil.isConnect(this)) {//No Network
+            if (!Util.isConnect(this)) {//No Network
                 File file = new File(filePath);
                 if (!file.exists()) {//paper file is not exist
                     //show no network
@@ -539,7 +539,7 @@ public class ActivityPaperG extends ActionBarActivity implements View.OnClickLis
 
                 initPaperAdapterAndTimer();
             }else{
-                if(NetUtil.isConnect(ActivityPaperG.this)){//network available, but paper == null
+                if(Util.isConnect(ActivityPaperG.this)){//network available, but paper == null
                     mLinearLayoutErrorRetry.setVisibility(View.VISIBLE);
                     mRelativeLayoutPaperTitle.setVisibility(View.GONE);
                     mLinearLayoutNoNet.setVisibility(View.GONE);

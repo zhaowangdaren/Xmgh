@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,8 +38,8 @@ public class ActivityZhenTi extends ActionBarActivity implements  View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zhenti);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         _iCourse = getIntent().getIntExtra(MainActivity.ARG_SECTION_NUMBER, 0);

@@ -123,6 +123,14 @@
             android:name=".activity.CourseActivity"
             android:label="@string/title_activity_course" >
         </activity>
+        <activity
+            android:name=".activity.MutlSonQuestionActivity"
+            android:label="@string/title_activity_test" >
+        </activity>
+        <activity
+            android:name=".activity.BaseTestActivity"
+            android:label="@string/title_activity_base_test" >
+        </activity>
     </application>
 
 </manifest>

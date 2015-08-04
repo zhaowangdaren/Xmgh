@@ -141,20 +141,7 @@ public class NetUtil {
 	}
 	
 	 
-	/**
-	 * check net is allowable
-	 * @param context
-	 * @return
-	 */
-	public static boolean isConnect(Context context){
-		ConnectivityManager connManager = (ConnectivityManager)
-				context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo netInfo = connManager.getActiveNetworkInfo();
-		if( netInfo != null){
-			return netInfo.isAvailable();
-		}
-		return false;
-	}
+
 
     public static AssessmentScore getAssessmentScore2(String accountNumber){
         InputStream inputStream = null;

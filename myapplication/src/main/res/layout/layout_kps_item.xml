@@ -4,6 +4,7 @@
 
     <ImageView
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_add_circle_outline_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,12 +14,25 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imageView_kps_item"
         android:text="New Text"
         android:id="@+id/textView_kps_content"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toLeftOf="@+id/imageView_kps_item_donwload"
+        android:layout_toStartOf="@+id/imageView_kps_item_donwload" />
+
+    <ImageView
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_file_download_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView_kps_item_donwload"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
 </RelativeLayout>

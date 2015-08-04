@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +22,7 @@ import com.example.ustc_pc.myapplication.adapter.ActivityPaperReportGVAdapter;
 import com.example.ustc_pc.myapplication.db.DBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.unit.Paper;
 import com.example.ustc_pc.myapplication.unit.Question;
@@ -44,8 +44,8 @@ public class ActivityPaperReport extends ActionBarActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paper_report);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         initData();
@@ -267,7 +267,7 @@ public class ActivityPaperReport extends ActionBarActivity implements AdapterVie
             Paper paper = params[0];
             boolean result = false;
             dbHelper = DBHelper.getInstance(ActivityPaperReport.this);
-            if(NetUtil.isConnect(ActivityPaperReport.this)){
+            if(Util.isConnect(ActivityPaperReport.this)){
                 UserSharedPreference userSharedPreference = new UserSharedPreference(ActivityPaperReport.this);
                 String username = userSharedPreference.getAccountNumber();
                 result = NetUtil.upLoadPaperInfo(paper, username);

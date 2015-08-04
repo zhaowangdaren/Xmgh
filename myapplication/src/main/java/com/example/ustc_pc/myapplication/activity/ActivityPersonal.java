@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.imageView.CircleImageView;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 
 public class ActivityPersonal extends ActionBarActivity implements View.OnClickListener{
 
@@ -26,8 +26,8 @@ public class ActivityPersonal extends ActionBarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         initData();
@@ -63,7 +63,7 @@ public class ActivityPersonal extends ActionBarActivity implements View.OnClickL
         Bitmap bitmap = userSharedPreference.getUserPhotoBitmap();
         if(bitmap != null) mHeaderCI.setImageBitmap(bitmap);
 
-        if(NetUtil.isConnect(this) && userSharedPreference.isUserInfoChanged()){
+        if(Util.isConnect(this) && userSharedPreference.isUserInfoChanged()){
             new Thread(new Runnable() {
                 @Override
                 public void run() {

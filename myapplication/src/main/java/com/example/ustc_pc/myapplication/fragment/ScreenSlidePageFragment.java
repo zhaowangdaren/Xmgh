@@ -266,7 +266,7 @@ public class ScreenSlidePageFragment extends Fragment implements View.OnClickLis
         public View getView(int position, View convertView, ViewGroup parent) {
             OptionViewHolder optionViewHolder;
             if(convertView == null){
-                convertView = View.inflate(parent.getContext(), R.layout.layout_question_option, null);
+                convertView = View.inflate(parent.getContext(), R.layout.layout_question_option_item, null);
                 optionViewHolder = new OptionViewHolder();
                 optionViewHolder.checkedTextView = (CheckedTextView) convertView.findViewById(R.id.checkedTV_option);
                 optionViewHolder.textView = (TextView) convertView.findViewById(R.id.textView_option_content);

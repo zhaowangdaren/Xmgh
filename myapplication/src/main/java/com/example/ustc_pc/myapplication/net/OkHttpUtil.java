@@ -1,6 +1,7 @@
 package com.example.ustc_pc.myapplication.net;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -15,9 +16,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,6 +38,9 @@ public class OkHttpUtil {
         client.setReadTimeout(30, TimeUnit.SECONDS);
     }
 
+    public OkHttpClient getClient(){
+        return client;
+    }
     /**
      * check phone number is registered
      * @param phoneNumber
@@ -263,11 +271,11 @@ public class OkHttpUtil {
      * @return
      * @throws IOException
      */
-    public boolean addCourse(int iUserID, ArrayList<Integer> courseIDs) throws IOException {
+    public boolean addCourse(int iUserID, List<Course> courseIDs) throws IOException {
         if(courseIDs.size() <= 0)return true;
         StringBuffer stringBuffer = new StringBuffer();
-        for(int i: courseIDs){
-            stringBuffer.append(String.valueOf(i)+",");
+        for(Course course: courseIDs){
+            stringBuffer.append(course.getICourseID()+",");
         }
         if(stringBuffer.charAt(stringBuffer.length() - 1)==',')//delete the last ','
             stringBuffer.deleteCharAt(stringBuffer.length() - 1);
@@ -289,15 +297,15 @@ public class OkHttpUtil {
     /**
      *
      * @param iUserID
-     * @param courseIDs
+     * @param courses
      * @return
      * @throws IOException
      */
-    public boolean deleteCourse(int iUserID, ArrayList<Integer> courseIDs) throws IOException {
-        if(courseIDs.size() <= 0)return true;
+    public boolean deleteCourse(int iUserID, List<Course> courses) throws IOException {
+        if(courses.size() <= 0)return true;
         StringBuffer stringBuffer = new StringBuffer();
-        for(int i: courseIDs){
-            stringBuffer.append(String.valueOf(i)+",");
+        for(Course course : courses){
+            stringBuffer.append(course.getICourseID()+",");
         }
         if(stringBuffer.charAt(stringBuffer.length() - 1)==',')//delete the last ','
             stringBuffer.deleteCharAt(stringBuffer.length() - 1);
@@ -320,7 +328,7 @@ public class OkHttpUtil {
         ArrayList<KPs> kPses = new ArrayList<>();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
-                .add("iCoueseID", String.valueOf(iCourseID))
+                .add("iCourseID", String.valueOf(iCourseID))
                 .build();
         Request request = new Request.Builder()
                 .url(Util.URL_GET_KPs)
@@ -353,15 +361,63 @@ public class OkHttpUtil {
                 .add("strKPID", strKPID)
                 .build();
         Request request = new Request.Builder()
-                .url(Util.URL_GET_KPs)
+                .url(Util.URL_GET_QUESTIONS)
                 .post(formBody)
                 .build();
         Response response = client.newCall(request).execute();
         if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
-        JSONObject jsonObject = JSONObject.parseObject(response.body().string());
-        return new URL(jsonObject.getString("strDonUrl"));
+        String strResult = response.body().string();
+        if(strResult.length() <= 0)throw new IOException("Unexcepted cod "+ response);
+        JSONObject jsonObject = JSON.parseObject(strResult);
+        String strURL = jsonObject.getString("strDonUrl");
+        if(strURL == null || strURL.length() <= 0)
+            throw new IOException("Unexcepted cod "+ response);
+        return new URL(strURL);
     }
 
+
+    public void downloadQuestions(int iCourseID, int iQuestionType, String strKPID)throws IOException{
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("iCourseID", String.valueOf(iCourseID))
+                .add("iQuestionType", String.valueOf(iQuestionType))
+                .add("strKPID", strKPID)
+                .build();
+        Request request = new Request.Builder()
+                .url(Util.URL_GET_QUESTIONS)
+                .post(formBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
+        String strResult = response.body().string();
+        if(strResult.length() <= 0)throw new IOException("Unexcepted cod "+ response);
+        JSONObject jsonObject = JSON.parseObject(strResult);
+        String strURL = jsonObject.getString("strDonUrl");
+        if(strURL == null || strURL.length() <= 0)
+            throw new IOException("Unexcepted cod "+ response);
+
+        Response fileResponse = client.newCall(
+                new Request.Builder().url(strURL).get().build()
+                ).execute();
+        if(!fileResponse.isSuccessful())throw new IOException("Unexcepted cod" + fileResponse);
+        InputStream inputStream = null;
+        inputStream = fileResponse.body().byteStream();
+        OutputStream outputStream = new FileOutputStream(Util.APP_PATH);
+        byte[] buff = new byte[1024 * 4];
+        long downloaded = 0;
+        long target = fileResponse.body().contentLength();
+        while(true){
+            int readed = inputStream.read(buff);
+            if(readed == -1)break;
+
+            //write buff
+            outputStream.write(buff, 0, readed);
+            downloaded += readed;
+            if(target > 0){
+//                publishProgress((int) (downloaded * 100 / target));
+//                onProgressUpdate((int) (downloaded * 100 / target));
+            }
+        }
+    }
     /**
      * Upload done questions
      * @param iUserID

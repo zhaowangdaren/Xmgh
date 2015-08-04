@@ -15,6 +15,7 @@ import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.example.ustc_pc.myapplication.activity.ActivityLogin;
+import com.example.ustc_pc.myapplication.activity.CourseActivity;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 
@@ -160,7 +161,7 @@ public class ActivityWelcome extends Activity implements View.OnClickListener{
         if(isLogin){
             //has login,then show AllUI
             Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), MainActivity.class);
+            intent.setClass(getApplicationContext(), CourseActivity.class);
             startActivity(intent);
         }else{
             //not login ,then show LoginUI

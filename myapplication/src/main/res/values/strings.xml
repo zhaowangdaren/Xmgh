@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="username">账号</string>
+    <string name="username">用户名</string>
     <string name="password">密码</string>
     <string name="no_account_sigin"><u>没有账号？点击注册</u></string>
     <string name="no_network_click_refresh">没有网络，点击刷新</string>
@@ -172,4 +172,8 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_main_activity2">MainActivity2Activity</string>
     <string name="title_activity_course">CourseActivity</string>
+    <string name="add_course">添加课程</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="parseing_questions">解析问题中...</string>
+    <string name="title_activity_base_test">BaseTestActivity</string>
 </resources>

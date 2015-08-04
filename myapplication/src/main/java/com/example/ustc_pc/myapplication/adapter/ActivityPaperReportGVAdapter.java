@@ -38,7 +38,7 @@ public class ActivityPaperReportGVAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if(convertView == null){
-            convertView = View.inflate(parent.getContext(), R.layout.layout_question_option, null);
+            convertView = View.inflate(parent.getContext(), R.layout.layout_question_option_item, null);
             viewHolder = new ViewHolder();
             viewHolder.textView = (CheckedTextView)convertView.findViewById(R.id.checkedTV_option);
             convertView.setTag(viewHolder);

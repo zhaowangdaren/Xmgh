@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
@@ -61,8 +60,8 @@ public class ActivitySelectImage extends ActionBarActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_iamge);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//        setSupportActionBar(toolbar);
 
         initView();
         initData();

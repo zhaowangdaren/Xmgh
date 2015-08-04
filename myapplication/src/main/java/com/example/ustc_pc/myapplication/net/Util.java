@@ -1,5 +1,23 @@
 package com.example.ustc_pc.myapplication.net;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Environment;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.example.ustc_pc.myapplication.unit.FileOperation;
+import com.example.ustc_pc.myapplication.unit.QuestionNew;
+
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +43,9 @@ public class Util {
     public static final int PHONE_LOGIN = 0, QQ_LOGIN = 1, WEIBO_LOGIN = 2, WECHAT_LOGIN = 3;
     public static String DB_NAME = "cn.edu.ustc.xmgh.db";
     public static Integer FIRST_LEVEL_KP = 1, SECOND_LEVEL_KP = 2, THIRD_LEVEL_KP = 3, LAST_LEVEL_KP = 4;
+    public static String URL_GET_QUESTIONS = URL_HOME + "GetQuestions";
+    public static String APP_PATH = Environment.getExternalStorageDirectory()+"/.cn.edu.ustc.xmgh/";
+    public static int BASIC_TEST = 1, REAL_TEST = 2, SPECIAL_TEST = 3, MOCK_TEST = 4;
 
 
     public static boolean isPhoneNumber(String strPhone) {
@@ -33,4 +54,61 @@ public class Util {
         return m.matches();
     }
 
+    public static boolean unZip(String sourcePath, String targetPath) {
+        try {
+            ZipFile zipFile = new ZipFile(sourcePath);
+            if (zipFile.isEncrypted()) {
+                Log.e("Unzip failed", "The zip has been encrypted");
+                return false;
+            }
+            zipFile.extractAll(targetPath);
+        }catch (ZipException e){
+            Log.e("Unzip failed", e.toString());
+            return false;
+        }
+        return true;
+    }
+
+
+    public static String[] getAllQuestionsAPath(String absolutePath){
+        File file  = new File(absolutePath);
+        String[] questionsFolderName = file.list();
+        for(int i = 0; i<questionsFolderName.length; i++){
+            questionsFolderName[i] = absolutePath + questionsFolderName[i];
+        }
+        return questionsFolderName;
+    }
+
+    public static List<QuestionNew> parseQuestionsFromFile(String[] questionsAPath) {
+        if(questionsAPath.length <= 0)return null;
+        List<QuestionNew> result = new ArrayList<>(questionsAPath.length);
+        for(int i = 0; i< questionsAPath.length;i++){
+            String strQuestion = FileOperation.getFileFromSD(questionsAPath[i] + "/" + "question.json");
+            JSONObject jsonQuestion = JSON.parseObject(strQuestion);
+            int iQuestionID = jsonQuestion.getIntValue("iQuestionID");
+            String strSubject = jsonQuestion.getString("strSubject");
+            boolean isMultiSonQuestion = jsonQuestion.getBooleanValue("isMultiSonQuestion");
+            String strAudioFileName = jsonQuestion.getString("strAudioFileName");
+            String strVideoUrl = jsonQuestion.getString("strVideoUrl");
+            JSONArray jsonQuestionSons = jsonQuestion.getJSONArray("questions");
+            QuestionNew questionNew = new QuestionNew(iQuestionID,strSubject,isMultiSonQuestion,strAudioFileName,strVideoUrl, jsonQuestionSons);
+            result.add(questionNew);
+        }
+        return result;
+    }
+
+    /**
+     * check net is allowable
+     * @param context
+     * @return
+     */
+    public static boolean isConnect(Context context){
+        ConnectivityManager connManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connManager.getActiveNetworkInfo();
+        if( netInfo != null){
+            return netInfo.isAvailable();
+        }
+        return false;
+    }
 }

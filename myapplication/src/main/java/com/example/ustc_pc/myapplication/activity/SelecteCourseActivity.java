@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +22,10 @@ import android.widget.TextView;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
+import com.example.ustc_pc.myapplication.db.UserSharedPreference;
+import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,16 +89,16 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button_finished:
-                FinishSelectCourseImageViewAsyncTask finishSelectCourseAsyncTask = new FinishSelectCourseImageViewAsyncTask(this);
+                FinishSelectCourseAsyncTask finishSelectCourseAsyncTask = new FinishSelectCourseAsyncTask(this);
                 finishSelectCourseAsyncTask.execute(mCourses);
                 break;
         }
     }
 
-    class FinishSelectCourseImageViewAsyncTask extends AsyncTask<List<Course>, Integer, Boolean> {
+    class FinishSelectCourseAsyncTask extends AsyncTask<List<Course>, Integer, Boolean> {
         Context context;
         ProgressDialog progressDialog;
-        public FinishSelectCourseImageViewAsyncTask(Context context){
+        public FinishSelectCourseAsyncTask(Context context){
             this.context = context;
         }
 
@@ -107,17 +111,24 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
         protected Boolean doInBackground(List<Course>... params) {
             CourseDBHelper courseDBHelper = CourseDBHelper.getInstance(context);
             courseDBHelper.updateCourses(params[0]);
+
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            try {
+                okHttpUtil.addCourse(new UserSharedPreference(context).getiUserID(),params[0]);
+            } catch (IOException e) {
+                Log.e("Error ", e.toString());
+            }
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean result){
             progressDialog.dismiss();
-            startMainActivity();
+            startCourseActivity();
         }
     }
 
-    public void startMainActivity(){
+    public void startCourseActivity(){
         Intent intent = new Intent(this, CourseActivity.class);
         startActivity(intent);
         finish();

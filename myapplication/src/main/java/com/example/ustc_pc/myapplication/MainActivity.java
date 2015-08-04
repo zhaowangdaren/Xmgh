@@ -397,10 +397,10 @@ public class MainActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             CourseViewHolder viewHolder ;
             if(convertView == null){
-                convertView = View.inflate(parent.getContext(), R.layout.layout_menu_item, null);
+                convertView = View.inflate(parent.getContext(), R.layout.layout_left_menu_courses_item, null);
                 viewHolder = new CourseViewHolder();
-                viewHolder.iconIV = (ImageView)convertView.findViewById(R.id.imageView_menu_course_ic);
-                viewHolder.nameTV = (TextView)convertView.findViewById(R.id.textView_menu_course_name);
+                viewHolder.iconIV = (ImageView)convertView.findViewById(R.id.imageView_left_menu_course_ic);
+                viewHolder.nameTV = (TextView)convertView.findViewById(R.id.textView_left_menu_course_name);
             }else{
                 viewHolder = (CourseViewHolder) convertView.getTag();
             }

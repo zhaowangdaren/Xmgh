@@ -8,7 +8,7 @@
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/imageView_menu_course_ic"
+        android:id="@+id/imageView_left_menu_course_ic"
         android:src="@drawable/ic_menu_star"/>
 
     <TextView
@@ -17,5 +17,5 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="New Text"
-        android:id="@+id/textView_menu_course_name" />
+        android:id="@+id/textView_left_menu_course_name" />
 </LinearLayout>
