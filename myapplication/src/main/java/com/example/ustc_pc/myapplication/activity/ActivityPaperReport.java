@@ -68,7 +68,7 @@ public class ActivityPaperReport extends ActionBarActivity implements AdapterVie
         mPaperDetialTV = (TextView) findViewById(R.id.textView_paper_details);
         mPaperDetialTV.setVisibility(View.GONE);
         mAnswerSheetGV = (GridView) findViewById(R.id.gridView_answer_sheets);
-        mCheckAnalysisBT = (Button) findViewById(R.id.button_check_analysis);
+        mCheckAnalysisBT = (Button) findViewById(R.id.button_show_all_analysis);
         mCheckAnalysisBT.setOnClickListener(this);
 
     }
@@ -245,7 +245,7 @@ public class ActivityPaperReport extends ActionBarActivity implements AdapterVie
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_check_analysis:
+            case R.id.button_show_all_analysis:
                 Intent intent = new Intent();
                 intent.setClass(this, ActivityPaperAnalysis.class);
                 intent.putExtra("PAPER", _paper);

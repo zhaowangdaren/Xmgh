@@ -1,16 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent">
-
-    <android.support.v7.widget.Toolbar
-        android:elevation="10dp"
-        android:id="@+id/my_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/toolbar_color"
-        android:titleTextAppearance="?android:attr/text"
-        />
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ustc_pc.myapplication.activity.CABaseTestActivity">
 
     <Button
         android:id="@+id/button_show_all_analysis"
@@ -48,7 +39,7 @@
                     android:text="@string/paper_name"/>
 
                 <TextView
-                    android:id="@+id/textView_paper_report_title"
+                    android:id="@+id/textView_test_kp_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dip"
@@ -68,7 +59,7 @@
                     android:text="@string/spend_time"/>
 
                 <TextView
-                    android:id="@+id/textView_paper_spend_time"
+                    android:id="@+id/textView_test_spend_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dip"
@@ -125,7 +116,7 @@
                             android:textColor="@color/white"
                             android:text="/"/>
                         <TextView
-                            android:id="@+id/textView_sum_questions"
+                            android:id="@+id/textView_sum_questions_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
@@ -155,27 +146,7 @@
                 android:numColumns="4"
                 android:verticalSpacing="@dimen/view_margin"
                 />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:padding="@dimen/view_margin"
-                    android:background="@color/transparency_gray"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/paper_details"/>
-
-                <TextView
-                    android:id="@+id/textView_paper_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-
 </RelativeLayout>
-

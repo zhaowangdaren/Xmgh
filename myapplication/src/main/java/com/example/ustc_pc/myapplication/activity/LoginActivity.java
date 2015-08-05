@@ -28,7 +28,7 @@ import com.example.ustc_pc.myapplication.net.Util;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ActivityLogin extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private final int iUNKNOWN_ERROR = -1, iUSERNAME_WRONG = 0, iPASSWORD_WRONG = 1, iLOGIN_SUCCESS = 2;
     EditText mUsernameET, mPasswordET;
@@ -128,11 +128,11 @@ public class ActivityLogin extends AppCompatActivity implements View.OnClickList
                 String strPhoneNumber = mUsernameET.getText().toString();
                 String password = mPasswordET.getText().toString();
                 if(strPhoneNumber == null || strPhoneNumber.length() < 1 || ! Util.isPhoneNumber(strPhoneNumber)){
-                    Toast.makeText(ActivityLogin.this, R.string.error_account, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.error_account, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(password == null || password.length() < 6){
-                    Toast.makeText(ActivityLogin.this, R.string.error_password, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.error_password, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

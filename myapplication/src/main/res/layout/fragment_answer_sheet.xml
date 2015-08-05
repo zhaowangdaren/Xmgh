@@ -1,0 +1,29 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#e0e0e0"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:fillViewport="true">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView
+            android:layout_margin="@dimen/view_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gridView_answer_sheets"
+            android:layout_gravity="center_vertical"
+            android:numColumns="4"
+            android:verticalSpacing="@dimen/view_margin"/>
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/click_style_bg_rectangle_blue"
+            android:id="@+id/button_submit_answer"
+            android:text="@string/submit_answer"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+</ScrollView>

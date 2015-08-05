@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Entity mapped to table "KPS".
  */
-public class KPs implements Serializable{
+public class KPs implements Serializable ,Comparable<KPs>{
 
     private Long id;
     private Integer iUserID;
@@ -125,4 +125,8 @@ public class KPs implements Serializable{
         this.iProgress = iProgress;
     }
 
+    @Override
+    public int compareTo(KPs kPs) {
+        return this.getStrKPID().compareTo(kPs.getStrKPID());
+    }
 }

@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by ustc-pc on 2015/8/3.
  */
-public class QuestionNew implements Serializable {
-    private int iQuestionID;
+public class QuestionNew implements Serializable ,Comparable<QuestionNew>{
+    private Integer iQuestionID;
     private String strSubject;
     private boolean isMultiSonQuestion;
     private String strAudioFileName;
@@ -51,7 +51,7 @@ public class QuestionNew implements Serializable {
         }
     }
 
-    public int getiQuestionID() {
+    public Integer getiQuestionID() {
         return iQuestionID;
     }
 
@@ -99,12 +99,26 @@ public class QuestionNew implements Serializable {
         this.questionSons = questionSons;
     }
 
+    @Override
+    public int compareTo(QuestionNew questionNew) {
+        return this.getiQuestionID().compareTo(questionNew.getiQuestionID());
+    }
+
     public class QuestionSon{
         public int iSonQuestionID;
         public String strSonSubject;
         public boolean isMultiSelect;
         public List<QuestionOption> options;
         public String strPicFileName;
+        public Integer iSpendTime;
+
+        public Integer getISpendTime(){
+            return iSpendTime;
+        }
+
+        public void setiSpendTime(Integer iSpendTime){
+            this.iSpendTime = iSpendTime;
+        }
 
         public QuestionSon(){
 
@@ -178,8 +192,6 @@ public class QuestionNew implements Serializable {
                 this.ID = ID;
                 this.strOption = strOption;
             }
-
-
         }
 
 

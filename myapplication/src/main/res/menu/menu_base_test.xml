@@ -2,6 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.ustc_pc.myapplication.activity.BaseTestActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_timer" android:title="00:00"
+        android:orderInCategory="100" app:showAsAction="ifRoom|withText" />
 </menu>

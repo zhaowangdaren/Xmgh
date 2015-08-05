@@ -3,6 +3,7 @@ package com.example.ustc_pc.myapplication.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -17,7 +18,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.ustc_pc.myapplication.R;
-import com.example.ustc_pc.myapplication.fragment.BaseFragment;
+import com.example.ustc_pc.myapplication.fragment.AnswerSheetFragment;
+import com.example.ustc_pc.myapplication.fragment.BaseTestFragment;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
@@ -29,11 +31,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseTestActivity extends AppCompatActivity {
+public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFragment.OnFragmentInteractionListener{
 
     ViewPager mViewPager;
     List<QuestionNew> mQuestions;
@@ -53,6 +56,7 @@ public class BaseTestActivity extends AppCompatActivity {
         mIQuestionType = intent.getIntExtra("iQuestionType", -1);
         mStrKPName = intent.getStringExtra("strKPName");
         mStrKPID = intent.getStringExtra("strKPID");
+
         mViewPager = (ViewPager)findViewById(R.id.viewPager_actvity_base_test);
         mQuestions = new ArrayList<>();
         mQuestionsPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager());
@@ -84,6 +88,23 @@ public class BaseTestActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Capture submit answer event
+     * @param uri
+     */
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        Intent intent = new Intent(this, CABaseTestActivity.class);
+        intent.putExtra("questions", (Serializable)mQuestions);
+        intent.putExtra("mICourseID",mICourseID);
+        intent.putExtra("mIQuestionType",mIQuestionType);
+        intent.putExtra("mStrKPID",mStrKPID);
+        intent.putExtra("mStrKPName",mStrKPName);
+
+        startActivity(intent);
+        finish();
+    }
+
     private class QuestionsPagerAdapter extends FragmentStatePagerAdapter{
 
         public QuestionsPagerAdapter(FragmentManager fm) {
@@ -92,14 +113,20 @@ public class BaseTestActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = BaseFragment.newInstance( mQuestions.get(position),mStrKPName, position, getCount() );
 
+            Fragment fragment = null;
+            if(position < mQuestions.size()){
+                fragment = BaseTestFragment.newInstance(
+                        mQuestions.get(position), mStrKPName, position, getCount());
+            }else{
+                fragment = AnswerSheetFragment.newInstance(mQuestions);
+            }
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return mQuestions.size();
+            return mQuestions.size() + 1;
         }
     }
     private class ParseQuestionsAsyncTask extends AsyncTask<String, Integer, List<QuestionNew>>{
@@ -143,7 +170,7 @@ public class BaseTestActivity extends AppCompatActivity {
                 mQuestionsPagerAdapter.notifyDataSetChanged();
 
             }
-
+            progressDialog.dismiss();
         }
     }
     private class DownloadQuestionsAsyncTask extends AsyncTask<String, Integer, Boolean> {

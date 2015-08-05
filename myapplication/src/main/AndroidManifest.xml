@@ -131,6 +131,14 @@
             android:name=".activity.BaseTestActivity"
             android:label="@string/title_activity_base_test" >
         </activity>
+        <activity
+            android:name=".activity.CABaseTestActivity"
+            android:label="@string/title_activity_check_answer" >
+        </activity>
+        <activity
+            android:name=".activity.ShowAnalysisActivity"
+            android:label="@string/title_activity_show_analysis" >
+        </activity>
     </application>
 
 </manifest>

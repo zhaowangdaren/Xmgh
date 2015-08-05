@@ -115,7 +115,7 @@ ADDED from AndroidManifest.xml:47:9
 		ADDED from AndroidManifest.xml:49:13
 	android:name
 		ADDED from AndroidManifest.xml:48:13
-activity#com.example.ustc_pc.myapplication.activity.ActivityLogin
+activity#com.example.ustc_pc.myapplication.activity.LoginActivity
 ADDED from AndroidManifest.xml:52:9
 	android:label
 		ADDED from AndroidManifest.xml:55:13

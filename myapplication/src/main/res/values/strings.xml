@@ -176,4 +176,7 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="parseing_questions">解析问题中...</string>
     <string name="title_activity_base_test">BaseTestActivity</string>
+    <string name="title_activity_check_answer">CheckAnswerActivity</string>
+    <string name="parseing_answer">解析答案中...</string>
+    <string name="title_activity_show_analysis">ShowAnalysisActivity</string>
 </resources>

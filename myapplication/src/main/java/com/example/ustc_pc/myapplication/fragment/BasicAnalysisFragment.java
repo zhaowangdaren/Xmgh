@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.dao.DoneQuestion;
+import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Answer;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
 
 import java.util.List;
@@ -23,49 +26,63 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BaseFragment.OnFragmentInteractionListener} interface
+ * {@link BasicAnalysisFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BaseFragment#newInstance} factory method to
+ * Use the {@link BasicAnalysisFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BaseFragment extends Fragment {
-    public static final int TYPE_QUESTION_LAYOUT_HEADER = 0, TYPE_QUESTION_LAYOUT_FATHER = 1,
-            TYPE_QUESTION_LAYOUT_OPTION = 2;
-
+public class BasicAnalysisFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String ARG_QUESTION = "question";
-    public static final String ARG_KP_NAME = "kp";
-    public static final String ARG_INDEX = "index";
-    public static final String ARG_SUM = "sum";
+    private static final String ARG_DONE_QUESTION = "ARG_DONE_QUESTION";
+    private static final String ARG_QUESTION = "ARG_QUESTION";
+    private static final String ARG_ANSWER = "ARG_ANSWER";
+    private static final String ARG_INDEX = "ARG_INDEX";
+    private static final String ARG_KP_NAME = "ARG_KP_NAME";
+    private static final String ARG_SUM_QUESTIONS_NUM = "ARG_SUM_QUESTIONS_NUM";
     // TODO: Rename and change types of parameters
+    private DoneQuestion mDoneQuestion;
     private QuestionNew mQuestionNew;
+    private Answer mAnswer;
+
     private int mIndex;
-    private int mSumQuestion;
+    private int mQuestionsNum;
     private String mStrKPName;
-    private OnFragmentInteractionListener mListener;
+
 
     private RecyclerView mRecyclerView;
+
+    private OnFragmentInteractionListener mListener;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment BaseFragment.
+     * @param mDoneQuestion Parameter 1.
+     * @param mQuestionNew Parameter 2.
+     * @param mAnswer Parameter 3.
+     * @return A new instance of fragment BasicAnalysisFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BaseFragment newInstance(QuestionNew param1, String strKPName, int index, int sum) {
-        BaseFragment fragment = new BaseFragment();
+    public static BasicAnalysisFragment newInstance(DoneQuestion mDoneQuestion,
+                                                    QuestionNew mQuestionNew,
+                                                    Answer mAnswer,
+                                                    int index,
+                                                    String strKpName,
+                                                    int questionsNum) {
+        BasicAnalysisFragment fragment = new BasicAnalysisFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_QUESTION, param1);
-        args.putSerializable(ARG_KP_NAME, strKPName);
+        args.putSerializable(ARG_DONE_QUESTION, mDoneQuestion);
+        args.putSerializable(ARG_QUESTION, mQuestionNew);
+        args.putSerializable(ARG_ANSWER, mAnswer);
         args.putInt(ARG_INDEX, index);
-        args.putInt(ARG_SUM, sum);
+        args.putString(ARG_KP_NAME, strKpName);
+        args.putInt(ARG_SUM_QUESTIONS_NUM, questionsNum);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public BaseFragment() {
+    public BasicAnalysisFragment() {
         // Required empty public constructor
     }
 
@@ -73,11 +90,14 @@ public class BaseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            Bundle arg = getArguments();
-            mQuestionNew = (QuestionNew) arg.getSerializable(ARG_QUESTION);
-            mStrKPName = arg.getString(ARG_KP_NAME);
-            mIndex = getArguments().getInt(ARG_INDEX, 0);
-            mSumQuestion = getArguments().getInt(ARG_SUM, 0);
+            mDoneQuestion = (DoneQuestion)getArguments().getSerializable(ARG_DONE_QUESTION);
+            mQuestionNew = (QuestionNew)getArguments().getSerializable(ARG_QUESTION);
+            mAnswer = (Answer)getArguments().getSerializable(ARG_ANSWER);
+
+            mIndex = getArguments().getInt(ARG_INDEX,0);
+            mQuestionsNum = getArguments().getInt(ARG_SUM_QUESTIONS_NUM, 0);
+            mStrKPName = getArguments().getString(ARG_KP_NAME);
+
         }
     }
 
@@ -85,51 +105,12 @@ public class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_base, container, false);
+        View view = inflater.inflate(R.layout.fragment_basic_analysis, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_layout_question);
         QuestionRecyclerViewAdapter adapter = new QuestionRecyclerViewAdapter();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
     }
 
     class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.QuestionRecyclerViewHolder>{
@@ -140,17 +121,21 @@ public class BaseFragment extends Fragment {
             QuestionRecyclerViewHolder holder = null;
             View view;
             switch (viewType){
-                case TYPE_QUESTION_LAYOUT_HEADER:
+                case Util.TYPE_QUESTION_LAYOUT_HEADER:
                     view = View.inflate(getActivity() ,R.layout.layout_question_header, null);
                     holder = new QuestionRecyclerViewHolder(view, viewType);
                     break;
-                case TYPE_QUESTION_LAYOUT_FATHER:
+                case Util.TYPE_QUESTION_LAYOUT_FATHER:
                     view = View.inflate(getActivity(), R.layout.layout_question_father, null);
                     holder = new QuestionRecyclerViewHolder(view, viewType);
                     break;
-                case TYPE_QUESTION_LAYOUT_OPTION:
+                case Util.TYPE_QUESTION_LAYOUT_OPTION:
                     view = View.inflate(getActivity(), R.layout.layout_question_son, null);
                     holder = new QuestionRecyclerViewHolder(view, viewType);
+                    break;
+                case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
+                    view = View.inflate(getActivity(),R.layout.layout_question_analysis,null);
+                    holder = new QuestionRecyclerViewHolder(view,viewType);
                     break;
             }
             return holder;
@@ -160,41 +145,46 @@ public class BaseFragment extends Fragment {
         public void onBindViewHolder(QuestionRecyclerViewHolder holder, int position) {
             //the index in the question list
             switch (getItemViewType(position)){
-                case TYPE_QUESTION_LAYOUT_HEADER:
+                case Util.TYPE_QUESTION_LAYOUT_HEADER:
                     holder.questionTypeTV.setText(mStrKPName);
                     holder.questionIndexTV.setText(""+mIndex + 1);
-                    holder.questionSumTV.setText(""+mSumQuestion);
+                    holder.questionSumTV.setText(""+ mQuestionsNum);
                     break;
-                case TYPE_QUESTION_LAYOUT_FATHER:
+                case Util.TYPE_QUESTION_LAYOUT_FATHER:
                     holder.questionFatherTV.setText(mQuestionNew.getStrSubject());
                     break;
-                case TYPE_QUESTION_LAYOUT_OPTION:
+                case Util.TYPE_QUESTION_LAYOUT_OPTION:
                     OptionListAdapter optionListAdapter = new OptionListAdapter(mQuestionNew.getQuestionSons().get(0).getOptions());
                     holder.optionListView.setAdapter(optionListAdapter);
-                    holder.optionListView.setOnItemClickListener(new ListViewItemClick(optionListAdapter));
+//                    holder.optionListView.setOnItemClickListener(new ListViewItemClick(optionListAdapter));
+                    break;
+                case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
+                    holder.analysisTV.setText( Html.fromHtml(mAnswer.getAnswerSons().get(0).getStrAnalysis()) );
                     break;
             }
         }
 
         /**
-         * 0:layout_question_header, 1:layout_question_father, 2:layout_question_son
+         * 0:layout_question_header, 1:layout_question_father, 2:layout_question_son, 3:layou_question_analysis
          * @return
          */
         @Override
         public int getItemCount() {
-            return 3;
+            return 4;
         }
 
         @Override
         public int getItemViewType(int position){
             switch (position){
                 case 0:
-                    return TYPE_QUESTION_LAYOUT_HEADER;
+                    return Util.TYPE_QUESTION_LAYOUT_HEADER;
                 case 1:
-                    return TYPE_QUESTION_LAYOUT_FATHER;
+                    return Util.TYPE_QUESTION_LAYOUT_FATHER;
                 case 2:
-                    return TYPE_QUESTION_LAYOUT_OPTION;
-                default: return TYPE_QUESTION_LAYOUT_FATHER;
+                    return Util.TYPE_QUESTION_LAYOUT_OPTION;
+                case 3:
+                    return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
+                default: return Util.TYPE_QUESTION_LAYOUT_FATHER;
             }
         }
 
@@ -208,26 +198,32 @@ public class BaseFragment extends Fragment {
             //layout option
             ListView optionListView;
 
+            //layout question analysis
+            TextView analysisTV;
+
             public QuestionRecyclerViewHolder(View view, int iType){
                 super(view);
                 switch (iType){
-                    case TYPE_QUESTION_LAYOUT_HEADER:
+                    case Util.TYPE_QUESTION_LAYOUT_HEADER:
                         questionTypeTV = (TextView) view.findViewById(R.id.textView_layout_question_header_question_type);
                         questionIndexTV = (TextView)view.findViewById(R.id.textView_layout_question_header_index);
                         questionSumTV = (TextView)view.findViewById(R.id.textView_layout_question_header_sum);
                         break;
-                    case TYPE_QUESTION_LAYOUT_FATHER:
+                    case Util.TYPE_QUESTION_LAYOUT_FATHER:
                         questionFatherTV = (TextView)view.findViewById(R.id.textView_layout_question_father);
                         break;
-                    case TYPE_QUESTION_LAYOUT_OPTION:
+                    case Util.TYPE_QUESTION_LAYOUT_OPTION:
                         optionListView = (ListView)view.findViewById(R.id.listView_question_option_list);
+                        break;
+                    case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
+                        analysisTV = (TextView)view.findViewById(R.id.textView_question_analysis);
                         break;
                 }
             }
         }
     }
 
-    class OptionListAdapter extends BaseAdapter{
+    class OptionListAdapter extends BaseAdapter {
         List<QuestionNew.QuestionSon.QuestionOption> options;
         public OptionListAdapter(List<QuestionNew.QuestionSon.QuestionOption> options){
             this.options = options;
@@ -280,6 +276,15 @@ public class BaseFragment extends Fragment {
             optionViewHolder.checkedTextView.setText(""+41+position);
 
             optionViewHolder.textView.setText(getItem(position).strOption);
+            if(options.get(position).isAnswer){
+                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_right));
+                optionViewHolder.checkedTextView.setTextColor(-1);//white
+            }else if(options.get(position).isSelected){
+                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_error));
+                optionViewHolder.checkedTextView.setTextColor(-1);//white
+            }else{
+                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
+            }
             if(options.get(position).isSelected){
                 optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_click));
                 optionViewHolder.checkedTextView.setTextColor(-1);//white
@@ -297,26 +302,44 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    class ListViewItemClick implements AdapterView.OnItemClickListener {
-
-        OptionListAdapter optionsAdapter;
-        public ListViewItemClick(OptionListAdapter myAdapter){
-            optionsAdapter = myAdapter;
-        }
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            //single select
-            if( !mQuestionNew.getQuestionSons().get(0).getIsMultiSelect() ){
-                int optionSize = optionsAdapter.getCount();
-                for(int i = 0; i< optionSize ; i++){
-                    if(optionsAdapter.getItem(i).isSelected)optionsAdapter.getItem(i).isSelected = false;
-                }
-            }
-
-            if(optionsAdapter.getItem(position).isSelected) optionsAdapter.getItem(position).isSelected = false;
-            else optionsAdapter.getItem(position).isSelected = true;
-            optionsAdapter.notifyDataSetChanged();
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
         }
     }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onFragmentInteraction(Uri uri);
+    }
+
 }

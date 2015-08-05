@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ustc_pc.myapplication.activity.ActivityHistoryTest;
-import com.example.ustc_pc.myapplication.activity.ActivityLogin;
+import com.example.ustc_pc.myapplication.activity.LoginActivity;
 import com.example.ustc_pc.myapplication.activity.ActivityPersonal;
 import com.example.ustc_pc.myapplication.activity.ActivityUserBook;
 import com.example.ustc_pc.myapplication.activity.ActivityZhenTi;
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity
         UserSharedPreference userSharedPreference = new UserSharedPreference(this);
         boolean isLogin = userSharedPreference.getIsLogin();
         if( !isLogin ){
-            Intent intent = new Intent(this, ActivityLogin.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         }

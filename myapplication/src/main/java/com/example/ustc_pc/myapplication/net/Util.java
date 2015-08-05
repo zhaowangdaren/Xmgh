@@ -9,6 +9,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.ustc_pc.myapplication.unit.Answer;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
 
@@ -47,6 +48,23 @@ public class Util {
     public static String APP_PATH = Environment.getExternalStorageDirectory()+"/.cn.edu.ustc.xmgh/";
     public static int BASIC_TEST = 1, REAL_TEST = 2, SPECIAL_TEST = 3, MOCK_TEST = 4;
 
+    public static final int TYPE_QUESTION_LAYOUT_HEADER = 0, TYPE_QUESTION_LAYOUT_FATHER = 1,
+            TYPE_QUESTION_LAYOUT_OPTION = 2, TYPE_QUESTION_LAYOUT_ANALYSIS = 4;
+
+    /**
+     * check net is allowable
+     * @param context
+     * @return
+     */
+    public static boolean isConnect(Context context){
+        ConnectivityManager connManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connManager.getActiveNetworkInfo();
+        if( netInfo != null){
+            return netInfo.isAvailable();
+        }
+        return false;
+    }
 
     public static boolean isPhoneNumber(String strPhone) {
         Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
@@ -97,18 +115,20 @@ public class Util {
         return result;
     }
 
-    /**
-     * check net is allowable
-     * @param context
-     * @return
-     */
-    public static boolean isConnect(Context context){
-        ConnectivityManager connManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = connManager.getActiveNetworkInfo();
-        if( netInfo != null){
-            return netInfo.isAvailable();
+
+
+    public static List<Answer> parseAnswerFromFile(String[] questionsAPath) {
+        if(questionsAPath.length <= 0)return null;
+        List<Answer> result = new ArrayList<>(questionsAPath.length);
+        for(int i = 0; i< questionsAPath.length; i++){
+            String strAnswer = FileOperation.getFileFromSD(questionsAPath[i] + "/" + "analysis.json");
+            JSONObject jsonAnswer = JSON.parseObject(strAnswer);
+            int iQuestionID = jsonAnswer.getIntValue("iQuestionID");
+            boolean isMultiSonQuestion = jsonAnswer.getBooleanValue("isMultiSonQuestion");
+            JSONArray jsonArraySons = jsonAnswer.getJSONArray("questions");
+            Answer answer = new Answer(iQuestionID,isMultiSonQuestion,jsonArraySons);
+            result.add(answer);
         }
-        return false;
+        return result;
     }
 }

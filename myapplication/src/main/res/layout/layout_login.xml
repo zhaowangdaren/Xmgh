@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e0e0e0"
-    tools:context="com.example.ustc_pc.myapplication.activity.ActivityLogin">
+    tools:context="com.example.ustc_pc.myapplication.activity.LoginActivity">
 
     <LinearLayout
         android:orientation="vertical"
