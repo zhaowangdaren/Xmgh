@@ -17,6 +17,7 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.adapter.ZhenTiAdapter;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.unit.Paper;
 
@@ -57,7 +58,7 @@ public class ActivityZhenTi extends ActionBarActivity implements  View.OnClickLi
 
     private void initData() {
         String fileName = "zhenti_"+_iCourse + ".json";
-        if( NetUtil.isConnect(this)){//has network
+        if( Util.isConnect(this)){//has network
             GetZhenTiPaperAsyncTask getZhenTiPaperAsyncTask = new GetZhenTiPaperAsyncTask();
             getZhenTiPaperAsyncTask.execute();
         }else{// no network

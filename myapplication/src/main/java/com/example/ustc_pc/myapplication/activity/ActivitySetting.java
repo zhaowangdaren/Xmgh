@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 
 import org.json.JSONException;
@@ -108,7 +109,7 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
     }
 
     private void checkUpdate() {
-        if(!NetUtil.isConnect(this)){
+        if(!Util.isConnect(this)){
             Toast.makeText(this, getString(R.string.no_network_try_again), Toast.LENGTH_SHORT).show();
         }else{
             CheckUpdateAsync checkUpdateAsync = new CheckUpdateAsync();

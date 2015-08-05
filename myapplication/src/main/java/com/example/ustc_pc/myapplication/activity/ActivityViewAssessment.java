@@ -17,6 +17,7 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.adapter.ActivityViewAssessmentAdapter;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.AssessmentScore;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.viewUnit.ViewArc;
@@ -65,7 +66,7 @@ public class ActivityViewAssessment extends ActionBarActivity implements SwipeRe
 
     private void initData(){
         iCourseID = getIntent().getIntExtra("COURSE_ID",1);
-        if(!NetUtil.isConnect(this)){
+        if(!Util.isConnect(this)){
             mNoNetLL.setVisibility(View.VISIBLE);
         }else {
             progressDialog = ProgressDialog.show(ActivityViewAssessment.this, null, getResources().getString(R.string.loading));
