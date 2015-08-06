@@ -25,12 +25,12 @@ import android.widget.TextView;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
-import com.example.ustc_pc.myapplication.fragment.CourseFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseBaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseActivity extends AppCompatActivity implements CourseFragment.OnFragmentInteractionListener {
+public class CourseActivity extends AppCompatActivity implements CourseBaseFragment.OnFragmentInteractionListener {
 
     private List<Course> mSelectedCourses;
     private DrawerLayout mDrawerLayout;
@@ -97,10 +97,10 @@ public class CourseActivity extends AppCompatActivity implements CourseFragment.
     }
 
     private void changeCourse(int position) {
-        CourseFragment courseFragment = CourseFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        CourseBaseFragment courseBaseFragment = CourseBaseFragment.newInstance(mSelectedCourses.get(position).getICourseID());
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, courseFragment)
+                .replace(R.id.content_frame, courseBaseFragment)
                 .commit();
         mDrawerLayout.closeDrawer(mRelativeLayoutLeftMenu);
 
@@ -212,10 +212,15 @@ public class CourseActivity extends AppCompatActivity implements CourseFragment.
             return true;
         }
         // Handle your other action bar items...
-
+        if(item.getItemId() == R.id.action_more){
+            showRightTopMenu();
+        }
         return super.onOptionsItemSelected(item);
     }
 
+    private void showRightTopMenu(){
+
+    }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

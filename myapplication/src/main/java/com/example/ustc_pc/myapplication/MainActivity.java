@@ -39,7 +39,7 @@ import com.example.ustc_pc.myapplication.activity.ActivityZhenTi;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
-import com.example.ustc_pc.myapplication.fragment.CourseFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseBaseFragment;
 import com.example.ustc_pc.myapplication.net.Util;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
-        implements View.OnClickListener, AdapterView.OnItemClickListener, CourseFragment.OnFragmentInteractionListener{
+        implements View.OnClickListener, AdapterView.OnItemClickListener, CourseBaseFragment.OnFragmentInteractionListener{
 
     public static final String ARG_SECTION_NUMBER = "section_number";
     /**
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         mICurCourseID = lastCourseID;
         if(lastCourseID != Util.NO_LAST_COURSE){
             mFragmentManager.beginTransaction()
-                    .replace(R.id.container, CourseFragment.newInstance(lastCourseID))
+                    .replace(R.id.container, CourseBaseFragment.newInstance(lastCourseID))
                     .commit();
             mLeftMenuDrawerLayout.closeDrawers();
             UserSharedPreference userSharedPreference = new UserSharedPreference(this);
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity
         int iCourseID = mSelectedCourses.get(position).getICourseID();
         mICurCourseID = iCourseID;
         mFragmentManager.beginTransaction()
-                .replace(R.id.container, CourseFragment.newInstance(iCourseID))
+                .replace(R.id.container, CourseBaseFragment.newInstance(iCourseID))
                 .commit();
         mLeftMenuDrawerLayout.closeDrawers();
         UserSharedPreference userSharedPreference = new UserSharedPreference(this);

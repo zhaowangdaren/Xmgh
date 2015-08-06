@@ -179,4 +179,6 @@
     <string name="title_activity_check_answer">CheckAnswerActivity</string>
     <string name="parseing_answer">解析答案中...</string>
     <string name="title_activity_show_analysis">ShowAnalysisActivity</string>
+    <string name="action_note">笔记</string>
+    <string name="are_being_developed">正在开发中，敬请等待</string>
 </resources>

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
+import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.Answer;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
@@ -43,10 +44,13 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
     private int mIQuestionType;
     private String mStrKPName, mStrKPID;
     private int mCorrectNum = 0;
+    private long mlTestSpendTime, mlTestStartTime, mlTestEndTime;
 
     private Button mShowAllAnalysisBT;
     private TextView mKPNameTV, mSpendTime, mScoreTV, mSumQueNumTV;
     private ScrollViewWithGridView mAnswerSheetGV;
+    private String mStrTestSpendTime = "00:00";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +63,17 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
         mIQuestionType = intent.getIntExtra("mIQuestionType", -1);
         mStrKPID = intent.getStringExtra("mStrKPID");
         mStrKPName = intent.getStringExtra("mStrKPName");
+        mlTestStartTime = intent.getLongExtra("mlTestStartTime", 0);
+        mlTestEndTime = intent.getLongExtra("mlTestEndTime", 0);
+        mlTestSpendTime = intent.getLongExtra("mlTestSpendTime", 0);
+        mStrTestSpendTime = intent.getStringExtra("mStrTestSpendTime");
 
         mShowAllAnalysisBT = (Button) findViewById(R.id.button_show_all_analysis);
         mShowAllAnalysisBT.setOnClickListener(this);
         mKPNameTV = (TextView)findViewById(R.id.textView_test_kp_name);
         mSpendTime = (TextView)findViewById(R.id.textView_test_spend_time);
+        mSpendTime.setText(mStrTestSpendTime);
+
         mScoreTV = (TextView)findViewById(R.id.textView_score);
         mSumQueNumTV = (TextView)findViewById(R.id.textView_sum_questions_num);
         mSumQueNumTV.setText(""+mQuestions.size());
@@ -182,10 +192,12 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                     }
                     if(questionOptions.get(j).isAnswer)strUserAnswer.append(questionOptions.get(j).ID + ",");
                 }
+                long lQuestionSpendTime = questionNew.getQuestionSons().get(0).getlStopTime()
+                        - questionNew.getQuestionSons().get(0).getlStartTime();
                 DoneQuestion doneQuestion = new DoneQuestion(
                         mICourseID,mIQuestionType,questionNew.getiQuestionID(),
                         false,isCorrect,null,strUserAnswer.toString(),
-                        questionNew.getQuestionSons().get(0).getISpendTime());
+                        lQuestionSpendTime);
                 result.add(doneQuestion);
 
                 if(isCorrect)mCorrectNum++;
@@ -209,9 +221,17 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 AnswerSheetGVAdapter answerSheetGVAdapter = new AnswerSheetGVAdapter();
                 mAnswerSheetGV.setAdapter(answerSheetGVAdapter);
 
-                mScoreTV.setText(""+mCorrectNum);
+                mScoreTV.setText("" + mCorrectNum);
+
+                saveDoneQuestion2DB();
             }
         }
+    }
+
+    private void saveDoneQuestion2DB(){
+        if(mDoneQuestions == null || mDoneQuestions.isEmpty())return;
+        DoneQuestionDBHelper doneQuestionDBHelper = DoneQuestionDBHelper.getInstance(this);
+        doneQuestionDBHelper.insertDoneQue(mDoneQuestions);
     }
 
     class AnswerSheetGVAdapter extends BaseAdapter{

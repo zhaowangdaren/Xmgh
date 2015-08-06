@@ -110,14 +110,23 @@ public class QuestionNew implements Serializable ,Comparable<QuestionNew>{
         public boolean isMultiSelect;
         public List<QuestionOption> options;
         public String strPicFileName;
-        public Integer iSpendTime;
+        public long lSpendTime;
+        public long lStartTime, lStopTime;
 
-        public Integer getISpendTime(){
-            return iSpendTime;
+        public long getlStartTime(){return lStartTime;}
+        public void setlStartTime(long startTime){
+            this.lStartTime = startTime;
         }
 
-        public void setiSpendTime(Integer iSpendTime){
-            this.iSpendTime = iSpendTime;
+        public long getlStopTime(){return lStopTime;}
+        public void setlStopTime(long stopTime){lStopTime = stopTime;}
+
+        public long getISpendTime(){
+            return lSpendTime;
+        }
+
+        public void setlSpendTime(long lSpendTime){
+            this.lSpendTime = lSpendTime;
         }
 
         public QuestionSon(){

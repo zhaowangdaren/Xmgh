@@ -6,86 +6,176 @@
     >
 
 
-    <Button
-        android:layout_margin="@dimen/view_margin"
-        android:id="@+id/button_error_book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/style_click_menu_button_bg"
-        android:drawableLeft="@drawable/style_click_error_book_icon"
-        android:text="查看错题"
-        android:textColor="@drawable/text_click_bg"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="50dp"
-        />
+    <RelativeLayout
+        android:gravity="end"
+        android:id="@+id/relativeLayout_1_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- TODO change button id-->
+        <Button
+            android:id="@+id/button_1_test"
+            android:text="基础练习"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:layout_margin="@dimen/view_margin"
-        android:layout_below="@id/button_error_book"
-        android:id="@+id/button_error_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/style_click_menu_button_bg"
-        android:drawableLeft="@drawable/style_click_error_test_icon"
-        android:text="错题练习"
-        android:textColor="@drawable/text_click_bg"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="50dp"
-        />
+        <Button
+            android:layout_toRightOf="@id/button_1_test"
+            android:id="@+id/button_2_test"
+            android:text="模拟测试"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:layout_margin="@dimen/view_margin"
-        android:layout_below="@id/button_error_test"
-        android:id="@+id/button_test_history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/style_click_menu_button_bg"
-        android:drawableLeft="@drawable/style_click_test_history_icon"
-        android:text="练习历史"
-        android:textColor="@drawable/text_click_bg"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="50dp"
-        />
+        <Button
+            android:layout_toRightOf="@id/button_2_test"
+            android:id="@+id/button_3_test"
+            android:text="基础练习"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
-    <Button
-        android:layout_margin="@dimen/view_margin"
-        android:layout_below="@+id/button_test_history"
-        android:id="@+id/button_zhen_ti"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/style_click_menu_button_bg"
-        android:drawableLeft="@drawable/style_click_zhen_ti_icon"
-        android:text="往年真题"
-        android:textColor="@drawable/text_click_bg"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="50dp"
-        />
+    <RelativeLayout
+        android:gravity="end"
+        android:layout_below="@id/relativeLayout_1_line"
+        android:id="@+id/relativeLayout_2_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:layout_margin="@dimen/view_margin"
-        android:layout_below="@+id/button_zhen_ti"
-        android:id="@+id/button_note_book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/style_click_menu_button_bg"
-        android:drawableLeft="@drawable/style_click_note_book_icon"
-        android:text="笔记题目"
-        android:textColor="@drawable/text_click_bg"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="50dp"
-        />
+        <!-- TODO change button id-->
+        <Button
+            android:id="@+id/button_4_test"
+            android:text="基础练习"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:layout_margin="@dimen/view_margin"
-        android:layout_below="@+id/button_note_book"
-        android:id="@+id/button_favorite_book"
+        <Button
+            android:layout_toRightOf="@id/button_4_test"
+            android:id="@+id/button_5_test"
+            android:text="模拟测试"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_toRightOf="@id/button_5_test"
+            android:id="@+id/button_6_test"
+            android:text="基础练习"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:visibility="invisible"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/style_click_menu_button_bg"
-        android:drawableLeft="@drawable/style_click_favorite_book_icon"
-        android:text="收藏题目"
-        android:textColor="@drawable/text_click_bg"
-        android:paddingLeft="@dimen/view_margin"
-        android:paddingRight="50dp"
-        />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:id="@+id/button_error_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_click_menu_button_bg"
+            android:drawableLeft="@drawable/style_click_error_book_icon"
+            android:text="查看错题"
+            android:textColor="@drawable/text_click_bg"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingRight="50dp"
+            />
+
+        <Button
+            android:layout_toRightOf="@id/button_error_book"
+            android:id="@+id/button_r1"
+            android:text="模拟测试"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_toRightOf="@id/button_r1"
+            android:id="@+id/button_r2"
+            android:text="模拟测试"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="模拟测试"
+            android:layout_toRightOf="@id/button_r2"
+            android:id="@+id/button_r3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="模拟测试"
+            android:layout_toRightOf="@id/button_r3"
+            android:id="@+id/button_r4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:layout_below="@id/button_error_book"
+            android:id="@+id/button_error_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_click_menu_button_bg"
+            android:drawableLeft="@drawable/style_click_error_test_icon"
+            android:text="错题练习"
+            android:textColor="@drawable/text_click_bg"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingRight="50dp"
+            />
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:layout_below="@id/button_error_test"
+            android:id="@+id/button_test_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_click_menu_button_bg"
+            android:drawableLeft="@drawable/style_click_test_history_icon"
+            android:text="练习历史"
+            android:textColor="@drawable/text_click_bg"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingRight="50dp"
+            />
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:layout_below="@+id/button_test_history"
+            android:id="@+id/button_zhen_ti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_click_menu_button_bg"
+            android:drawableLeft="@drawable/style_click_zhen_ti_icon"
+            android:text="往年真题"
+            android:textColor="@drawable/text_click_bg"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingRight="50dp"
+            />
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:layout_below="@+id/button_zhen_ti"
+            android:id="@+id/button_note_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_click_menu_button_bg"
+            android:drawableLeft="@drawable/style_click_note_book_icon"
+            android:text="笔记题目"
+            android:textColor="@drawable/text_click_bg"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingRight="50dp"
+            />
+
+        <Button
+            android:layout_margin="@dimen/view_margin"
+            android:layout_below="@+id/button_note_book"
+            android:id="@+id/button_favorite_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_click_menu_button_bg"
+            android:drawableLeft="@drawable/style_click_favorite_book_icon"
+            android:text="收藏题目"
+            android:textColor="@drawable/text_click_bg"
+            android:paddingLeft="@dimen/view_margin"
+            android:paddingRight="50dp"
+            />
+    </RelativeLayout>
+
 </RelativeLayout>

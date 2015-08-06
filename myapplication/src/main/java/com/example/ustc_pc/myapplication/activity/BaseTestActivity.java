@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.view.menu.MenuView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +37,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import android.os.Handler;
 
 public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFragment.OnFragmentInteractionListener{
 
@@ -45,6 +48,8 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
     private int mICourseID;
     private int mIQuestionType;
     private String mStrKPName, mStrKPID;
+
+    private long mlTestStartTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +66,86 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         mQuestions = new ArrayList<>();
         mQuestionsPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mQuestionsPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
         DownloadQuestionsAsyncTask downloadQuestionsAsyncTask = new DownloadQuestionsAsyncTask(this);
         downloadQuestionsAsyncTask.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
 
     }
+
+    private class ViewPagerChangeListener implements ViewPager.OnPageChangeListener{
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset,
+                                   int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if(position < mQuestions.size()){
+                mQuestions.get(position).getQuestionSons().get(0).setlStartTime(
+                        System.currentTimeMillis());
+                if(position > 0){
+                    mQuestions.get(position).getQuestionSons().get(0).setlStopTime(
+                        System.currentTimeMillis()
+                    );
+                }
+            }else{
+                if(position == mQuestions.size()){
+                    mQuestions.get(position - 1).getQuestionSons().get(0).setlStopTime(
+                            System.currentTimeMillis());
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {}
+    }
+
+    private long mlTestSpendTime;
+    private String mStrTestSpendTime = "00:00";
+    private MenuView.ItemView mTimerMenu;
+
+    private void startTimer(){
+        mlTestStartTime = System.currentTimeMillis();
+        //init the first question start time
+        mQuestions.get(0).getQuestionSons().get(0).setlStartTime(mlTestStartTime);
+
+    }
+
+    private Runnable mUpdateTimerRun = new Runnable() {
+        @Override
+        public void run() {
+            long spentTime = System.currentTimeMillis() - mlTestStartTime;
+            mlTestSpendTime = spentTime;
+            //minius
+            Long minius = (spentTime / 1000 ) / 60;
+            //seconds
+            Long seconds = (spentTime / 1000 ) % 60;
+
+            Message msg = new Message();
+            Bundle bundle = new Bundle();
+            String strMinius = minius + "";
+            if(minius < 10 ) strMinius = "0"+strMinius;
+            String strSeconds = seconds + "";
+            if(seconds < 10) strSeconds = "0" + strSeconds;
+            String strTestSpendTime = strMinius+":"+strSeconds;
+            bundle.putString("TEST_SPEND_TIME", strTestSpendTime);
+            msg.setData(bundle);
+            handlerTimer.sendMessage(msg);
+            handlerTimer.postDelayed(this, 1000);
+        }
+    };
+
+    private Handler handlerTimer = new Handler() {
+      public void handleMessage(Message msg){
+          mStrTestSpendTime = msg.getData().getString("TEST_SPEND_TIME");
+          if(mStrTestSpendTime != null && mStrTestSpendTime.length() > 0){
+              if(mTimerMenu == null)mTimerMenu = (MenuView.ItemView) findViewById(R.id.action_timer);
+              mTimerMenu.setTitle(mStrTestSpendTime);
+          }
+      }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,18 +169,24 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         return super.onOptionsItemSelected(item);
     }
 
+    private long mlTestEndTime;
     /**
      * Capture submit answer event
      * @param uri
      */
     @Override
     public void onFragmentInteraction(Uri uri) {
+        mlTestEndTime = System.currentTimeMillis();
         Intent intent = new Intent(this, CABaseTestActivity.class);
         intent.putExtra("questions", (Serializable)mQuestions);
         intent.putExtra("mICourseID",mICourseID);
         intent.putExtra("mIQuestionType",mIQuestionType);
         intent.putExtra("mStrKPID",mStrKPID);
         intent.putExtra("mStrKPName",mStrKPName);
+        intent.putExtra("mlTestSpendTime", mlTestSpendTime);
+        intent.putExtra("mlTestStartTime",mlTestStartTime);
+        intent.putExtra("mlTestEndTime",mlTestEndTime);
+        intent.putExtra("mStrTestSpendTime",mStrTestSpendTime);
 
         startActivity(intent);
         finish();
@@ -168,7 +255,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             if(result != null && !result.isEmpty()){
                 mQuestions.addAll(result);
                 mQuestionsPagerAdapter.notifyDataSetChanged();
-
+                startTimer();
             }
             progressDialog.dismiss();
         }
@@ -272,6 +359,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
                 ParseQuestionsAsyncTask parseQuestionsAsyncTask = new ParseQuestionsAsyncTask(context);
                 parseQuestionsAsyncTask.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
             }
+            progressDialog.dismiss();
         }
     }
 }

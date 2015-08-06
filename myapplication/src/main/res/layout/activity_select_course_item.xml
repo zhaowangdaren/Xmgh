@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/relativeLayout_course_item"
+    android:padding="@dimen/activity_horizontal_margin"
     android:background="@color/white"
     >
 

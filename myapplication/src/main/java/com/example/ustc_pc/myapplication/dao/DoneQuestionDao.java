@@ -28,7 +28,7 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
         public final static Property IsCorrect = new Property(4, Boolean.class, "isCorrect", false, "IS_CORRECT");
         public final static Property StrNote = new Property(5, String.class, "strNote", false, "STR_NOTE");
         public final static Property StrUserAnswer = new Property(6, String.class, "strUserAnswer", false, "STR_USER_ANSWER");
-        public final static Property ISpendTime = new Property(7, Integer.class, "iSpendTime", false, "I_SPEND_TIME");
+        public final static Property ISpendTime = new Property(7, Integer.class, "lSpendTime", false, "I_SPEND_TIME");
     };
 
 
@@ -51,7 +51,7 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
                 "\"IS_CORRECT\" INTEGER," + // 4: isCorrect
                 "\"STR_NOTE\" TEXT," + // 5: strNote
                 "\"STR_USER_ANSWER\" TEXT," + // 6: strUserAnswer
-                "\"I_SPEND_TIME\" INTEGER);"); // 7: iSpendTime
+                "\"I_SPEND_TIME\" INTEGER);"); // 7: lSpendTime
     }
 
     /** Drops the underlying database table. */
@@ -123,7 +123,7 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isCorrect
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // strNote
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // strUserAnswer
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // iSpendTime
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // lSpendTime
         );
         return entity;
     }

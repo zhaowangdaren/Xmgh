@@ -16,12 +16,14 @@ public class DoneQuestion implements Serializable{
     private Boolean isCorrect = false;
     private String strNote;
     private String strUserAnswer;
-    private Integer iSpendTime;
+    private Long lSpendTime;
 
     public DoneQuestion() {
     }
 
-    public DoneQuestion(Integer iCourseID, Integer iQuestionType, Integer iQuestionID, Boolean isFavorite, Boolean isCorrect, String strNote, String strUserAnswer, Integer iSpendTime) {
+    public DoneQuestion(Integer iCourseID, Integer iQuestionType, Integer iQuestionID,
+                        Boolean isFavorite, Boolean isCorrect, String strNote,
+                        String strUserAnswer, Long lSpendTime) {
         this.iCourseID = iCourseID;
         this.iQuestionType = iQuestionType;
         this.iQuestionID = iQuestionID;
@@ -29,7 +31,7 @@ public class DoneQuestion implements Serializable{
         this.isCorrect = isCorrect;
         this.strNote = strNote;
         this.strUserAnswer = strUserAnswer;
-        this.iSpendTime = iSpendTime;
+        this.lSpendTime = lSpendTime;
     }
 
     public Integer getICourseID() {
@@ -89,11 +91,11 @@ public class DoneQuestion implements Serializable{
     }
 
     public Integer getISpendTime() {
-        return iSpendTime;
+        return lSpendTime;
     }
 
     public void setISpendTime(Integer iSpendTime) {
-        this.iSpendTime = iSpendTime;
+        this.lSpendTime = iSpendTime;
     }
 
 }

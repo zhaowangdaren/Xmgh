@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,7 @@ import com.example.ustc_pc.myapplication.unit.Paper;
 import com.example.ustc_pc.myapplication.unit.Question;
 import com.example.ustc_pc.myapplication.unit.Strings;
 
-public class ActivityPaperAnalysis extends ActionBarActivity implements ViewPager.OnPageChangeListener, View.OnClickListener{
+public class ActivityPaperAnalysis extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener{
 
     ViewPager mViewPager;
     private TextView mTypeTV, mIndexTV, mDivideSymbol, mSumTV;//题型，第几题，总题数
