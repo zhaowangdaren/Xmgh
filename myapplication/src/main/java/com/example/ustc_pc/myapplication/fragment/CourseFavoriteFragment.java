@@ -1,14 +1,26 @@
 package com.example.ustc_pc.myapplication.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.dao.KPs;
+import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
+import com.example.ustc_pc.myapplication.db.KPsDBHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +45,6 @@ public class CourseFavoriteFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment CourseFavoriteFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -54,16 +65,85 @@ public class CourseFavoriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mCourseID = getArguments().getInt(ARG_PARAM1);
+            mKPses = new ArrayList<>();
         }
     }
+
+    private ListView mLV;
+    private List<KPs> mKPses;
+    private LVAdapter mLvAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course_favorite, container, false);
+        View view = inflater.inflate(R.layout.fragment_course_error, container, false);
+        mLV = (ListView) view.findViewById(R.id.listView_favorite_fragment);
+        mLvAdapter = new LVAdapter();
+        mLV.setAdapter(mLvAdapter);
+
+        GetFavoriteQueAsync getErrorQueAsync = new GetFavoriteQueAsync(getActivity());
+        getErrorQueAsync.execute(mCourseID);
+        return view;
     }
 
+    private class LVAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return mKPses.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return mKPses.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = View.inflate(parent.getContext(), R.layout.layout_listview_check_item, null);
+            TextView textView = (TextView)convertView.findViewById(R.id.textView_labale_name_user_book);
+            textView.setText(mKPses.get(position).getStrName());
+            return convertView;
+        }
+    }
+
+    private class GetFavoriteQueAsync extends AsyncTask<Integer, Integer, List<KPs>> {
+
+        private Context context;
+        private ProgressDialog progressDialog;
+        public GetFavoriteQueAsync(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            progressDialog = ProgressDialog.show(context, getString(R.string.loading),null);
+        }
+        @Override
+        protected List<KPs> doInBackground(Integer... integers) {
+            int iCourseID = integers[0];
+            DoneQuestionDBHelper doneQuestionDBHelper = DoneQuestionDBHelper.getInstance(context);
+            List<String> strKPIDs = doneQuestionDBHelper.queryFavoriteKPs(iCourseID);
+            KPsDBHelper kPsDBHelper = KPsDBHelper.getInstance(context);
+            List<KPs> result = kPsDBHelper.queryKPsByKPID(iCourseID, strKPIDs);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<KPs> result){
+            if(result != null && !result.isEmpty()){
+                mKPses.addAll(result);
+                mLvAdapter.notifyDataSetChanged();
+            }
+            progressDialog.dismiss();
+        }
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

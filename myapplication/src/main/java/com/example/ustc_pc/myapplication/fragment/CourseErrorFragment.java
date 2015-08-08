@@ -130,7 +130,7 @@ public class CourseErrorFragment extends Fragment {
             List<String> strKPIDs = doneQuestionDBHelper.queryErrorKPs(iCourseID);
             KPsDBHelper kPsDBHelper = KPsDBHelper.getInstance(context);
 
-            List<KPs> result = kPsDBHelper.queryKPsByKPID(strKPIDs);
+            List<KPs> result = kPsDBHelper.queryKPsByKPID(iCourseID, strKPIDs);
             return result;
         }
 
@@ -140,6 +140,7 @@ public class CourseErrorFragment extends Fragment {
                 mKPses.addAll(result);
                 mLvAdapter.notifyDataSetChanged();
             }
+            progressDialog.dismiss();
         }
     }
     // TODO: Rename method, update argument and hook method into UI event

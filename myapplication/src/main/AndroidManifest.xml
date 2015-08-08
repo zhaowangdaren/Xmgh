@@ -29,27 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:logo="@drawable/ic_launcher"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name=".activity.ActivityPaperG" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityPapers"
-            android:label="@string/title_activity_activity_papers" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityPaperReport"
-            android:label="@string/title_activity_activity_paper_report" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityPaperAnalysis"
-            android:label="@string/title_activity_activity_paper_analysis" >
-        </activity>
-        <activity
             android:name=".activity.ActivityLogin"
             android:icon="@drawable/ic_launcher"
             android:label="@string/login"
@@ -58,14 +37,6 @@
         <activity
             android:name=".activity.ActivityWriteInfo"
             android:label="@string/title_activity_activity_write_info" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityHistoryTest"
-            android:label="@string/title_activity_activity_history_test" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityZhenTi"
-            android:label="@string/title_activity_activity_history_office" >
         </activity>
         <activity
             android:name=".activity.ActivityPersonal"
@@ -82,14 +53,6 @@
         <activity
             android:name=".activity.ActivitySelectImage"
             android:label="@string/select_photo" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityUserBook"
-            android:label="@string/title_activity_activity_user_book" >
-        </activity>
-        <activity
-            android:name=".activity.ActivityUserQuestions"
-            android:label="@string/title_activity_activity_user_questions" >
         </activity>
         <activity
             android:name=".activity.ActivitySetting"

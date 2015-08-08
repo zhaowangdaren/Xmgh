@@ -67,12 +67,47 @@ public class DoneQuestionDBHelper {
 
     public List<String> queryErrorKPs(int iCourseID) {
         List<DoneQuestion> errorQues = questionDao.queryBuilder()
-                .where(DoneQuestionDao.Properties.IsCorrect.eq(false))
+                .where(DoneQuestionDao.Properties.ICourseID.eq(iCourseID),DoneQuestionDao.Properties.IsCorrect.eq(false))
                 .orderAsc(DoneQuestionDao.Properties.StrKPID)
                 .list();
         List<String> result = new ArrayList<>();
         String lastKPID = null;
         for(DoneQuestion doneQuestion : errorQues){
+            String kpID = doneQuestion.getStrKPID();
+            if(lastKPID == null || !lastKPID.equals(kpID)){
+                lastKPID = kpID;
+                result.add(lastKPID);
+            }
+        }
+        return result;
+    }
+
+    public List<String> queryFavoriteKPs(int iCourseID) {
+        List<DoneQuestion> favoriteQues = questionDao.queryBuilder()
+                .where(DoneQuestionDao.Properties.ICourseID.eq(iCourseID),DoneQuestionDao.Properties.IsFavorite.eq(true))
+                .orderAsc(DoneQuestionDao.Properties.StrKPID)
+                .list();
+        List<String> result = new ArrayList<>();
+        String lastKPID = null;
+        for(DoneQuestion doneQuestion : favoriteQues){
+            String kpID = doneQuestion.getStrKPID();
+            if(lastKPID == null || !lastKPID.equals(kpID)){
+                lastKPID = kpID;
+                result.add(lastKPID);
+            }
+        }
+        return result;
+    }
+
+    public List<String> queryNoteKPs(int iCourseID) {
+        List<DoneQuestion> favoriteQues = questionDao.queryBuilder()
+                .where(DoneQuestionDao.Properties.ICourseID.eq(iCourseID)
+                        ,DoneQuestionDao.Properties.StrNote.isNotNull())
+                .orderAsc(DoneQuestionDao.Properties.StrKPID)
+                .list();
+        List<String> result = new ArrayList<>();
+        String lastKPID = null;
+        for(DoneQuestion doneQuestion : favoriteQues){
             String kpID = doneQuestion.getStrKPID();
             if(lastKPID == null || !lastKPID.equals(kpID)){
                 lastKPID = kpID;

@@ -8,5 +8,4 @@
         android:text="@string/are_being_developed"
         android:gravity="center"
         />
-
 </FrameLayout>
