@@ -12,18 +12,17 @@ public class DoneQuestion implements Serializable{
     private Integer iCourseID;
     private Integer iQuestionType;
     private Integer iQuestionID;
-    private Boolean isFavorite = false;
-    private Boolean isCorrect = false;
+    private Boolean isFavorite;
+    private Boolean isCorrect;
     private String strNote;
     private String strUserAnswer;
-    private Long lSpendTime;
+    private Long iSpendTime;
+    private String strKPID;
 
     public DoneQuestion() {
     }
 
-    public DoneQuestion(Integer iCourseID, Integer iQuestionType, Integer iQuestionID,
-                        Boolean isFavorite, Boolean isCorrect, String strNote,
-                        String strUserAnswer, Long lSpendTime) {
+    public DoneQuestion(Integer iCourseID, Integer iQuestionType, Integer iQuestionID, Boolean isFavorite, Boolean isCorrect, String strNote, String strUserAnswer, Long iSpendTime, String strKPID) {
         this.iCourseID = iCourseID;
         this.iQuestionType = iQuestionType;
         this.iQuestionID = iQuestionID;
@@ -31,7 +30,8 @@ public class DoneQuestion implements Serializable{
         this.isCorrect = isCorrect;
         this.strNote = strNote;
         this.strUserAnswer = strUserAnswer;
-        this.lSpendTime = lSpendTime;
+        this.iSpendTime = iSpendTime;
+        this.strKPID = strKPID;
     }
 
     public Integer getICourseID() {
@@ -90,12 +90,20 @@ public class DoneQuestion implements Serializable{
         this.strUserAnswer = strUserAnswer;
     }
 
-    public Integer getISpendTime() {
-        return lSpendTime;
+    public Long getISpendTime() {
+        return iSpendTime;
     }
 
-    public void setISpendTime(Integer iSpendTime) {
-        this.lSpendTime = iSpendTime;
+    public void setISpendTime(Long iSpendTime) {
+        this.iSpendTime = iSpendTime;
+    }
+
+    public String getStrKPID() {
+        return strKPID;
+    }
+
+    public void setStrKPID(String strKPID) {
+        this.strKPID = strKPID;
     }
 
 }

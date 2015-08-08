@@ -26,6 +26,12 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
 import com.example.ustc_pc.myapplication.fragment.CourseBaseFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseErrorFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseFavoriteFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseNoteFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseSimulateFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseSpecialFragment;
+import com.example.ustc_pc.myapplication.fragment.CourseZhenTiFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +111,7 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         mDrawerLayout.closeDrawer(mRelativeLayoutLeftMenu);
 
         mLeftMenuLV.setItemChecked(position, true);
-        this.setTitle(mSelectedCourses.get(position).getStrCourseName());
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.basic_test));
     }
 
     @Override
@@ -212,15 +218,110 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
             return true;
         }
         // Handle your other action bar items...
-        if(item.getItemId() == R.id.action_more){
-            showRightTopMenu();
+        switch (item.getItemId()){
+            case R.id.action_basic:
+                startBasicTest();
+            case R.id.action_zhen_ti:
+                startZhenTiTest();
+                return true;
+            case R.id.action_special_test:
+                startSpecialTest();
+                return true;
+            case R.id.action_simulate_test:
+                startSimulateTest();
+                return true;
+            case R.id.action_check_error:
+                startCheckError();
+                return true;
+            case R.id.action_check_favorite:
+                startCheckFavorite();
+                return true;
+            case R.id.action_check_note:
+                startCheckNote();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showRightTopMenu(){
+    private void startCheckNote() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseNoteFragment courseNoteFragment = CourseNoteFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseNoteFragment)
+                .commit();
 
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.check_note));
     }
+
+    private void startCheckFavorite() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseFavoriteFragment courseFavoriteFragment = CourseFavoriteFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseFavoriteFragment)
+                .commit();
+
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.check_favorite));
+    }
+
+    private void startCheckError() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseErrorFragment courseErrorFragment = CourseErrorFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseErrorFragment)
+                .commit();
+
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.check_error));
+    }
+
+    private void startBasicTest() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseBaseFragment courseBaseFragment = CourseBaseFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseBaseFragment)
+                .commit();
+
+        mLeftMenuLV.setItemChecked(position, true);
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.basic_test));
+    }
+
+    private void startSimulateTest() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseSimulateFragment courseSimulateFragment = CourseSimulateFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseSimulateFragment)
+                .commit();
+
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.simulate_test));
+    }
+
+    private void startSpecialTest() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseSpecialFragment courseSpecialFragment = CourseSpecialFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseSpecialFragment)
+                .commit();
+
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.special_test));
+    }
+
+    private void startZhenTiTest() {
+        int position = mLeftMenuLV.getCheckedItemPosition();
+        CourseZhenTiFragment courseZhenTiFragment = CourseZhenTiFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, courseZhenTiFragment)
+                .commit();
+
+        this.setTitle(mSelectedCourses.get(position).getStrCourseName()+":"+getString(R.string.zhen_ti_test));
+    }
+
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

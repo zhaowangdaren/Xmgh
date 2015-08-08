@@ -3,7 +3,7 @@ package com.example.ustc_pc.myapplication.fragment;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +13,18 @@ import com.example.ustc_pc.myapplication.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Course3Fragment.OnFragmentInteractionListener} interface
+ * {@link CourseSpecialFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Course3Fragment#newInstance} factory method to
+ * Use the {@link CourseSpecialFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Course3Fragment extends Fragment {
+public class CourseSpecialFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_COURSE_ID = "param1";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int mCourseID;
 
     private OnFragmentInteractionListener mListener;
 
@@ -35,20 +33,18 @@ public class Course3Fragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Course3Fragment.
+     * @return A new instance of fragment CourseSpecialFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Course3Fragment newInstance(String param1, String param2) {
-        Course3Fragment fragment = new Course3Fragment();
+    public static CourseSpecialFragment newInstance(int param1) {
+        CourseSpecialFragment fragment = new CourseSpecialFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_COURSE_ID, param1);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public Course3Fragment() {
+    public CourseSpecialFragment() {
         // Required empty public constructor
     }
 
@@ -56,8 +52,7 @@ public class Course3Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mCourseID = getArguments().getInt(ARG_COURSE_ID);
         }
     }
 

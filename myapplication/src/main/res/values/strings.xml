@@ -181,4 +181,11 @@
     <string name="title_activity_show_analysis">ShowAnalysisActivity</string>
     <string name="action_note">笔记</string>
     <string name="are_being_developed">正在开发中，敬请等待</string>
+    <string name="zhen_ti_test">真题训练</string>
+    <string name="special_test">专项训练</string>
+    <string name="simulate_test">模拟训练</string>
+    <string name="check_error">查看错题</string>
+    <string name="check_note">查看笔记</string>
+    <string name="check_favorite">查看收藏</string>
+    <string name="basic_test">基础训练</string>
 </resources>

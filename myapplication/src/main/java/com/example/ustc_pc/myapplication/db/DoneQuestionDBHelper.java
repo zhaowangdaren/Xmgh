@@ -9,6 +9,7 @@ import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.dao.DoneQuestionDao;
 import com.example.ustc_pc.myapplication.net.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,5 +63,22 @@ public class DoneQuestionDBHelper {
                 questionDao.insertOrReplace(doneQuestion);
             }
         }
+    }
+
+    public List<String> queryErrorKPs(int iCourseID) {
+        List<DoneQuestion> errorQues = questionDao.queryBuilder()
+                .where(DoneQuestionDao.Properties.IsCorrect.eq(false))
+                .orderAsc(DoneQuestionDao.Properties.StrKPID)
+                .list();
+        List<String> result = new ArrayList<>();
+        String lastKPID = null;
+        for(DoneQuestion doneQuestion : errorQues){
+            String kpID = doneQuestion.getStrKPID();
+            if(lastKPID == null || !lastKPID.equals(kpID)){
+                lastKPID = kpID;
+                result.add(lastKPID);
+            }
+        }
+        return result;
     }
 }

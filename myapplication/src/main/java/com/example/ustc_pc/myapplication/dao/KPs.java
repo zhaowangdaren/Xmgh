@@ -7,22 +7,27 @@ import java.io.Serializable;
 /**
  * Entity mapped to table "KPS".
  */
-public class KPs implements Serializable ,Comparable<KPs>{
+public class KPs implements Serializable, Comparable<KPs>{
 
     private Long id;
     private Integer iUserID;
-    private Boolean isExpand = false;
+    private Boolean isExpand;
     private String strKPID;
     private Integer iCourseID;
     private String strName;
     private Integer iLevel;
     private String strFatherKPID;
-    private Boolean hasChild = false;
+    private Boolean hasChild;
     private Integer iProgress;
 
     @Override
     public boolean equals(Object object){
         return getStrKPID().equals(((KPs)object).getStrKPID());
+    }
+
+    @Override
+    public int compareTo(KPs kPs) {
+        return this.getStrKPID().compareTo(kPs.getStrKPID());
     }
 
     public KPs() {
@@ -125,8 +130,4 @@ public class KPs implements Serializable ,Comparable<KPs>{
         this.iProgress = iProgress;
     }
 
-    @Override
-    public int compareTo(KPs kPs) {
-        return this.getStrKPID().compareTo(kPs.getStrKPID());
-    }
 }

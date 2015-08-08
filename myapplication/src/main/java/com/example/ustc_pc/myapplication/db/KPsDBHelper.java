@@ -63,4 +63,13 @@ public class KPsDBHelper {
         queryBuilder.where(KPsDao.Properties.ICourseID.eq(iCourseID));
         return queryBuilder.list();
     }
+
+    public List<KPs> queryKPsByKPID(List<String> strKPIDs) {
+        if (strKPIDs == null)return null;
+        List<KPs> kPses = kPsDao.queryBuilder()
+                .where(KPsDao.Properties.StrKPID.in(strKPIDs))
+                .list();
+
+        return kPses;
+    }
 }

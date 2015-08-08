@@ -254,7 +254,7 @@ public class ActivityUserBook extends ActionBarActivity implements AdapterView.O
                 TextView textView = (TextView) convertView.findViewById(R.id.textView_labale_name_error);
                 textView.setText(mLabels.get(position));
             }else{
-                convertView = View.inflate(parent.getContext(), R.layout.layout_user_book_item, null);
+                convertView = View.inflate(parent.getContext(), R.layout.layout_listview_check_item, null);
                 TextView textView = (TextView)convertView.findViewById(R.id.textView_labale_name_user_book);
                 textView.setText(mLabels.get(position));
             }

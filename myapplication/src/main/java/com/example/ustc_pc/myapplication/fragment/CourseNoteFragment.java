@@ -3,7 +3,7 @@ package com.example.ustc_pc.myapplication.fragment;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +13,18 @@ import com.example.ustc_pc.myapplication.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Course2Fragment.OnFragmentInteractionListener} interface
+ * {@link CourseNoteFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Course2Fragment#newInstance} factory method to
+ * Use the {@link CourseNoteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Course2Fragment extends Fragment {
+public class CourseNoteFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_COURSE_ID = "ARG_COURSE_ID";
-    private static final String ARG_QUESTION_TYPE = "ARG_QUESTION_TYPE";
+    private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
-    private int mICourseID;
-    private int mIQuestionType;
+    private int mCourseID;
 
     private OnFragmentInteractionListener mListener;
 
@@ -34,21 +32,19 @@ public class Course2Fragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param iCourseID Parameter 1.
-     * @param iQuestionType Parameter 2.
-     * @return A new instance of fragment Course2Fragment.
+     * @param param1 Parameter 1.
+     * @return A new instance of fragment CourseNoteFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Course2Fragment newInstance(int iCourseID, int iQuestionType) {
-        Course2Fragment fragment = new Course2Fragment();
+    public static CourseNoteFragment newInstance(int param1) {
+        CourseNoteFragment fragment = new CourseNoteFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COURSE_ID, iCourseID);
-        args.putInt(ARG_QUESTION_TYPE, iQuestionType);
+        args.putInt(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public Course2Fragment() {
+    public CourseNoteFragment() {
         // Required empty public constructor
     }
 
@@ -56,8 +52,7 @@ public class Course2Fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mICourseID = getArguments().getInt(ARG_COURSE_ID);
-            mIQuestionType = getArguments().getInt(ARG_QUESTION_TYPE);
+            mCourseID = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -65,7 +60,7 @@ public class Course2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course2, container, false);
+        return inflater.inflate(R.layout.fragment_course_note, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -97,7 +92,7 @@ public class Course2Fragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

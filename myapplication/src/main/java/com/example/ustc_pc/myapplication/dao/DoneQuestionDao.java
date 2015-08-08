@@ -28,7 +28,8 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
         public final static Property IsCorrect = new Property(4, Boolean.class, "isCorrect", false, "IS_CORRECT");
         public final static Property StrNote = new Property(5, String.class, "strNote", false, "STR_NOTE");
         public final static Property StrUserAnswer = new Property(6, String.class, "strUserAnswer", false, "STR_USER_ANSWER");
-        public final static Property ISpendTime = new Property(7, Integer.class, "lSpendTime", false, "I_SPEND_TIME");
+        public final static Property ISpendTime = new Property(7, Long.class, "iSpendTime", false, "I_SPEND_TIME");
+        public final static Property StrKPID = new Property(8, String.class, "strKPID", false, "STR_KPID");
     };
 
 
@@ -51,7 +52,8 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
                 "\"IS_CORRECT\" INTEGER," + // 4: isCorrect
                 "\"STR_NOTE\" TEXT," + // 5: strNote
                 "\"STR_USER_ANSWER\" TEXT," + // 6: strUserAnswer
-                "\"I_SPEND_TIME\" INTEGER);"); // 7: lSpendTime
+                "\"I_SPEND_TIME\" INTEGER," + // 7: iSpendTime
+                "\"STR_KPID\" TEXT);"); // 8: strKPID
     }
 
     /** Drops the underlying database table. */
@@ -100,9 +102,14 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
             stmt.bindString(7, strUserAnswer);
         }
  
-        Integer iSpendTime = entity.getISpendTime();
+        Long iSpendTime = entity.getISpendTime();
         if (iSpendTime != null) {
             stmt.bindLong(8, iSpendTime);
+        }
+ 
+        String strKPID = entity.getStrKPID();
+        if (strKPID != null) {
+            stmt.bindString(9, strKPID);
         }
     }
 
@@ -123,7 +130,8 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isCorrect
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // strNote
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // strUserAnswer
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // lSpendTime
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // iSpendTime
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // strKPID
         );
         return entity;
     }
@@ -138,7 +146,8 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
         entity.setIsCorrect(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setStrNote(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setStrUserAnswer(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setISpendTime(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setISpendTime(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setStrKPID(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     /** @inheritdoc */

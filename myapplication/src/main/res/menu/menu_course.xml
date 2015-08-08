@@ -4,5 +4,25 @@
     tools:context="com.example.ustc_pc.myapplication.activity.CourseActivity">
     <item android:id="@+id/action_more" android:title="@string/action_more"
         android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom|withText">
+
+        <menu>
+            <item
+                android:id="@+id/action_basic" android:title="@string/basic_test"
+                app:showAsAction="ifRoom|withText"/>
+            <item
+                android:id="@+id/action_zhen_ti" android:title="@string/zhen_ti_test"
+                app:showAsAction="ifRoom|withText"/>
+            <item android:id="@+id/action_special_test" android:title="@string/special_test"
+                app:showAsAction="ifRoom|withText"/>
+            <item android:id="@+id/action_simulate_test" android:title="@string/simulate_test"
+                app:showAsAction="ifRoom|withText"/>
+            <item android:id="@+id/action_check_error" android:title="@string/check_error"
+                app:showAsAction="ifRoom|withText"/>
+            <item android:id="@+id/action_check_note" android:title="@string/check_note"
+                app:showAsAction="ifRoom|withText"/>
+            <item android:id="@+id/action_check_favorite" android:title="@string/check_favorite"
+                app:showAsAction="ifRoom|withText"/>
+        </menu>
+    </item>
 </menu>
