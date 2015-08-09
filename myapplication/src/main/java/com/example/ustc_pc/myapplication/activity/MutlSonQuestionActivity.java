@@ -242,7 +242,7 @@ public class MutlSonQuestionActivity extends AppCompatActivity {
                 return null;
             }
             String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
-            List<QuestionNew> questions = Util.parseQuestionsFromFile(questionsAPath);
+            List<QuestionNew> questions = Util.parseMultiSonQuestionsFromFile(questionsAPath);
             return questions;
         }
 

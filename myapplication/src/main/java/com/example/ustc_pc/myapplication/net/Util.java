@@ -12,12 +12,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.ustc_pc.myapplication.unit.Answer;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
+import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -94,6 +99,25 @@ public class Util {
         }
         return true;
     }
+
+    public static String getFileFromSD(String filePath){
+        StringBuilder sb = new StringBuilder();
+        try {
+            File file = new File(filePath);
+            BufferedReader bf = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
+            String content = "";
+            while(true){
+                content = bf.readLine();
+                if(content == null)break;
+                sb.append(content.trim());
+            }
+            bf.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
     /**
      * check net is allowable
      * @param context
@@ -140,12 +164,13 @@ public class Util {
         return questionsFolderName;
     }
 
-    public static List<QuestionNew> parseQuestionsFromFile(String[] questionsAPath) {
+    public static List<QuestionNew> parseMultiSonQuestionsFromFile(String[] questionsAPath) {
         if(questionsAPath.length <= 0)return null;
         List<QuestionNew> result = new ArrayList<>(questionsAPath.length);
         try {
             for (int i = 0; i < questionsAPath.length; i++) {
-                String strQuestion = FileOperation.getFileFromSD(questionsAPath[i] + "/" + Util.FILE_NAME_QUESTION);
+                String strQuestion = Util.getFileFromSD(questionsAPath[i] + "/" + Util.FILE_NAME_QUESTION);
+                if(strQuestion == null || strQuestion.length() < 10)return null;
                 JSONObject jsonQuestion = JSON.parseObject(strQuestion);
                 if(jsonQuestion == null || jsonQuestion.isEmpty())return null;
                 int iQuestionID = jsonQuestion.getIntValue("iQuestionID");
@@ -164,13 +189,22 @@ public class Util {
         }
     }
 
+    public static List<QuestionUnmultiSon> parseUnmultiSonQueFromFile(String[] questionAPaths){
+        if(questionAPaths == null || questionAPaths.length <= 0)return null;
+        List<QuestionUnmultiSon> result = new ArrayList<>(questionAPaths.length);
+        for(int i =0; i<questionAPaths.length; i++){
+            String strQuestion = Util.getFileFromSD(questionAPaths[i] + "/" + Util.FILE_NAME_QUESTION);
+            if(strQuestion == null || strQuestion.length() < 10)return null;
+            JSONObject jsonQuestion = JSON.parseObject(strQuestion);
 
+        }
+    }
 
     public static List<Answer> parseAnswerFromFile(String[] questionsAPath) {
         if(questionsAPath.length <= 0)return null;
         List<Answer> result = new ArrayList<>(questionsAPath.length);
         for(int i = 0; i< questionsAPath.length; i++){
-            String strAnswer = FileOperation.getFileFromSD(questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS);
+            String strAnswer = Util.getFileFromSD(questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS);
             JSONObject jsonAnswer = JSON.parseObject(strAnswer);
             int iQuestionID = jsonAnswer.getIntValue("iQuestionID");
             boolean isMultiSonQuestion = jsonAnswer.getBooleanValue("isMultiSonQuestion");

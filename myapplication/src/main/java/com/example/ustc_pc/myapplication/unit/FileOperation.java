@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
+import com.example.ustc_pc.myapplication.net.Util;
+
 import org.apache.http.util.EncodingUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,45 +72,45 @@ public class FileOperation {
         return result;
     }
 
-    /**
-     *
-     * @param filePath
-     * @return
-     */
-    public static String getFileFromSD(String filePath){
-        String result  = null;
-        try{
-            InputStream inputStream = new FileInputStream(new File(filePath));
-            //获取文件的字节数
-            int lenght = inputStream.available();
-            //创建byte数组
-            byte[] buffer = new byte[lenght];
-            //将文件中的数据读到byte数组中
-            inputStream.read(buffer);
-            result = EncodingUtils.getString(buffer, ENCODING);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return result;
-    }
+//    /**
+//     *
+//     * @param filePath
+//     * @return
+//     */
+//    public static String getFileFromSD(String filePath){
+//        String result  = null;
+//        try{
+//            InputStream inputStream = new FileInputStream(new File(filePath));
+//            //获取文件的字节数
+//            int lenght = inputStream.available();
+//            //创建byte数组
+//            byte[] buffer = new byte[lenght];
+//            //将文件中的数据读到byte数组中
+//            inputStream.read(buffer);
+//            result = EncodingUtils.getString(buffer, ENCODING);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
 
-    public static String getFileFromSD2(String filePath){
-        StringBuilder sb = new StringBuilder();
-        try {
-            File file = new File(filePath);
-            BufferedReader bf = new BufferedReader(new FileReader(file));
-            String content = "";
-            while(true){
-                content = bf.readLine();
-                if(content == null)break;
-                sb.append(content.trim());
-            }
-            bf.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return sb.toString();
-    }
+//    public static String getFileFromSD2(String filePath){
+//        StringBuilder sb = new StringBuilder();
+//        try {
+//            File file = new File(filePath);
+//            BufferedReader bf = new BufferedReader(new FileReader(file));
+//            String content = "";
+//            while(true){
+//                content = bf.readLine();
+//                if(content == null)break;
+//                sb.append(content.trim());
+//            }
+//            bf.close();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return sb.toString();
+//    }
 
     public static boolean createFile(String filePath, String fileName){
         File file1 = new File(filePath);
@@ -307,7 +309,7 @@ public class FileOperation {
 
     public static Paper getPaper(String filePath){
         Paper paper = null;
-        String strJSON = FileOperation.getFileFromSD(filePath);
+        String strJSON = Util.getFileFromSD(filePath);
         if(strJSON != null && strJSON.length() > 0){
             try {
                 JSONObject jsonObjectSource = new JSONObject(strJSON);
@@ -388,7 +390,7 @@ public class FileOperation {
     public static ArrayList<Paper> getKPPapersFromFile(String fileName){
         ArrayList<Paper> result = null;
         String filePath = APP_PATH + fileName;
-        String strJSON = getFileFromSD(filePath);
+        String strJSON = Util.getFileFromSD(filePath);
         if(strJSON != null && strJSON.length() > 0) {
             result = new ArrayList<>();
             try {
@@ -412,7 +414,7 @@ public class FileOperation {
     }
 
     public static Question getQuestion(String filePath){
-        String strJSON = FileOperation.getFileFromSD(filePath);
+        String strJSON = Util.getFileFromSD(filePath);
         Question question = null;
         if(strJSON != null && strJSON.length() > 0){
             try {
@@ -642,7 +644,7 @@ public class FileOperation {
     }
     public static ArrayList<Question> getFavoriteQuestions(){
         ArrayList<Question> result  = null;
-        String strJSON = FileOperation.getFileFromSD(FileOperation.APP_PATH + "favorite_questions.json");
+        String strJSON = Util.getFileFromSD(FileOperation.APP_PATH + "favorite_questions.json");
         try {
             result = new ArrayList<>();
             JSONObject jsonObject = new JSONObject(strJSON);
@@ -721,7 +723,7 @@ public class FileOperation {
 
     public static String getPaperReportStrFromSD(String paperID) {
         String fileName = "paper_"+paperID+"_report.json";
-        String strJSON = getFileFromSD2(APP_PATH + fileName);
+        String strJSON = Util.getFileFromSD(APP_PATH + fileName);
         return strJSON;
     }
 
@@ -796,7 +798,7 @@ public class FileOperation {
     public static ArrayList<Individuation> getIndividuations(String fileName) {
         ArrayList<Individuation> result = null;
         String filePath = APP_PATH + fileName;
-        String strJSON = getFileFromSD(filePath);
+        String strJSON = Util.getFileFromSD(filePath);
         if(strJSON != null && strJSON.length() > 0){
             result = new ArrayList<>();
             try{
