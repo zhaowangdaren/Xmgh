@@ -12,8 +12,8 @@ public class DoneQuestion implements Serializable{
     private Integer iCourseID;
     private Integer iQuestionType;
     private Integer iQuestionID;
-    private Boolean isFavorite;
-    private Boolean isCorrect;
+    private Boolean isFavorite = false;
+    private Boolean isCorrect = false;
     private String strNote;
     private String strUserAnswer;
     private Long iSpendTime;

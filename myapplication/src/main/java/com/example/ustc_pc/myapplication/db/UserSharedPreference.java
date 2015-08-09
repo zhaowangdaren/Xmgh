@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.net.Util;
 
 import java.io.ByteArrayInputStream;
@@ -81,9 +80,9 @@ public class UserSharedPreference {
         }
     }
 
-    public void setIsUserInfoChanged(boolean isUploading){
+    public void setIsUserInfoChanged(boolean isChanged){
         SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putBoolean("isUserInfoChanged", isUploading);
+        editor.putBoolean("isUserInfoChanged", isChanged);
         editor.apply();
     }
 
@@ -135,153 +134,6 @@ public class UserSharedPreference {
     public String getPassword(){
         return mSharedPre.getString("password", "");
     }
-
-    /**
-     * 女0  男1
-     * @param index
-     */
-    public void setGender(int index){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putInt("gender", index);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getGender(){
-        int index = mSharedPre.getInt("gender", 0);
-        if(index == 0){
-            return mContext.getResources().getString(R.string.woman);
-        }else {
-            return mContext.getResources().getString(R.string.man);
-        }
-    }
-
-    public int getGenderI(){
-        return mSharedPre.getInt("gender",0);
-    }
-
-    public void setUserType(int type){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putInt("user_type",type);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public int getUserType(){
-        return mSharedPre.getInt("user_type", 0);
-    }
-
-    public void setEmail(String email){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("email", email);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getEmail(){
-        return mSharedPre.getString("email", "");
-    }
-
-    public void setAboutMe(String aboutMe){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("aboutMe", aboutMe);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getAboutMe(){
-        return mSharedPre.getString("aboutMe", "");
-    }
-
-    public void setSourceCollege(String sourceCollege){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("sourceCollege", sourceCollege);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getSourceCollege(){
-        return mSharedPre.getString("sourceCollege", "");
-    }
-
-    public void setSourceMajor(String sourceMajor){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("sourceMajor", sourceMajor);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getSourceMajor(){
-        return mSharedPre.getString("sourceMajor", "");
-    }
-
-    public void setFirstTC(String firstTC){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("firstTC", firstTC);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getFirstTC(){
-        return mSharedPre.getString("firstTC", null);
-    }
-
-    public void setFirstTM(String firstTM){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("firstTM", firstTM);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getFirstTM(){
-        return mSharedPre.getString("firstTM", "");
-    }
-
-
-    public void setSecondTC(String secondTC){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("secondTC", secondTC);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getSecondTC(){
-        return mSharedPre.getString("secondTC", "");
-    }
-
-    public void setSecondTM(String secondTM){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("secondTM", secondTM);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getSecondTM(){
-        return mSharedPre.getString("secondTM", "");
-    }
-
-    public void setAcceptedC(String acceptedC){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("acceptedC", acceptedC);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getAcceptedC(){
-        return mSharedPre.getString("acceptedC", "");
-    }
-
-    public void setAcceptedM(String acceptedM){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("acceptedM", acceptedM);
-        editor.putBoolean("isUserInfoChanged", true);
-        editor.apply();
-    }
-
-    public String getAcceptedM(){
-        return mSharedPre.getString("acceptedM", "");
-    }
-
 
     public void setSumAssessmentScore(String courseName, int sum_assessment_score) {
         SharedPreferences.Editor editor = mSharedPre.edit();

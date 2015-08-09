@@ -13,8 +13,10 @@ import android.widget.TextView;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.imageView.CircleImageView;
-import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
+
+import java.io.IOException;
 
 public class ActivityPersonal extends ActionBarActivity implements View.OnClickListener{
 
@@ -26,8 +28,6 @@ public class ActivityPersonal extends ActionBarActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
 
-//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
         initData();
@@ -67,7 +67,13 @@ public class ActivityPersonal extends ActionBarActivity implements View.OnClickL
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    NetUtil.uploadingUserInfo(ActivityPersonal.this);
+                    OkHttpUtil okHttpUtil = new OkHttpUtil();
+                    try {
+                        okHttpUtil.setPersonInfo(ActivityPersonal.this);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }).start();
         }

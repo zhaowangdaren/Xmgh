@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
@@ -17,9 +19,12 @@ import android.support.v7.internal.view.menu.MenuView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.fragment.AnswerSheetFragment;
 import com.example.ustc_pc.myapplication.fragment.BaseTestFragment;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
@@ -36,10 +41,13 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import android.os.Handler;
 
 public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFragment.OnFragmentInteractionListener{
+
+    ViewAnimator mVA;
+    View mBaseTestView, mErrorView;
 
     ViewPager mViewPager;
     List<QuestionNew> mQuestions;
@@ -48,6 +56,8 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
     private int mICourseID;
     private int mIQuestionType;
     private String mStrKPName, mStrKPID;
+    private int miTestID;
+
 
     private long mlTestStartTime;
 
@@ -56,13 +66,21 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_test);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         mICourseID = intent.getIntExtra("iCourseID", 0);
         mIQuestionType = intent.getIntExtra("iQuestionType", -1);
         mStrKPName = intent.getStringExtra("strKPName");
         mStrKPID = intent.getStringExtra("strKPID");
 
-        mViewPager = (ViewPager)findViewById(R.id.viewPager_actvity_base_test);
+        mVA = (ViewAnimator)findViewById(R.id.viewAnimator);
+        mBaseTestView = View.inflate(this, R.layout.layout_base_test, null);
+        mErrorView = View.inflate(this, R.layout.layout_load_failed, null);
+        mErrorView.setOnClickListener(new ErrorViewClickListener(this));
+        mVA.addView(mBaseTestView,0);
+        mVA.addView(mErrorView, 1);
+
+        mViewPager = (ViewPager) mBaseTestView.findViewById(R.id.viewPager_actvity_base_test);
         mQuestions = new ArrayList<>();
         mQuestionsPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mQuestionsPagerAdapter);
@@ -165,7 +183,10 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if(id == android.R.id.home){
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -187,7 +208,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         intent.putExtra("mlTestStartTime",mlTestStartTime);
         intent.putExtra("mlTestEndTime",mlTestEndTime);
         intent.putExtra("mStrTestSpendTime",mStrTestSpendTime);
-
+        intent.putExtra("mlTestID",miTestID);
         startActivity(intent);
         finish();
     }
@@ -206,7 +227,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
                 fragment = BaseTestFragment.newInstance(
                         mQuestions.get(position), mStrKPName, position, getCount());
             }else{
-                fragment = AnswerSheetFragment.newInstance(mQuestions);
+                fragment = AnswerSheetFragment.newInstance(mQuestions,miTestID);
             }
             return fragment;
         }
@@ -237,10 +258,10 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             //relative path
             String strKpIDRPPath = "";
             for(int i=0; i< kpIDs.length; i++){
-                strKpIDRPPath += kpIDs + "/";
+                strKpIDRPPath += kpIDs[i] + "/";
             }
             //absolute path
-            String strKpIdAPPath = Util.APP_PATH + strCourseID + "/" + strQuestionType + "/" + strKpIDRPPath;
+            String strKpIdAPPath = Util.APP_PATH + "/" + strCourseID + "/" + strQuestionType + "/" + strKpIDRPPath;
             if( !(new File(strKpIdAPPath).exists())){
                 Log.e("Error Mutl...Activity", "Kp id absolute un exists");
                 return null;
@@ -255,7 +276,10 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             if(result != null && !result.isEmpty()){
                 mQuestions.addAll(result);
                 mQuestionsPagerAdapter.notifyDataSetChanged();
+                if(mVA.getCurrentView().equals(mErrorView))mVA.showPrevious();
                 startTimer();
+            }else{
+                if(mVA.getCurrentView().equals(mBaseTestView))mVA.showNext();
             }
             progressDialog.dismiss();
         }
@@ -295,16 +319,31 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             InputStream inputStream = null;
             OutputStream outputStream = null;
             try {
-                URL downloadURL = okHttpUtil.getQuestionsURL(iCourseID, iQuestionType, strKPID);
+                HashMap<String, Object> result = okHttpUtil.getBasicTestOnline(
+                        new UserSharedPreference(context).getiUserID()
+                        , iCourseID
+                        , iQuestionType
+                        , strKPID);
+                int iTestID = (int)result.get("iTestID");
+                miTestID = iTestID;
+                String strURL = (String)result.get("strURL");
+                URL downloadURL = new URL(strURL);
                 if(downloadURL == null )return false;
                 strFileName = downloadURL.getFile();
+                strFileName = strFileName.substring(strFileName.lastIndexOf("/"));
+                if( ! Util.createFolder(Util.APP_PATH )){
+                    Util.APP_PATH = Environment.getDownloadCacheDirectory()+"/.cn.edu.ustc.xmgh";
+                    Util.createFolder(Util.APP_PATH);
+                }
                 //begin download file
                 Response fileResponse = okHttpUtil.getClient().newCall(
                         new Request.Builder().url(downloadURL).get().build()
                 ).execute();
                 if(!fileResponse.isSuccessful())throw new IOException("Unexcepted cod" + fileResponse);
                 inputStream = fileResponse.body().byteStream();
-                outputStream = new FileOutputStream(Util.APP_PATH);
+                String filePath = Util.APP_PATH + strFileName;
+
+                outputStream = new FileOutputStream(new File(filePath));
                 byte[] buff = new byte[1024 * 4];
                 long downloaded = 0;
                 long target = fileResponse.body().contentLength();
@@ -328,15 +367,21 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             }finally {
                 try {
                     if (inputStream != null) inputStream.close();
-                    if(outputStream != null)outputStream.close();
+                    if(outputStream != null) outputStream.close();
                 }catch (IOException ignored){}
+
             }
 
             //Extract zip file
-            String zipFilePath = Util.APP_PATH + "/" +strFileName;
+            String zipFilePath = Util.APP_PATH +strFileName;
 
             //the target path format is : APP_PATH/CourseId/QuestionType
             String unZipTargetPath = Util.APP_PATH + "/" + strings[0] + "/" + strings[1];
+            String[] strKPIDs = strKPID.split("\\.");
+            for(int i =0; i<strKPIDs.length; i++){
+                unZipTargetPath += "/"+strKPIDs[i];
+            }
+            unZipTargetPath += "/";
             boolean isUnzipSuccess = Util.unZip(zipFilePath, unZipTargetPath);
 
             return isUnzipSuccess;
@@ -354,12 +399,25 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         protected void onPostExecute(Boolean result){
             if(!result)
                 Toast.makeText(context, "Download Failed", Toast.LENGTH_SHORT).show();
+
             else {
                 Toast.makeText(context, "Download Successed", Toast.LENGTH_SHORT).show();
                 ParseQuestionsAsyncTask parseQuestionsAsyncTask = new ParseQuestionsAsyncTask(context);
                 parseQuestionsAsyncTask.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
             }
             progressDialog.dismiss();
+        }
+    }
+
+    private class ErrorViewClickListener implements View.OnClickListener {
+        private Context context;
+        public ErrorViewClickListener(Context context){
+           this.context = context;
+        }
+        @Override
+        public void onClick(View view) {
+            DownloadQuestionsAsyncTask downloadQuestionsAsyncTask = new DownloadQuestionsAsyncTask(context);
+            downloadQuestionsAsyncTask.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
         }
     }
 }

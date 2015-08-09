@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
-import com.example.ustc_pc.myapplication.net.NetUtil;
-
 import org.apache.http.util.EncodingUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -129,6 +127,7 @@ public class FileOperation {
         }
         return true;
     }
+
 
     /**
      *
@@ -384,26 +383,6 @@ public class FileOperation {
             }
         }
         return paper;
-    }
-
-    public static ArrayList<Paper> getPapers(String kpID){
-        ArrayList<Paper> result = null;
-        String strJSON = NetUtil.getKPPapers(kpID);
-        if(strJSON != null && strJSON.length() > 0) {
-            result = new ArrayList<>();
-            try {
-                JSONObject jsonObject = new JSONObject(strJSON);
-                JSONArray jsonArray = jsonObject.getJSONArray("papers");
-                for(int i=0; i< jsonArray.length(); i++){
-                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                    Paper paper = new Paper(jsonObject1.getString("ID"), jsonObject1.getString("name"), jsonObject1.getInt("numOfQuestion"),"","","","");
-                    result.add(paper);
-                }
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
-        }
-        return result;
     }
 
     public static ArrayList<Paper> getKPPapersFromFile(String fileName){

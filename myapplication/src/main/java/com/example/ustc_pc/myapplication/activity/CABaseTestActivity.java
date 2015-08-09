@@ -19,12 +19,15 @@ import android.widget.TextView;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
+import com.example.ustc_pc.myapplication.db.UserSharedPreference;
+import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.Answer;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
 import com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +43,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
     List<DoneQuestion> mDoneQuestions;
 
 
+    private long mlTestID;
     private int mICourseID;
     private int mIQuestionType;
     private String mStrKPName, mStrKPID;
@@ -59,6 +63,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
         Intent intent = getIntent();
         mQuestions = (List<QuestionNew>)intent.getSerializableExtra("questions");
         if(mQuestions == null)mQuestions = new ArrayList<>();
+        mlTestID = intent.getLongExtra("mlTestID", -1);
         mICourseID = intent.getIntExtra("mICourseID", -1);
         mIQuestionType = intent.getIntExtra("mIQuestionType", -1);
         mStrKPID = intent.getStringExtra("mStrKPID");
@@ -195,9 +200,15 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 long lQuestionSpendTime = questionNew.getQuestionSons().get(0).getlStopTime()
                         - questionNew.getQuestionSons().get(0).getlStartTime();
                 DoneQuestion doneQuestion = new DoneQuestion(
-                        mICourseID,mIQuestionType,questionNew.getiQuestionID(),
-                        false,isCorrect,null,strUserAnswer.toString(),
-                        lQuestionSpendTime);
+                        mICourseID,
+                        mIQuestionType,
+                        questionNew.getiQuestionID(),
+                        false,
+                        isCorrect,
+                        null,
+                        strUserAnswer.toString(),
+                        lQuestionSpendTime,
+                        mStrKPID);
                 result.add(doneQuestion);
 
                 if(isCorrect)mCorrectNum++;
@@ -224,8 +235,25 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 mScoreTV.setText("" + mCorrectNum);
 
                 saveDoneQuestion2DB();
+                uploadDoneQuestion(new UserSharedPreference(context).getiUserID(), mlTestID, mStrKPID, mDoneQuestions);
             }
+            progressDialog.dismiss();
         }
+    }
+
+    private void uploadDoneQuestion(final int iUserID, final long lTestID
+            , final String strTestKPID, final List<DoneQuestion> doneQuestions){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpUtil okHttpUtil = new OkHttpUtil();
+                try {
+                    okHttpUtil.uploadDoneQuestions(iUserID, lTestID,strTestKPID,doneQuestions);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void saveDoneQuestion2DB(){

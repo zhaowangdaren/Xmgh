@@ -77,7 +77,7 @@ public class CourseFavoriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_course_error, container, false);
+        View view = inflater.inflate(R.layout.fragment_course_favorite, container, false);
         mLV = (ListView) view.findViewById(R.id.listView_favorite_fragment);
         mLvAdapter = new LVAdapter();
         mLV.setAdapter(mLvAdapter);

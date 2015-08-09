@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,10 +37,15 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
     CourseItemAdapter courseItemAdapter;
 
     Button mFinishBT;
+
+    private boolean isChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_course);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         gridView = (GridView)findViewById(R.id.gridView_courses);
         mFinishBT = (Button)findViewById(R.id.button_finished);
@@ -74,7 +80,16 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if(id == android.R.id.home){
+            if(isChanged){
+                FinishSelectCourseAsyncTask finishSelectCourseAsyncTask = new FinishSelectCourseAsyncTask(this);
+                finishSelectCourseAsyncTask.execute(mCourses);
+            }else{
+                startCourseActivity();
+            }
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -83,14 +98,19 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
         if(mCourses.get(position).getIsSelected())mCourses.get(position).setIsSelected(false);
         else mCourses.get(position).setIsSelected(true);
         courseItemAdapter.notifyDataSetChanged();
+        isChanged = true;
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button_finished:
-                FinishSelectCourseAsyncTask finishSelectCourseAsyncTask = new FinishSelectCourseAsyncTask(this);
-                finishSelectCourseAsyncTask.execute(mCourses);
+                if(isChanged) {
+                    FinishSelectCourseAsyncTask finishSelectCourseAsyncTask = new FinishSelectCourseAsyncTask(this);
+                    finishSelectCourseAsyncTask.execute(mCourses);
+                }else {
+                    startCourseActivity();
+                }
                 break;
         }
     }
@@ -112,13 +132,32 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
             CourseDBHelper courseDBHelper = CourseDBHelper.getInstance(context);
             courseDBHelper.updateCourses(params[0]);
 
+            List<Course> deletedCourses = getUnselectCourse();
+            List<Course> addCourses = getSelectedCourse();
             OkHttpUtil okHttpUtil = new OkHttpUtil();
             try {
-                okHttpUtil.addCourse(new UserSharedPreference(context).getiUserID(),params[0]);
+                okHttpUtil.addCourse(new UserSharedPreference(context).getiUserID(), addCourses);
+                okHttpUtil.deleteCourse(new UserSharedPreference(context).getiUserID(),deletedCourses);
             } catch (IOException e) {
                 Log.e("Error ", e.toString());
             }
             return true;
+        }
+
+        private List<Course> getSelectedCourse() {
+            List<Course> result = new ArrayList<>();
+            for(Course course : mCourses){
+                if(course.getIsSelected())result.add(course);
+            }
+            return result;
+        }
+
+        private List<Course> getUnselectCourse() {
+            List<Course> result = new ArrayList<>();
+            for(Course course : mCourses){
+                if(!course.getIsSelected())result.add(course);
+            }
+            return result;
         }
 
         @Override
@@ -163,19 +202,29 @@ public class SelecteCourseActivity extends AppCompatActivity implements AbsListV
                 viewHolder = new ViewHolder();
                 viewHolder.relativeLayout = (RelativeLayout)convertView.findViewById(R.id.relativeLayout_course_item);
                 viewHolder.textView = (TextView)convertView.findViewById(R.id.textView_course_name);
+                viewHolder.checkIV = (ImageView)convertView.findViewById(R.id.imageView_select_course_check);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder)convertView.getTag();
             }
             viewHolder.textView.setText(mCourses.get(position).getStrCourseName());
-            if(mCourses.get(position).getIsSelected())viewHolder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.gray));
-            else viewHolder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            if(mCourses.get(position).getIsSelected()){
+                viewHolder.checkIV.setVisibility(View.VISIBLE);
+                viewHolder.textView.setTextColor(getResources().getColor(R.color.offical_blue));
+                viewHolder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.white));
+            }
+            else {//unselected
+                viewHolder.checkIV.setVisibility(View.INVISIBLE);
+                viewHolder.textView.setTextColor(getResources().getColor(R.color.gray));
+                viewHolder.relativeLayout.setBackgroundColor(getResources().getColor(R.color.transparency_gray));
+            }
             return convertView;
         }
 
         class ViewHolder{
             RelativeLayout relativeLayout;
             TextView textView;
+            ImageView checkIV;
         }
     }
 

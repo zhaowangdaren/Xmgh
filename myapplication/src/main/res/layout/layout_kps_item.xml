@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="@dimen/list_item_height">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_add_circle_outline_black_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView_kps_item"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentLeft="true" />
 
     <TextView
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin_half"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/imageView_kps_item"
         android:text="New Text"
         android:id="@+id/textView_kps_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/imageView_kps_item_donwload"
-        android:layout_toStartOf="@+id/imageView_kps_item_donwload" />
+        android:layout_toLeftOf="@+id/imageView_kps_item_start_test"
+        android:layout_toRightOf="@+id/imageView_kps_item"
+        android:layout_toEndOf="@+id/imageView_kps_item" />
 
     <ImageView
         android:padding="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_file_download_black_24dp"
+        android:src="@drawable/ic_create_black_24dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView_kps_item_donwload"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView_kps_item_start_test"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

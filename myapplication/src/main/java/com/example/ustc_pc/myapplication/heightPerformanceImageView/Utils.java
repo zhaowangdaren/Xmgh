@@ -21,7 +21,7 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.StrictMode;
 
-import com.example.ustc_pc.myapplication.MainActivity;
+import com.example.ustc_pc.myapplication.activity.CourseActivity;
 
 
 /**
@@ -46,7 +46,7 @@ public class Utils {
             if (Utils.hasHoneycomb()) {
                 threadPolicyBuilder.penaltyFlashScreen();
                 vmPolicyBuilder
-                        .setClassInstanceLimit(MainActivity.class, 1);
+                        .setClassInstanceLimit(CourseActivity.class, 1);
             }
             StrictMode.setThreadPolicy(threadPolicyBuilder.build());
             StrictMode.setVmPolicy(vmPolicyBuilder.build());

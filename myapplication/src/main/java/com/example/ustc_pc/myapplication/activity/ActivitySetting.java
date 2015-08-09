@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ustc_pc.myapplication.R;
-import com.example.ustc_pc.myapplication.net.NetUtil;
 import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.FileOperation;
 
@@ -47,10 +46,8 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setTitle(R.string.action_settings);
 
         initView();
 
@@ -167,14 +164,14 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
 
         @Override
         protected String doInBackground(String... params) {
-            String result = NetUtil.checkUpdate();
-            return result;
+
+            return null;
         }
 
         @Override
         protected void onPostExecute(String result){
             progressDialog.dismiss();
-            if(result.length() > 0) {
+            if(result != null && result.length() > 0) {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     mVersion = Float.valueOf(jsonObject.getString("version"));
@@ -184,6 +181,8 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }else{
+
             }
         }
 

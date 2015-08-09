@@ -1,7 +1,6 @@
 package com.example.ustc_pc.myapplication.activity;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,10 +15,8 @@ import android.widget.TextView;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.adapter.ActivityViewAssessmentAdapter;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
-import com.example.ustc_pc.myapplication.net.NetUtil;
 import com.example.ustc_pc.myapplication.net.Util;
 import com.example.ustc_pc.myapplication.unit.AssessmentScore;
-import com.example.ustc_pc.myapplication.unit.FileOperation;
 import com.example.ustc_pc.myapplication.viewUnit.ViewArc;
 
 public class ActivityViewAssessment extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
@@ -94,25 +91,27 @@ public class ActivityViewAssessment extends ActionBarActivity implements SwipeRe
 
         @Override
         protected Object doInBackground(String... params) {
-            AssessmentScore assessmentScore = NetUtil.getAssessmentScore(params[0],iCourseID);
-            if(assessmentScore != null) {
-                //set color
-                int size = assessmentScore._arrayDoneKps.size();
-                int[] colorsR = FileOperation.randomCommon(0, 255, size);
-                int[] colorsG = FileOperation.randomCommon(0, 255, size);
-                int[] colorsB = FileOperation.randomCommon(0, 255, size);
-                for (int i = 0; i < size; i++) {
-                    assessmentScore._arrayDoneKps.get(i)._iColor = Color.argb(255, colorsR[i], colorsG[i], colorsB[i]);
-                }
-
-                //set arg
-                int averageArg = 360 / assessmentScore._iFirstKpNum;
-                assessmentScore._iFinishedArg = averageArg * assessmentScore._arrayDoneKps.size();
-                assessmentScore._iUnfinishedArg = 360 - assessmentScore._iFinishedArg;
-                return assessmentScore;
-            }else{
-                return null;
-            }
+//            OkHttpUtil okHttpUtil = new OkHttpUtil();
+//            AssessmentScore assessmentScore = okHttpUtil.getAssessmentScore(params[0], iCourseID);
+//            if(assessmentScore != null) {
+//                //set color
+//                int size = assessmentScore._arrayDoneKps.size();
+//                int[] colorsR = FileOperation.randomCommon(0, 255, size);
+//                int[] colorsG = FileOperation.randomCommon(0, 255, size);
+//                int[] colorsB = FileOperation.randomCommon(0, 255, size);
+//                for (int i = 0; i < size; i++) {
+//                    assessmentScore._arrayDoneKps.get(i)._iColor = Color.argb(255, colorsR[i], colorsG[i], colorsB[i]);
+//                }
+//
+//                //set arg
+//                int averageArg = 360 / assessmentScore._iFirstKpNum;
+//                assessmentScore._iFinishedArg = averageArg * assessmentScore._arrayDoneKps.size();
+//                assessmentScore._iUnfinishedArg = 360 - assessmentScore._iFinishedArg;
+//                return assessmentScore;
+//            }else{
+//                return null;
+//            }
+            return null;
         }
 
         @Override

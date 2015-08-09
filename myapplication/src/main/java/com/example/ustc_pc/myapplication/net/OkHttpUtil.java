@@ -1,6 +1,10 @@
 package com.example.ustc_pc.myapplication.net;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
@@ -9,6 +13,7 @@ import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.dao.User;
+import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -22,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -184,6 +190,46 @@ public class OkHttpUtil {
         return iResult == 1 ? true:false;
     }
 
+    public boolean setPersonInfo(Context context) throws IOException {
+        UserSharedPreference userSharedPreference = new UserSharedPreference(context);
+        int iAccountType = userSharedPreference.getiAccountType();
+        int iUserID = userSharedPreference.getiUserID();
+        String strThirdID = userSharedPreference.getStrThirdID();
+        String strPassword = userSharedPreference.getPassword();
+
+        JSONObject personInfoJson = new JSONObject();
+        personInfoJson.put("iUserID", iUserID);
+        personInfoJson.put("strUserName",userSharedPreference.getStrUserName());
+        personInfoJson.put("iGender",userSharedPreference.getiGender());
+        personInfoJson.put("strEmail",userSharedPreference.getStrEmail());
+        personInfoJson.put("strAboutMe",userSharedPreference.getStrAboutMe());
+        personInfoJson.put("iUserType",userSharedPreference.getiUserType());
+        personInfoJson.put("strSourceCollege",userSharedPreference.getStrSourceCollege());
+        personInfoJson.put("strSourceMajor",userSharedPreference.getStrSourceMajor());
+        personInfoJson.put("strFirstTargetCollege",userSharedPreference.getStrFirstTargetCollege());
+        personInfoJson.put("strFirstTargetMajor",userSharedPreference.getStrFirstTargetMajor());
+        personInfoJson.put("strSecondTargetCollege",userSharedPreference.getStrSecondTargetCollege());
+        personInfoJson.put("strSecondTargetMajor",userSharedPreference.getStrSecondTargetMajor());
+        personInfoJson.put("strAcceptedCollege",userSharedPreference.getStrAcceptedCollege());
+        personInfoJson.put("strAcceptedMajor",userSharedPreference.getStrAcceptedMajor());
+
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("iAccountType",String.valueOf(iAccountType))
+                .add("iUserID", String.valueOf(iUserID))
+                .add("strThirdID", strThirdID)
+                .add("strPassword", strPassword)
+                .add("strPersonalInfo", personInfoJson.toJSONString())
+                .build();
+        Request request = new Request.Builder()
+                .url(Util.URL_SET_PERSONAL_INFO)
+                .post(formBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        if(!response.isSuccessful())throw new IOException("Unexcepted cod "+response);
+        JSONObject result = JSONObject.parseObject(response.body().string());
+        int iResult = result.getIntValue("iResult");
+        return iResult == 1 ? true:false;
+    }
     /**
      *
      * @param iAccountType
@@ -256,6 +302,7 @@ public class OkHttpUtil {
             Gson gson = new Gson();
             for(int i=0; i< size ; i++){
                 Course course = gson.fromJson(jsonArray.getJSONObject(i).toJSONString(), Course.class);
+                course.setIsSelected(true);
                 courses.add(course);
             }
         }catch (JSONException e){
@@ -314,7 +361,7 @@ public class OkHttpUtil {
                 .add("strDeletedCoursesID", stringBuffer.toString())
                 .build();
         Request request = new Request.Builder()
-                .url(Util.URL_ADD_COURSE)
+                .url(Util.URL_DEL_COURSE)
                 .post(formBody)
                 .build();
         Response response = client.newCall(request).execute();
@@ -375,7 +422,37 @@ public class OkHttpUtil {
         return new URL(strURL);
     }
 
-
+    public HashMap<String, Object> getBasicTestOnline(int iUserID, int iCourseID, int iQuestionType, String strKPID) throws IOException {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("iUserID", String.valueOf(iUserID))
+                .add("iCourseID", String.valueOf(iCourseID))
+                .add("strKPID", strKPID)
+                .add("iQuestionType", String.valueOf(iQuestionType))
+                .build();
+        Request request = new Request.Builder()
+                .url(Util.URL_GET_BASIC_TEST_ONLINE)
+                .post(formBody)
+                .build();
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexcepted cod " + response);
+        String strResult = response.body().string();
+        if (strResult.length() <= 0) throw new IOException("Unexcepted cod " + response);
+        JSONObject jsonObject;
+        try {
+            jsonObject = JSON.parseObject(strResult);
+            int iTestID = jsonObject.getIntValue("iTestID");
+            String strURL = jsonObject.getString("strURL");
+            if (strURL == null || strURL.length() <= 0)
+                throw new IOException("Unexcepted cod " + response);
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("iTestID", iTestID);
+            result.put("strURL", strURL);
+            return result;
+        }catch (JSONException e){
+            Log.e("Error",e.toString());
+            return null;
+        }
+    }
     public void downloadQuestions(int iCourseID, int iQuestionType, String strKPID)throws IOException{
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iCourseID", String.valueOf(iCourseID))
@@ -424,7 +501,9 @@ public class OkHttpUtil {
      * @param doneQuestions
      * @return
      */
-    public Boolean uploadDoneQuestions(int iUserID, ArrayList<DoneQuestion> doneQuestions) throws IOException {
+    public Boolean uploadDoneQuestions(int iUserID
+            , long lTestID, String strTestKPID
+            , List<DoneQuestion> doneQuestions) throws IOException {
         if(doneQuestions.size() == 0)return true;
         JSONArray jsonArray = new JSONArray();
 
@@ -432,13 +511,17 @@ public class OkHttpUtil {
         for(DoneQuestion doneQuestion : doneQuestions){
             jsonArray.add(gson.toJson(doneQuestion));
         }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("questions", jsonArray.toJSONString());
-
-
+        JSONObject questions = new JSONObject();
+        questions.put("questions", jsonArray.toJSONString());
+        JSONArray tests = new JSONArray();
+        JSONObject test = new JSONObject();
+        test.put("lTestID", lTestID);
+        test.put("strTestKPID", strTestKPID);
+        test.put("questions", questions);
+        tests.add(test);
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
-                .add("strQuestions", jsonObject.toJSONString())
+                .add("strQuestions", tests.toJSONString())
                 .build();
         Request request = new Request.Builder()
                 .url(Util.URL_GET_KPs)
@@ -471,5 +554,9 @@ public class OkHttpUtil {
             result.add(gson.fromJson(jsonArray.getJSONObject(i).toJSONString(), DoneQuestion.class));
         }
         return result;
+    }
+
+    public Bitmap getImageFromServer(String data) {
+        return null;
     }
 }

@@ -1,17 +1,15 @@
 package com.example.ustc_pc.myapplication.activity;
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
-import com.example.ustc_pc.myapplication.db.DBHelper;
+import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.imageView.CircleImageView;
-import com.example.ustc_pc.myapplication.unit.Strings;
+import com.example.ustc_pc.myapplication.net.Util;
 
-public class ActivityViewPersonal extends ActionBarActivity implements View.OnClickListener{
+public class ActivityViewPersonal extends AppCompatActivity implements View.OnClickListener{
 
     CircleImageView mHeadIV;
     TextView mNickNameTV, mAccountNumberTV, mGenderTV, mEmailTV, mSourceCollegeTV, mSourceMajorTV, mAboutMeTV,
@@ -44,8 +42,6 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_personal);
 
-//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
 
@@ -61,16 +57,27 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
         mUserSharedPreference = new UserSharedPreference(this);
         mNickNameTV.setText(mUserSharedPreference.getStrUserName());
         mAccountNumberTV.setText(mUserSharedPreference.getAccountNumber());
-        mGenderTV.setText(mUserSharedPreference.getGender());
-        mEmailTV.setText(mUserSharedPreference.getEmail());
-        mSourceCollegeTV.setText(mUserSharedPreference.getSourceCollege());
-        mSourceMajorTV.setText(mUserSharedPreference.getSourceMajor());
-        mFirstTargetCollegeTV.setText(mUserSharedPreference.getFirstTC());
-        mFirstTargetMajorTV.setText(mUserSharedPreference.getFirstTM());
-        mSecondTargetCollegeTV.setText(mUserSharedPreference.getSecondTC());
-        mSecondTargetMajorTV.setText(mUserSharedPreference.getSecondTM());
-        mAcceptedCollegeTV .setText(mUserSharedPreference.getAcceptedC());
-        mAcceptedMajorTV.setText(mUserSharedPreference.getAcceptedM());
+        int iGender = mUserSharedPreference.getiGender();
+        String strGender;
+        switch (iGender){
+            case Util.WOMAN:
+                strGender = getString(R.string.woman);
+                break;
+            case Util.MAN:
+                strGender = getString(R.string.man);
+                break;
+            default: strGender = "";
+        }
+        mGenderTV.setText(strGender);
+        mEmailTV.setText(mUserSharedPreference.getStrEmail());
+        mSourceCollegeTV.setText(mUserSharedPreference.getStrSourceCollege());
+        mSourceMajorTV.setText(mUserSharedPreference.getStrSourceMajor());
+        mFirstTargetCollegeTV.setText(mUserSharedPreference.getStrFirstTargetCollege());
+        mFirstTargetMajorTV.setText(mUserSharedPreference.getStrFirstTargetMajor());
+        mSecondTargetCollegeTV.setText(mUserSharedPreference.getStrSecondTargetCollege());
+        mSecondTargetMajorTV.setText(mUserSharedPreference.getStrSecondTargetMajor());
+        mAcceptedCollegeTV .setText(mUserSharedPreference.getStrAcceptedCollege());
+        mAcceptedMajorTV.setText(mUserSharedPreference.getStrAcceptedMajor());
 
         Bitmap bitmap = mUserSharedPreference.getUserPhotoBitmap();
         if(bitmap != null)mHeadIV.setImageBitmap(bitmap);
@@ -230,7 +237,7 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
 
     private void logout() {
         //clear user info
-        ClearUserInfoAsyncTask clearUserInfoAsyncTask = new ClearUserInfoAsyncTask();
+        ClearUserInfoAsyncTask clearUserInfoAsyncTask = new ClearUserInfoAsyncTask(this);
         clearUserInfoAsyncTask.execute();
     }
 
@@ -307,12 +314,12 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
 
     private void setUserInfo(int fType, int value) {
         if(fType == 3){//gender
-            mUserSharedPreference.setGender(value);
+            mUserSharedPreference.setiGender(value);
             switch (value){
-                case 0:
+                case Util.WOMAN:
                     mGenderTV.setText(R.string.woman);
                     break;
-                case 1:
+                case Util.MAN:
                     mGenderTV.setText(R.string.man);
                     break;
             }
@@ -326,43 +333,43 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
                 mNickNameTV.setText(value);
                 break;
             case 4:
-                mUserSharedPreference.setEmail(value);
+                mUserSharedPreference.setStrEmail(value);
                 mEmailTV.setText(value);
                 break;
             case 5:
-                mUserSharedPreference.setAboutMe(value);
+                mUserSharedPreference.setStrAboutMe(value);
                 mAboutMeTV.setText(value);
                 break;
             case 6:
-                mUserSharedPreference.setSourceCollege(value);
+                mUserSharedPreference.setStrSourceCollege(value);
                 mSourceCollegeTV.setText(value);
                 break;
             case 7:
-                mUserSharedPreference.setSourceMajor(value);
+                mUserSharedPreference.setStrSourceMajor(value);
                 mSourceMajorTV.setText(value);
                 break;
             case 8:
-                mUserSharedPreference.setFirstTC(value);
+                mUserSharedPreference.setStrFirstTargetCollege(value);
                 mFirstTargetCollegeTV.setText(value);
                 break;
             case 9:
-                mUserSharedPreference.setFirstTM(value);
+                mUserSharedPreference.setStrFirstTargetMajor(value);
                 mFirstTargetMajorTV.setText(value);
                 break;
             case 10:
-                mUserSharedPreference.setSecondTC(value);
+                mUserSharedPreference.setStrSecondTargetCollege(value);
                 mSecondTargetCollegeTV.setText(value);
                 break;
             case 11:
-                mUserSharedPreference.setSecondTM(value);
+                mUserSharedPreference.setStrSecondTargetMajor(value);
                 mSecondTargetMajorTV.setText(value);
                 break;
             case 12:
-                mUserSharedPreference.setAcceptedC(value);
+                mUserSharedPreference.setStrAcceptedCollege(value);
                 mAcceptedCollegeTV.setText(value);
                 break;
             case 13:
-                mUserSharedPreference.setAcceptedM(value);
+                mUserSharedPreference.setStrAcceptedMajor(value);
                 mAcceptedMajorTV.setText(value);
                 break;
         }
@@ -370,7 +377,11 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
 
     class ClearUserInfoAsyncTask extends AsyncTask<String, Integer, Integer>{
 
+        private Context context;
         ProgressDialog progressDialog;
+        public ClearUserInfoAsyncTask(Context context){
+            this.context = context;
+        }
         @Override
         protected void onPreExecute(){
             progressDialog = ProgressDialog.show(ActivityViewPersonal.this, null, getResources().getString(R.string.logoutting));
@@ -378,31 +389,24 @@ public class ActivityViewPersonal extends ActionBarActivity implements View.OnCl
 
         @Override
         protected Integer doInBackground(String... params) {
-            UserSharedPreference userSharedPreference = new UserSharedPreference(ActivityViewPersonal.this);
+            UserSharedPreference userSharedPreference = new UserSharedPreference(context);
+            int iUserID = userSharedPreference.getiUserID();
             userSharedPreference.clear();
 
             //clear user paper and question info
-            DBHelper dbHelper = DBHelper.getInstance(ActivityViewPersonal.this);
-            SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
-            sqLiteDatabase.beginTransaction();
-            String strDropPaperTable = "DELETE FROM "+ Strings.TABLE_NAME_HISTORY_PAPERS+";";
-            String strDropQuestionTable = "DELETE FROM "+ Strings.TABLE_NAME_LOG_QUESTIONS+";";
-            try {
-                sqLiteDatabase.execSQL(strDropPaperTable);
-                sqLiteDatabase.execSQL(strDropQuestionTable);
-            }catch (SQLiteException e){
-                e.printStackTrace();
-            }
-            sqLiteDatabase.endTransaction();
-            dbHelper.close();
+            DoneQuestionDBHelper doneQuestionDBHelper = DoneQuestionDBHelper.getInstance(context);
+            doneQuestionDBHelper.deleteAll(iUserID);
             return null;
         }
 
         @Override
         protected void onPostExecute(Integer result){
             progressDialog.dismiss();
-            ActivityManager activityManager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-            activityManager.restartPackage(getPackageName());
+
+            Intent i = getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage(getBaseContext().getPackageName());
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
             finish();
         }
     }

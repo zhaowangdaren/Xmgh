@@ -5,7 +5,7 @@
     <string name="password">密码</string>
     <string name="no_account_sigin"><u>没有账号？点击注册</u></string>
     <string name="no_network_click_refresh">没有网络，点击刷新</string>
-    <string name="app_name">学霸</string>
+    <string name="app_name">小马过河</string>
     <string name="title_section1">英语一</string>
     <string name="title_section2">英语二</string>
     <string name="title_section3">政治</string>
@@ -20,7 +20,6 @@
     <string name="action_draft">Draft</string>
     <string name="action_answer_sheets">答题卡</string>
     <string name="action_timer">00:00</string>
-    <string name="title_activity_activity_bar_paper">ActivityBarPaper</string>
     <string name="hello_world">Hello world!</string>
     <string name="submit_answer">提交答案</string>
     <string name="title_activity_activity_papers">练习</string>
@@ -124,16 +123,12 @@
     <string name="forget_password"><u>忘记密码</u></string>
     <string name="sigin">注册</string>
     <string name="error_retry">发生异常，请点击重试</string>
-    <string name="title_activity_activty_paper_g">ActivtyPaperG</string>
-    <string name="title_activity_activity_user_book">ActivityUserBook</string>
-    <string name="title_activity_activity_user_questions">ActivityUserQuestions</string>
     <string name="no_note_question">还没有添加笔记</string>
     <string name="no_error_question">还没有错题</string>
     <string name="no_favorite_question">还没有收藏题目</string>
     <string name="error_book">错题本</string>
     <string name="favorite_book">收藏题目</string>
     <string name="note_book">笔记题目</string>
-    <string name="title_activity_activity_error_test_book">ActivityErrorTestBook</string>
     <string name="error_test">错题测试</string>
     <string name="start_test">开始测试</string>
     <string name="politics">政治</string>
@@ -149,14 +144,14 @@
     <string name="title_activity_activity_forget_password">忘记密码</string>
     <string name="new_password">新密码</string>
     <string name="confirm_password">确认密码</string>
-    <string name="title_activity_selecte_course">SelecteCourseActivity</string>
+    <string name="title_activity_selecte_course">选择科目</string>
     <string name="finished">完成</string>
     <string name="qq_login">使用QQ登录</string>
     <string name="weibo_login">使用微博登录</string>
     <string name="next_step">下一步</string>
     <string name="explain_about_register_auth_code">短信验证码已发送至：</string>
     <string name="set_password">设置密码</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">注册</string>
     <string name="please_input_phone_numer">请输入手机号码</string>
     <string name="hint">提示</string>
     <string name="has_registered">已注册</string>
@@ -169,16 +164,14 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_main_activity2">MainActivity2Activity</string>
-    <string name="title_activity_course">CourseActivity</string>
-    <string name="add_course">添加课程</string>
+    <string name="title_activity_course">小马过河</string>
+    <string name="add_course">修改课程</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="parseing_questions">解析问题中...</string>
-    <string name="title_activity_base_test">BaseTestActivity</string>
-    <string name="title_activity_check_answer">CheckAnswerActivity</string>
+    <string name="title_activity_base_test">基础训练</string>
+    <string name="title_activity_check_answer">练习结果</string>
     <string name="parseing_answer">解析答案中...</string>
-    <string name="title_activity_show_analysis">ShowAnalysisActivity</string>
+    <string name="title_activity_show_analysis">题目解析</string>
     <string name="action_note">笔记</string>
     <string name="are_being_developed">正在开发中，敬请等待</string>
     <string name="zhen_ti_test">真题训练</string>

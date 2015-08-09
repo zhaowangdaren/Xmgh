@@ -116,4 +116,8 @@ public class DoneQuestionDBHelper {
         }
         return result;
     }
+
+    public void deleteAll(int iUserID) {
+        questionDao.deleteAll();
+    }
 }

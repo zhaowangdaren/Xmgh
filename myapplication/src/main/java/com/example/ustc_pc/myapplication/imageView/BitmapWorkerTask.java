@@ -4,7 +4,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.example.ustc_pc.myapplication.net.NetUtil;
+
+import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 
 import java.lang.ref.WeakReference;
 
@@ -21,7 +22,8 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
         data = params[0];
-        return NetUtil.getImageFromServer(data);
+        OkHttpUtil okHttpUtil = new OkHttpUtil();
+        return okHttpUtil.getImageFromServer(data);
     }
 
     protected void onPostExecute(Bitmap bitmap){

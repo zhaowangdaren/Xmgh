@@ -1,10 +1,10 @@
 package com.example.ustc_pc.myapplication.activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,15 +13,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.ustc_pc.myapplication.MainActivity;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
-import com.example.ustc_pc.myapplication.net.NetUtil;
+import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.viewUnit.LineEditText;
+
+import java.io.IOException;
 
 import static android.view.View.OnFocusChangeListener;
 
-public class ActivityWriteInfo extends ActionBarActivity implements View.OnClickListener, OnFocusChangeListener{
+public class ActivityWriteInfo extends AppCompatActivity implements View.OnClickListener, OnFocusChangeListener{
 
 
     RadioGroup mGenderRG, mStudentTypeRG;
@@ -37,8 +38,6 @@ public class ActivityWriteInfo extends ActionBarActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_info);
-//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
@@ -155,23 +154,29 @@ public class ActivityWriteInfo extends ActionBarActivity implements View.OnClick
         if(sTargetC == null)sTargetC = "";
         String sTargetM = m2TargetMajorET.getText().toString();
         if(sTargetM == null)sTargetM = "";
-        UploadingAsyncTask uploadingAsyncTask = new UploadingAsyncTask();
+        UploadingAsyncTask uploadingAsyncTask = new UploadingAsyncTask(this);
         uploadingAsyncTask.execute(nickName, realName, String.valueOf(iGender), email, String.valueOf(iUserType), sourceC, sourceM, fTargetC, fTargetM,
                 sTargetC, sTargetM);
     }
 
 
 
-    class UploadingAsyncTask extends AsyncTask<String, Integer, Integer>{
+    class UploadingAsyncTask extends AsyncTask<String, Integer, Boolean>{
 
+        private Context context;
         UserSharedPreference userSharedPreference ;
+
+        public UploadingAsyncTask(Context context){
+            this.context = context;
+        }
+
         @Override
         protected void onPreExecute(){
             progressDialog = ProgressDialog.show(ActivityWriteInfo.this, null,getResources().getString(R.string.loading));
             userSharedPreference = new UserSharedPreference(ActivityWriteInfo.this);
         }
         @Override
-        protected Integer doInBackground(String... params) {
+        protected Boolean doInBackground(String... params) {
             String nickName = params[0];
             if(nickName != null && nickName.length() > 0){
                 userSharedPreference.setStrUserName(nickName);
@@ -181,54 +186,59 @@ public class ActivityWriteInfo extends ActionBarActivity implements View.OnClick
                 userSharedPreference.setRealName(realName);
             }
             String strGender = params[2];
-            userSharedPreference.setGender(Integer.valueOf(strGender));
+            userSharedPreference.setiGender(Integer.valueOf(strGender));
 
             String email = params[3];
             if(email != null && email.length() > 0){
-                userSharedPreference.setEmail(email);
+                userSharedPreference.setStrEmail(email);
             }
             String userType = params[4];
-            userSharedPreference.setUserType(Integer.valueOf(userType));
+            userSharedPreference.setiUserType(Integer.valueOf(userType));
 
             String sourceC = params[5];
             if(sourceC != null && sourceC.length() > 0 ){
-                userSharedPreference.setSourceCollege(sourceC);
+                userSharedPreference.setStrSourceCollege(sourceC);
             }
             String sourceM = params[6];
             if(sourceM != null && sourceM.length() > 0){
-                userSharedPreference.setSourceMajor(sourceM);
+                userSharedPreference.setStrSourceMajor(sourceM);
             }
             String fTargetC = params[7];
             if(fTargetC != null && fTargetC.length() > 0){
-                userSharedPreference.setFirstTC(fTargetC);
+                userSharedPreference.setStrFirstTargetCollege(fTargetC);
             }
             String fTargetM = params[8];
             if(fTargetM != null && fTargetM.length() > 0){
-                userSharedPreference.setFirstTM(fTargetM);
+                userSharedPreference.setStrFirstTargetMajor(fTargetM);
             }
 
             String sTargetC = params[9];
-            if(fTargetC != null && fTargetC.length() > 0){
-                userSharedPreference.setSecondTC(sTargetC);
+            if(sTargetC != null && sTargetC.length() > 0){
+                userSharedPreference.setStrFirstTargetCollege(sTargetC);
             }
             String sTargetM = params[10];
-            if(fTargetM != null && fTargetM.length() > 0){
-                userSharedPreference.setSecondTM(sTargetM);
+            if(sTargetM != null && sTargetM.length() > 0){
+                userSharedPreference.setStrSecondTargetMajor(sTargetM);
             }
-            int result = NetUtil.uploadingUserInfo(ActivityWriteInfo.this);
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            boolean result = false;
+            try {
+                result = okHttpUtil.setPersonInfo(context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return result;
         }
 
         @Override
-        protected void onPostExecute(Integer result){
+        protected void onPostExecute(Boolean result){
             UserSharedPreference userSharedPreference = new UserSharedPreference(ActivityWriteInfo.this);
-            if(result == 1){
+            if( result){
                 //upload finished , then set user info unchanged
                 userSharedPreference.setIsUserInfoChanged(false);
                 Toast.makeText(ActivityWriteInfo.this, "Wrtie Info success!",Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(ActivityWriteInfo.this, "Wrtie Info failed!",Toast.LENGTH_SHORT).show();
-                //userSharedPreference.setIsUploading(false);
             }
             progressDialog.dismiss();
             startMainActivity();
@@ -236,9 +246,6 @@ public class ActivityWriteInfo extends ActionBarActivity implements View.OnClick
     }
 
     private void startMainActivity(){
-        Intent intent  = new Intent();
-        intent.setClass(this, MainActivity.class);
-        startActivity(intent);
         finish();
     }
 }

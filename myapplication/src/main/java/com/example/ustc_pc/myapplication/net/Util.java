@@ -17,6 +17,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
  * Created by ustc-pc on 2015/7/25.
  */
 public class Util {
-    public static final String URL_HOME = "http://192.168.2.97/xmghProject/account";
+    public static final String URL_HOME = "http://192.168.2.45/xmghProject/account";
     public static final String URL_PHONE_CHECK = URL_HOME+"/PhoneCheck";
 
     public static String URL_REGISTER_BY_PHONE = URL_HOME+"/PhoneRegister";
@@ -34,23 +35,65 @@ public class Util {
     public static String URL_SET_PERSONAL_INFO = URL_HOME + "/SetPersonInfo";
     public static String URL_GET_PERSONAL_INFO = URL_HOME + "/GetPersonInfo";
     public static String URL_ADD_COURSE = URL_HOME + "/AddCourse";
+    public static String  URL_DEL_COURSE = URL_HOME + "/DelCourse";
     public static String URL_GET_KPs = URL_HOME + "/GetKPs";
     public static String URL_GET_SELECTED_COURSES = URL_HOME + "/GetSelectedCourses";
     public static String URL_GET_COURSES_INFO = URL_HOME + "/GetCoursesInfo";
-
+    public static String URL_GET_BASIC_TEST_ONLINE = URL_HOME + "/GetBasicTestOnline";
     public static int iNo_USERID = -1;
     public static int NO_LAST_COURSE = -1;
 
     public static final int PHONE_LOGIN = 0, QQ_LOGIN = 1, WEIBO_LOGIN = 2, WECHAT_LOGIN = 3;
     public static String DB_NAME = "cn.edu.ustc.xmgh.db";
     public static Integer FIRST_LEVEL_KP = 1, SECOND_LEVEL_KP = 2, THIRD_LEVEL_KP = 3, LAST_LEVEL_KP = 4;
-    public static String URL_GET_QUESTIONS = URL_HOME + "GetQuestions";
-    public static String APP_PATH = Environment.getExternalStorageDirectory()+"/.cn.edu.ustc.xmgh/";
+    public static String URL_GET_QUESTIONS = URL_HOME + "/GetQuestions";
+    public static String APP_PATH = Environment.getExternalStorageDirectory()+"/.cn.edu.ustc.xmgh";
     public static int BASIC_TEST = 1, REAL_TEST = 2, SPECIAL_TEST = 3, MOCK_TEST = 4;
 
     public static final int TYPE_QUESTION_LAYOUT_HEADER = 0, TYPE_QUESTION_LAYOUT_FATHER = 1,
             TYPE_QUESTION_LAYOUT_OPTION = 2, TYPE_QUESTION_LAYOUT_ANALYSIS = 4;
 
+
+    public static final String FILE_NAME_QUESTION = "question_unMultiSonQuestion.json";
+    public static final String FILE_NAME_ANALYSIS = "analysis_unMultiSonQuestion.json";
+    public static final int MAN = 1, WOMAN = 2;
+
+
+    public static boolean createFile(String filePath, String fileName){
+        File file1 = new File(filePath);
+        String temp = filePath + fileName;
+        if(!file1.exists()){
+            try{
+                file1.mkdir();
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        File file2 = new File(temp);
+        if(!file2.exists()){
+            try {
+                file2.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean createFolder(String folderPath){
+        File file = new File(folderPath);
+        if(!file.exists()){
+            try{
+                file.mkdir();
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * check net is allowable
      * @param context
@@ -100,19 +143,25 @@ public class Util {
     public static List<QuestionNew> parseQuestionsFromFile(String[] questionsAPath) {
         if(questionsAPath.length <= 0)return null;
         List<QuestionNew> result = new ArrayList<>(questionsAPath.length);
-        for(int i = 0; i< questionsAPath.length;i++){
-            String strQuestion = FileOperation.getFileFromSD(questionsAPath[i] + "/" + "question.json");
-            JSONObject jsonQuestion = JSON.parseObject(strQuestion);
-            int iQuestionID = jsonQuestion.getIntValue("iQuestionID");
-            String strSubject = jsonQuestion.getString("strSubject");
-            boolean isMultiSonQuestion = jsonQuestion.getBooleanValue("isMultiSonQuestion");
-            String strAudioFileName = jsonQuestion.getString("strAudioFileName");
-            String strVideoUrl = jsonQuestion.getString("strVideoUrl");
-            JSONArray jsonQuestionSons = jsonQuestion.getJSONArray("questions");
-            QuestionNew questionNew = new QuestionNew(iQuestionID,strSubject,isMultiSonQuestion,strAudioFileName,strVideoUrl, jsonQuestionSons);
-            result.add(questionNew);
+        try {
+            for (int i = 0; i < questionsAPath.length; i++) {
+                String strQuestion = FileOperation.getFileFromSD(questionsAPath[i] + "/" + Util.FILE_NAME_QUESTION);
+                JSONObject jsonQuestion = JSON.parseObject(strQuestion);
+                if(jsonQuestion == null || jsonQuestion.isEmpty())return null;
+                int iQuestionID = jsonQuestion.getIntValue("iQuestionID");
+                String strSubject = jsonQuestion.getString("strSubject");
+                boolean isMultiSonQuestion = jsonQuestion.getBooleanValue("isMultiSonQuestion");
+                String strAudioFileName = jsonQuestion.getString("strAudioFileName");
+                String strVideoUrl = jsonQuestion.getString("strVideoUrl");
+                JSONArray jsonQuestionSons = jsonQuestion.getJSONArray("questions");
+                QuestionNew questionNew = new QuestionNew(iQuestionID, strSubject, isMultiSonQuestion, strAudioFileName, strVideoUrl, jsonQuestionSons);
+                result.add(questionNew);
+            }
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-        return result;
     }
 
 
@@ -121,7 +170,7 @@ public class Util {
         if(questionsAPath.length <= 0)return null;
         List<Answer> result = new ArrayList<>(questionsAPath.length);
         for(int i = 0; i< questionsAPath.length; i++){
-            String strAnswer = FileOperation.getFileFromSD(questionsAPath[i] + "/" + "analysis.json");
+            String strAnswer = FileOperation.getFileFromSD(questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS);
             JSONObject jsonAnswer = JSON.parseObject(strAnswer);
             int iQuestionID = jsonAnswer.getIntValue("iQuestionID");
             boolean isMultiSonQuestion = jsonAnswer.getBooleanValue("isMultiSonQuestion");

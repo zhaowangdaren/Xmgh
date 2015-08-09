@@ -12,7 +12,7 @@ public class Course implements Serializable{
     private Long id;
     private String strCourseName;
     private Integer iCourseID;
-    private Boolean isSelected;
+    private Boolean isSelected = false;
     private Integer iUserID;
 
     public Course() {

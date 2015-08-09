@@ -28,12 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.ActivityLogin"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/login"
-            android:logo="@drawable/ic_launcher" >
-        </activity>
+
+        <activity android:name=".activity.LoginActivity"
+            android:label="@string/login"/>
         <activity
             android:name=".activity.ActivityWriteInfo"
             android:label="@string/title_activity_activity_write_info" >
@@ -61,10 +58,10 @@
         <activity
             android:name=".activity.ActivityForgetPassword"
             android:label="@string/title_activity_activity_forget_password"
-            android:parentActivityName=".activity.ActivityLogin" >
+            android:parentActivityName=".activity.LoginActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.ustc_pc.myapplication.activity.ActivityLogin" />
+                android:value="com.example.ustc_pc.myapplication.activity.LoginActivity" />
         </activity>
         <activity
             android:name=".activity.SelecteCourseActivity"
@@ -73,14 +70,6 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:label="@string/title_activity_register" >
-        </activity>
-        <activity
-            android:name=".MainActivity2Activity"
-            android:label="@string/title_activity_main_activity2" >
-        </activity>
-        <activity
-            android:name=".CourseActivity"
-            android:label="@string/title_activity_course" >
         </activity>
         <activity
             android:name=".activity.CourseActivity"

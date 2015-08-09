@@ -6,18 +6,6 @@
     android:background="#e0e0e0"
     >
 
-    <android.support.v7.widget.Toolbar
-        android:elevation="10dp"
-        android:id="@+id/my_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/toolbar_color"
-        android:titleTextAppearance="?android:attr/text"
-        />
-
-
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:paddingLeft="@dimen/activity_horizontal_margin_half"
         android:paddingRight="@dimen/activity_horizontal_margin_half"

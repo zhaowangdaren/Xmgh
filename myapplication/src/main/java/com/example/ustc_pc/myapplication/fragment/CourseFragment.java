@@ -416,7 +416,7 @@ public class CourseFragment extends Fragment {
                 contentTV = (TextView) itemView.findViewById(R.id.textView_kps_content);
                 if(iType == TYPE_ITEM){
                     openCloseitemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
-                    downloafIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_donwload);
+                    downloafIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_start_test);
                 }
             }
         }

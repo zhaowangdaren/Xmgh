@@ -31,9 +31,12 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_QUESTIONS = "questions";
+    private static final String ARG_TEST_ID = "ARG_TEST_ID";
 
     // TODO: Rename and change types of parameters
     private List<QuestionNew> mQuestions;
+    private long mlTestID;
+
     private ScrollViewWithGridView mGridView;
     private Button mSubmitBT;
 
@@ -47,10 +50,11 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
      * @return A new instance of fragment AnswerSheetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AnswerSheetFragment newInstance(List<QuestionNew> questions) {
+    public static AnswerSheetFragment newInstance(List<QuestionNew> questions, long lTestID) {
         AnswerSheetFragment fragment = new AnswerSheetFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_QUESTIONS, (Serializable) questions);
+        args.putLong(ARG_TEST_ID, lTestID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,6 +68,7 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mQuestions = (List<QuestionNew>)getArguments().getSerializable(ARG_QUESTIONS);
+            mlTestID = getArguments().getLong(ARG_TEST_ID, -1);
         }
     }
 
@@ -87,7 +92,8 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button_submit_answer:
-
+                onSubmitButtonPressed(null);
+                break;
         }
     }
 

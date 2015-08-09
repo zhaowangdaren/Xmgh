@@ -81,4 +81,9 @@ public class CourseDBHelper {
         }
         return selectedCourses;
     }
+
+    public void updateCourse(Course course) {
+        if(course == null)return;
+        courseDao.update(course);
+    }
 }

@@ -11,13 +11,13 @@ public class KPs implements Serializable, Comparable<KPs>{
 
     private Long id;
     private Integer iUserID;
-    private Boolean isExpand;
+    private Boolean isExpand = false;
     private String strKPID;
     private Integer iCourseID;
     private String strName;
     private Integer iLevel;
     private String strFatherKPID;
-    private Boolean hasChild;
+    private Boolean hasChild = false;
     private Integer iProgress;
 
     @Override

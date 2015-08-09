@@ -312,18 +312,17 @@ public class CourseBaseFragment extends Fragment {
                 holder.contentTV.setOnClickListener(new OnItemContentTVClickListener(index));
                 if(mShowingKPs.get(index).getIsExpand()){
                     holder.openCloseitemIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_remove_circle_outline_black_24dp));
-
                 }else{
                     holder.openCloseitemIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_circle_outline_black_24dp));
                 }
                 holder.openCloseitemIV.setOnClickListener(new OnOpenCloseItemIVClickListener(index));
-                holder.downloafIV.setOnClickListener(new OnItemDownloadIVClickListener(index));
+                holder.startTestIV.setOnClickListener(new OnItemStartTestIVClickListener(index));
                 // Let different level kp on different offset
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.openCloseitemIV.getLayoutParams();
                 float offset = getResources().getDimension(R.dimen.activity_horizontal_margin);
                 offset = offset + (getItem(index).getILevel() - 1) * offset;
-                lp.setMargins((int) offset, lp.topMargin, lp.rightMargin, lp.bottomMargin);
+                lp.setMargins((int) offset, 0,0,0);
                 holder.openCloseitemIV.setLayoutParams(lp);
 
                 if(!mShowingKPs.get(index).getHasChild())holder.openCloseitemIV.setVisibility(View.INVISIBLE);
@@ -385,20 +384,23 @@ public class CourseBaseFragment extends Fragment {
 
 
 
-        private class OnItemDownloadIVClickListener implements View.OnClickListener {
+        private class OnItemStartTestIVClickListener implements View.OnClickListener {
             private int index;
 
-            public OnItemDownloadIVClickListener(int index) {
+            public OnItemStartTestIVClickListener(int index) {
                 this.index = index;
             }
 
             @Override
             public void onClick(View view) {
-//                String strCourseID = String.valueOf(mICourseID);
-//                String strQuestionType = String.valueOf(Util.BASIC_TEST);
-//                String strKPID = mShowingKPs.get(index).getStrKPID();
-//                DownloadQuestionsAsyncTask downloadQuestionsAsyncTask = new DownloadQuestionsAsyncTask(getActivity());
-//                downloadQuestionsAsyncTask.execute(strCourseID, strQuestionType, strKPID);
+                Intent intent = new Intent(getActivity(), BaseTestActivity.class);
+                String strKPID = mShowingKPs.get(index).getStrKPID();
+                intent.putExtra("iCourseID", mICourseID);
+                intent.putExtra("iQuestionType", Util.BASIC_TEST);
+                intent.putExtra("strKPName",mShowingKPs.get(index).getStrName());
+                intent.putExtra("strKPID", strKPID);
+
+                startActivity(intent);
             }
         }
 
@@ -409,14 +411,14 @@ public class CourseBaseFragment extends Fragment {
             //header score TextView's id same as item kp's name TextView
             private TextView contentTV;
             //Download questions
-            private ImageView downloafIV;
+            private ImageView startTestIV;
 
             public KPsViewHolder(View itemView, int iType) {
                 super(itemView);
                 contentTV = (TextView) itemView.findViewById(R.id.textView_kps_content);
                 if(iType == TYPE_ITEM){
                     openCloseitemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
-                    downloafIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_donwload);
+                    startTestIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_start_test);
                 }
             }
         }

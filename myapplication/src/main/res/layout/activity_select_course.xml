@@ -4,18 +4,7 @@
     android:background="#e0e0e0"
     tools:context="com.example.ustc_pc.myapplication.activity.SelecteCourseActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:elevation="10dp"
-        android:id="@+id/my_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/toolbar_color"
-        android:titleTextAppearance="?android:attr/text">
-
-    </android.support.v7.widget.Toolbar>
     <GridView
-        android:layout_below="@id/my_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gridView_courses"
@@ -24,7 +13,8 @@
         android:verticalSpacing="@dimen/activity_horizontal_margin"
         android:horizontalSpacing="@dimen/activity_horizontal_margin"
         android:choiceMode="multipleChoice"
-        android:layout_above="@+id/button_finished" />
+        android:layout_above="@+id/button_finished"
+        android:layout_alignParentTop="true" />
 
     <Button
         android:layout_width="wrap_content"
