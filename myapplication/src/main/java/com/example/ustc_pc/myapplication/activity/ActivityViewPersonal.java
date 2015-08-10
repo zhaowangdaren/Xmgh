@@ -161,6 +161,9 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
         return super.onOptionsItemSelected(item);
     }
 
+    private static final int TYPE_CHANGE_HEADER_IMAGE = 0, TYPE_NICK_NAME = 1, TYPE_GENDER = 3, TYPE_EMAIL = 4, TYPE_ABOUT_ME = 5
+            ,TYPE_SOURCE_COLLEGE = 6, TYPE_SOURCE_MAJOR = 7, TYPE_FIRST_TARGET_COLLEGE = 8, TYPE_FIRST_TARGET_MAJOR = 9
+            , TYPE_SECOND_TARGET_COLLEGE = 10, TYPE_SECOND_TARGET_MAJOR = 11, TYPE_ACCEPTED_COLLEGE = 12, TYPE_ACCEPTED_MAJOR = 13;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -171,64 +174,61 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
                 showChangeHeaderImage();
                 break;
             case R.id.relativeLayout_nick_name:
-                showEditDialog(getResources().getString(R.string.nick_name), 1, mNickNameTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.nick_name), TYPE_NICK_NAME, mNickNameTV.getText().toString());
                 break;
             case R.id.relativeLayout_gender:
-                showEditDialog(getResources().getString(R.string.gender), 3,mGenderTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.gender), TYPE_GENDER,mGenderTV.getText().toString());
                 break;
             case R.id.relativeLayout_email:
-                showEditDialog(getResources().getString(R.string.email), 4, mEmailTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.email), TYPE_EMAIL, mEmailTV.getText().toString());
                 break;
             case R.id.relativeLayout_about_me:
-                showEditDialog(getResources().getString(R.string.about_me), 5, mAboutMeTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.about_me), TYPE_ABOUT_ME, mAboutMeTV.getText().toString());
                 break;
             case R.id.relativeLayout_source_college:
-                showEditDialog(getResources().getString(R.string.source_college), 6, mSourceCollegeTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.source_college), TYPE_SOURCE_COLLEGE, mSourceCollegeTV.getText().toString());
                 break;
             case R.id.relativeLayout_source_major:
-                showEditDialog(getResources().getString(R.string.source_major), 7, mSourceMajorTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.source_major), TYPE_SOURCE_MAJOR, mSourceMajorTV.getText().toString());
                 break;
             case R.id.relativeLayout_first_target_college:
-                showEditDialog(getResources().getString(R.string.first_target_college), 8, mFirstTargetCollegeTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.first_target_college), TYPE_FIRST_TARGET_COLLEGE, mFirstTargetCollegeTV.getText().toString());
                 break;
             case R.id.relativeLayout_first_target_major:
-                showEditDialog(getResources().getString(R.string.first_target_major), 9, mFirstTargetMajorTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.first_target_major), TYPE_SOURCE_MAJOR, mFirstTargetMajorTV.getText().toString());
                 break;
             case R.id.relativeLayout_second_target_college:
-                showEditDialog(getResources().getString(R.string.second_target_college), 10, mSecondTargetCollegeTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.second_target_college), TYPE_SECOND_TARGET_COLLEGE, mSecondTargetCollegeTV.getText().toString());
                 break;
             case R.id.relativeLayout_second_target_major:
-                showEditDialog(getResources().getString(R.string.second_target_major), 11, mSecondTargetMajorTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.second_target_major), TYPE_SECOND_TARGET_MAJOR, mSecondTargetMajorTV.getText().toString());
                 break;
             case R.id.relativeLayout_accepted_college:
-                showEditDialog(getResources().getString(R.string.accepted_college), 12, mAcceptedCollegeTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.accepted_college), TYPE_ACCEPTED_COLLEGE, mAcceptedCollegeTV.getText().toString());
                 break;
             case R.id.relativeLayout_accepted_major:
-                showEditDialog(getResources().getString(R.string.accepted_major), 13, mAcceptedMajorTV.getText().toString());
+                showEditDialog(getResources().getString(R.string.accepted_major), TYPE_ACCEPTED_MAJOR, mAcceptedMajorTV.getText().toString());
                 break;
         }
     }
 
-    public static final int CHANGE_HEADER_IMAGE = 10;
     private void showChangeHeaderImage() {
         Intent intent = new Intent();
         intent.setClass(this, ActivitySelectImage.class);
-        startActivityForResult(intent, CHANGE_HEADER_IMAGE);
+        startActivityForResult(intent, TYPE_CHANGE_HEADER_IMAGE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == 1) return;
         switch (requestCode){
-            case CHANGE_HEADER_IMAGE:
+            case TYPE_CHANGE_HEADER_IMAGE:
                 if(data != null) {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inJustDecodeBounds = true;
                     Bundle bundle = data.getExtras();
                     Bitmap bitmap = (Bitmap) bundle.get("data");
                     mHeadIV.setImageBitmap(bitmap);
-
-
                 }
                 break;
         }
@@ -244,7 +244,7 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
     private void showEditDialog(String title, int type, final String defaultValue){
         View view = null;
         final int fType =type;
-        if(type == 3){
+        if(type == TYPE_GENDER){
             view = View.inflate(this, R.layout.dialog_checkbox_gender, null);
             final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup_edit_gender);
 
@@ -252,16 +252,21 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
             builder.setTitle(title)
                     .setView(view);
 
-            if(defaultValue.equals(getResources().getString(R.string.woman))){
+            if(defaultValue.equals(getString(R.string.woman))){
                 radioGroup.check(R.id.radioButton_woman);
-            }else{
+            }else
+            if(defaultValue.equals(getString(R.string.man))){
                 radioGroup.check(R.id.radioButton_man);
             }
+
             radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    int iDefaultValue = defaultValue.equals(getString(R.string.woman))?0:1;
-                    int iGender = (checkedId == R.id.radioButton_woman) ? 0 : 1;
+                    int iDefaultValue = Util.NO_GENDER;
+                    if(defaultValue.length() > 0){
+                        iDefaultValue = defaultValue.equals(getString(R.string.woman)) ? Util.WOMAN : Util.MAN;
+                    }
+                    int iGender = (checkedId == R.id.radioButton_woman) ? Util.WOMAN : Util.MAN;
                     if(iDefaultValue != iGender){
                         setUserInfo(fType, iGender);
                         mUserSharedPreference.setIsUserInfoChanged(true);
@@ -282,10 +287,10 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
                         }
                     });
             builder.show();
-
         }else{
             view = View.inflate(this, R.layout.dialog_edittext, null);
             final EditText editText = (EditText)view.findViewById(R.id.editText);
+            editText.setTextColor(getResources().getColor(R.color.black));
             editText.setText(defaultValue);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(title);
@@ -295,7 +300,7 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String value = editText.getText().toString();
-                    if(value != null && !value.equals(defaultValue)) {
+                    if (value != null && !value.equals(defaultValue)) {
                         setUserInfo(fType, value);
                         mUserSharedPreference.setIsUserInfoChanged(true);
                     }
@@ -305,7 +310,6 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
             builder.setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
                 }
             }).show();
         }
@@ -313,7 +317,7 @@ public class ActivityViewPersonal extends AppCompatActivity implements View.OnCl
     }
 
     private void setUserInfo(int fType, int value) {
-        if(fType == 3){//gender
+        if(fType == TYPE_GENDER){//gender
             mUserSharedPreference.setiGender(value);
             switch (value){
                 case Util.WOMAN:

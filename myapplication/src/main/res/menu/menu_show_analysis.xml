@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.ustc_pc.myapplication.activity.ShowAnalysisActivity">
     <item android:id="@+id/action_note" android:title="@string/action_note"
-         app:showAsAction="ifRoom" android:icon="@drawable/ic_create_black_24dp"/>
+         app:showAsAction="ifRoom" android:icon="@drawable/ic_edit_white_24dp"/>
 
     <item android:id="@+id/action_favorite_question" android:title="@string/action_favorite_question"
-        app:showAsAction="ifRoom" android:icon="@android:drawable/star_off"/>
+        app:showAsAction="ifRoom" android:icon="@drawable/ic_grade_white_24dp"/>
 </menu>

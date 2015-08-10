@@ -1,16 +1,19 @@
 package com.example.ustc_pc.myapplication.unit;
 
+import com.example.ustc_pc.myapplication.net.Util;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ustc_zy on 2015/8/9.
  */
-public class QuestionUnmultiSon {
+public class QuestionUnmultiSon implements Serializable, Comparable<QuestionUnmultiSon>{
     private Integer iQuestionID;
     private String strSubject;
-    private boolean  isMultiSonQuestion;
+    private int  iMultiSonQuestion = Util.NO_MULTI_SON_QUESTION;
 
-    private boolean isMultiSelect;
+    private int iMultiSelect = Util.UN_MULTI_SELECT;
     private String strPicFileName;
     private String strAudioFileName;
     private String strVideoUrl;
@@ -18,11 +21,11 @@ public class QuestionUnmultiSon {
     private long lSpendTime, lStartTime, lStopTime;
     private List<QuestionOption> options;
 
-    public QuestionUnmultiSon(Integer iQuestionID, String strSubject, boolean isMultiSonQuestion, boolean isMultiSelect, String strPicFileName, String strAudioFileName, String strVideoUrl, long lSpendTime, long lStartTime, long lStopTime, List<QuestionOption> options) {
+    public QuestionUnmultiSon(Integer iQuestionID, String strSubject, int iMultiSonQuestion, int iMultiSelect, String strPicFileName, String strAudioFileName, String strVideoUrl, long lSpendTime, long lStartTime, long lStopTime, List<QuestionOption> options) {
         this.iQuestionID = iQuestionID;
         this.strSubject = strSubject;
-        this.isMultiSonQuestion = isMultiSonQuestion;
-        this.isMultiSelect = isMultiSelect;
+        this.iMultiSonQuestion = iMultiSonQuestion;
+        this.iMultiSelect = iMultiSelect;
         this.strPicFileName = strPicFileName;
         this.strAudioFileName = strAudioFileName;
         this.strVideoUrl = strVideoUrl;
@@ -46,22 +49,6 @@ public class QuestionUnmultiSon {
 
     public void setStrSubject(String strSubject) {
         this.strSubject = strSubject;
-    }
-
-    public boolean isMultiSonQuestion() {
-        return isMultiSonQuestion;
-    }
-
-    public void setIsMultiSonQuestion(boolean isMultiSonQuestion) {
-        this.isMultiSonQuestion = isMultiSonQuestion;
-    }
-
-    public boolean isMultiSelect() {
-        return isMultiSelect;
-    }
-
-    public void setIsMultiSelect(boolean isMultiSelect) {
-        this.isMultiSelect = isMultiSelect;
     }
 
     public String getStrPicFileName() {
@@ -120,22 +107,48 @@ public class QuestionUnmultiSon {
         this.options = options;
     }
 
-    public class QuestionOption{
-        private int ID;
+    public int getiMultiSonQuestion() {
+        return iMultiSonQuestion;
+    }
+
+    public void setiMultiSonQuestion(int iMultiSonQuestion) {
+        this.iMultiSonQuestion = iMultiSonQuestion;
+    }
+
+    public int getiMultiSelect() {
+        return iMultiSelect;
+    }
+
+    public void setiMultiSelect(int iMultiSelect) {
+        this.iMultiSelect = iMultiSelect;
+    }
+
+    public boolean isMultiSelect() {
+        if(this.iMultiSelect == Util.UN_MULTI_SELECT)return false;
+        else return true;
+    }
+
+    @Override
+    public int compareTo(QuestionUnmultiSon questionUnmultiSon) {
+        return this.getiQuestionID().compareTo(questionUnmultiSon.getiQuestionID());
+    }
+
+    public class QuestionOption implements Serializable{
+        private String ID;
         private String strOption;
         private boolean isAnswer;
         private boolean isSelected;
 
-        public QuestionOption(int ID, String strOption){
+        public QuestionOption(String ID, String strOption){
             this.ID = ID;
             this.strOption = strOption;
         }
 
-        public int getID() {
+        public String getID() {
             return ID;
         }
 
-        public void setID(int ID) {
+        public void setID(String ID) {
             this.ID = ID;
         }
 

@@ -10,13 +10,19 @@
         android:background="@color/activity_paper_name_bar_color"
         style="@style/Base.AlertDialog.AppCompat.Light">
         <TextView
+            android:gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView_layout_question_header_question_type"
             android:hint="题型"
             android:textColor="#000"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
         <LinearLayout
+            android:layout_below="@id/textView_layout_question_header_question_type"
             android:id="@+id/linearLayout_layout_question_header_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

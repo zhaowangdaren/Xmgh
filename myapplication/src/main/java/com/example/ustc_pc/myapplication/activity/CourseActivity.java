@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
+import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.fragment.CourseBaseFragment;
 import com.example.ustc_pc.myapplication.fragment.CourseErrorFragment;
 import com.example.ustc_pc.myapplication.fragment.CourseFavoriteFragment;
@@ -47,6 +48,9 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private RelativeLayout mRelativeLayoutLeftMenu , mRelativeLayoutLeftHead;
+    //user head view
+    private ImageView mLeftMenuHeadIV;
+    private TextView mLeftMenuUserNameTV;
 
     private ListView mLeftMenuLV;
     private LeftMenuLVAdapter mLeftMenuLVAdapter;
@@ -90,6 +94,12 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         mRelativeLayoutLeftMenu = (RelativeLayout)findViewById(R.id.relativeLayout_left_menu);
         mRelativeLayoutLeftHead = (RelativeLayout)findViewById(R.id.relativeLayout_left_menu_head);
         mRelativeLayoutLeftHead.setOnClickListener(this);
+        //TODO : Set user head view
+        mLeftMenuHeadIV = (ImageView) findViewById(R.id.imageView_left_menu_head);
+
+        mLeftMenuUserNameTV = (TextView)findViewById(R.id.textView_left_menu_username);
+        mLeftMenuUserNameTV.setText(new UserSharedPreference(this).getStrUserName());
+
         mLeftMenuLV = (ListView)findViewById(R.id.listView_left_drawer);
         mAddCourseBT = (Button)findViewById(R.id.button_left_menu_add_course);
         mAddCourseBT.setOnClickListener(this);
@@ -194,6 +204,7 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
         }
     }
+
     private class GetSelectedCoursesAsyncTask extends AsyncTask<Integer, Integer, List<Course>>{
 
         ProgressDialog progressDialog;

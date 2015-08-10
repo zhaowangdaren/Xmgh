@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
-import com.example.ustc_pc.myapplication.unit.QuestionNew;
+import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 import com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView;
 
 import java.io.Serializable;
@@ -34,10 +34,11 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
     private static final String ARG_TEST_ID = "ARG_TEST_ID";
 
     // TODO: Rename and change types of parameters
-    private List<QuestionNew> mQuestions;
+    private List<QuestionUnmultiSon> mQuestions;
     private long mlTestID;
 
     private ScrollViewWithGridView mGridView;
+    AnswerSheetAdapter mAnswerSheetAdapter;
     private Button mSubmitBT;
 
     private OnFragmentInteractionListener mListener;
@@ -50,7 +51,7 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
      * @return A new instance of fragment AnswerSheetFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AnswerSheetFragment newInstance(List<QuestionNew> questions, long lTestID) {
+    public static AnswerSheetFragment newInstance(List<QuestionUnmultiSon> questions, long lTestID) {
         AnswerSheetFragment fragment = new AnswerSheetFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_QUESTIONS, (Serializable) questions);
@@ -64,10 +65,16 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        if(mAnswerSheetAdapter != null)
+            mAnswerSheetAdapter.notifyDataSetChanged();
+    }
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mQuestions = (List<QuestionNew>)getArguments().getSerializable(ARG_QUESTIONS);
+            mQuestions = (List<QuestionUnmultiSon>)getArguments().getSerializable(ARG_QUESTIONS);
             mlTestID = getArguments().getLong(ARG_TEST_ID, -1);
         }
     }
@@ -82,8 +89,8 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
         mSubmitBT.setOnClickListener(this);
         if(mQuestions == null)mQuestions = new ArrayList<>();
 
-        AnswerSheetAdapter answerSheetAdapter = new AnswerSheetAdapter();
-        mGridView.setAdapter(answerSheetAdapter);
+        mAnswerSheetAdapter = new AnswerSheetAdapter();
+        mGridView.setAdapter(mAnswerSheetAdapter);
 
         return view;
     }
@@ -105,7 +112,7 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
         }
 
         @Override
-        public QuestionNew getItem(int i) {
+        public QuestionUnmultiSon getItem(int i) {
             return mQuestions.get(i);
         }
 
@@ -120,19 +127,19 @@ public class AnswerSheetFragment extends Fragment implements View.OnClickListene
             int index = position + 1;
             ((TextView)view).setText(""+index);
             if(hasDone(position)){
-                view.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
+                view.setBackgroundColor(getResources().getColor(R.color.offical_blue));
+                ((TextView)view).setTextColor(getResources().getColor(R.color.white));//white
             }else{
-                view.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_click));
-                ((TextView)view).setTextColor(-1);//white
+                view.setBackgroundColor(getResources().getColor(R.color.transparency_gray));
             }
             return view;
         }
 
         public boolean hasDone(int position){
-            List<QuestionNew.QuestionSon.QuestionOption> options =
-                    mQuestions.get(position).getQuestionSons().get(0).getOptions();
+            List<QuestionUnmultiSon.QuestionOption> options =
+                    mQuestions.get(position).getOptions();
             for(int i = 0; i<options.size(); i++){
-                if(options.get(i).isSelected)return true;
+                if(options.get(i).isSelected())return true;
             }
             return false;
         }

@@ -12,7 +12,7 @@ import de.greenrobot.dao.internal.DaoConfig;
 /** 
  * DAO for table "DONE_QUESTION".
 */
-public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
+public class DoneQuestionDao extends AbstractDao<DoneQuestion, Long> {
 
     public static final String TABLENAME = "DONE_QUESTION";
 
@@ -23,13 +23,14 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
     public static class Properties {
         public final static Property ICourseID = new Property(0, Integer.class, "iCourseID", false, "I_COURSE_ID");
         public final static Property IQuestionType = new Property(1, Integer.class, "iQuestionType", false, "I_QUESTION_TYPE");
-        public final static Property IQuestionID = new Property(2, Integer.class, "iQuestionID", false, "I_QUESTION_ID");
+        public final static Property LQuestionID = new Property(2, Long.class, "lQuestionID", true, "L_QUESTION_ID");
         public final static Property IsFavorite = new Property(3, Boolean.class, "isFavorite", false, "IS_FAVORITE");
         public final static Property IsCorrect = new Property(4, Boolean.class, "isCorrect", false, "IS_CORRECT");
         public final static Property StrNote = new Property(5, String.class, "strNote", false, "STR_NOTE");
         public final static Property StrUserAnswer = new Property(6, String.class, "strUserAnswer", false, "STR_USER_ANSWER");
-        public final static Property ISpendTime = new Property(7, Long.class, "iSpendTime", false, "I_SPEND_TIME");
-        public final static Property StrKPID = new Property(8, String.class, "strKPID", false, "STR_KPID");
+        public final static Property LSpendTime = new Property(7, Long.class, "lSpendTime", false, "L_SPEND_TIME");
+        public final static Property StrQuestionKpID = new Property(8, String.class, "strQuestionKpID", false, "STR_QUESTION_KP_ID");
+        public final static Property ITestID = new Property(9, Integer.class, "iTestID", false, "I_TEST_ID");
     };
 
 
@@ -47,13 +48,14 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
         db.execSQL("CREATE TABLE " + constraint + "\"DONE_QUESTION\" (" + //
                 "\"I_COURSE_ID\" INTEGER," + // 0: iCourseID
                 "\"I_QUESTION_TYPE\" INTEGER," + // 1: iQuestionType
-                "\"I_QUESTION_ID\" INTEGER," + // 2: iQuestionID
+                "\"L_QUESTION_ID\" INTEGER PRIMARY KEY ASC ," + // 2: lQuestionID
                 "\"IS_FAVORITE\" INTEGER," + // 3: isFavorite
                 "\"IS_CORRECT\" INTEGER," + // 4: isCorrect
                 "\"STR_NOTE\" TEXT," + // 5: strNote
                 "\"STR_USER_ANSWER\" TEXT," + // 6: strUserAnswer
-                "\"I_SPEND_TIME\" INTEGER," + // 7: iSpendTime
-                "\"STR_KPID\" TEXT);"); // 8: strKPID
+                "\"L_SPEND_TIME\" INTEGER," + // 7: lSpendTime
+                "\"STR_QUESTION_KP_ID\" TEXT," + // 8: strQuestionKpID
+                "\"I_TEST_ID\" INTEGER);"); // 9: iTestID
     }
 
     /** Drops the underlying database table. */
@@ -77,9 +79,9 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
             stmt.bindLong(2, iQuestionType);
         }
  
-        Integer iQuestionID = entity.getIQuestionID();
-        if (iQuestionID != null) {
-            stmt.bindLong(3, iQuestionID);
+        Long lQuestionID = entity.getLQuestionID();
+        if (lQuestionID != null) {
+            stmt.bindLong(3, lQuestionID);
         }
  
         Boolean isFavorite = entity.getIsFavorite();
@@ -102,21 +104,26 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
             stmt.bindString(7, strUserAnswer);
         }
  
-        Long iSpendTime = entity.getISpendTime();
-        if (iSpendTime != null) {
-            stmt.bindLong(8, iSpendTime);
+        Long lSpendTime = entity.getLSpendTime();
+        if (lSpendTime != null) {
+            stmt.bindLong(8, lSpendTime);
         }
  
-        String strKPID = entity.getStrKPID();
-        if (strKPID != null) {
-            stmt.bindString(9, strKPID);
+        String strQuestionKpID = entity.getStrQuestionKpID();
+        if (strQuestionKpID != null) {
+            stmt.bindString(9, strQuestionKpID);
+        }
+ 
+        Integer iTestID = entity.getITestID();
+        if (iTestID != null) {
+            stmt.bindLong(10, iTestID);
         }
     }
 
     /** @inheritdoc */
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2);
     }    
 
     /** @inheritdoc */
@@ -125,13 +132,14 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
         DoneQuestion entity = new DoneQuestion( //
             cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0), // iCourseID
             cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // iQuestionType
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // iQuestionID
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // lQuestionID
             cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // isFavorite
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isCorrect
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // strNote
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // strUserAnswer
-            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // iSpendTime
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // strKPID
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // lSpendTime
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // strQuestionKpID
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9) // iTestID
         );
         return entity;
     }
@@ -141,26 +149,31 @@ public class DoneQuestionDao extends AbstractDao<DoneQuestion, Void> {
     public void readEntity(Cursor cursor, DoneQuestion entity, int offset) {
         entity.setICourseID(cursor.isNull(offset + 0) ? null : cursor.getInt(offset + 0));
         entity.setIQuestionType(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setIQuestionID(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
+        entity.setLQuestionID(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
         entity.setIsFavorite(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
         entity.setIsCorrect(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
         entity.setStrNote(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setStrUserAnswer(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setISpendTime(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
-        entity.setStrKPID(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setLSpendTime(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setStrQuestionKpID(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setITestID(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
      }
     
     /** @inheritdoc */
     @Override
-    protected Void updateKeyAfterInsert(DoneQuestion entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected Long updateKeyAfterInsert(DoneQuestion entity, long rowId) {
+        entity.setLQuestionID(rowId);
+        return rowId;
     }
     
     /** @inheritdoc */
     @Override
-    public Void getKey(DoneQuestion entity) {
-        return null;
+    public Long getKey(DoneQuestion entity) {
+        if(entity != null) {
+            return entity.getLQuestionID();
+        } else {
+            return null;
+        }
     }
 
     /** @inheritdoc */

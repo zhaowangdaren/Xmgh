@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.dao.KPs;
-import com.example.ustc_pc.myapplication.dao.User;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -84,7 +83,7 @@ public class OkHttpUtil {
      */
     public int registerByPhone (String phoneNumber, String strPassword)throws IOException{
         RequestBody formBody = new FormEncodingBuilder()
-                .add("strPhoneNumber",phoneNumber)
+                .add("strPhoneNumber", phoneNumber)
                 .add("strPassword", strPassword)
                 .build();
         Request request = new Request.Builder()
@@ -113,8 +112,8 @@ public class OkHttpUtil {
      */
     public int phoneLogin(String phoneNumber, String strPassword) throws IOException {
         RequestBody formBody = new FormEncodingBuilder()
-                .add("strPhoneNumber",phoneNumber)
-                .add("strPassword",strPassword)
+                .add("strPhoneNumber", phoneNumber)
+                .add("strPassword", strPassword)
                 .build();
         Request request = new Request.Builder()
                 .url(Util.URL_LOGIN_BY_PHONE)
@@ -141,7 +140,7 @@ public class OkHttpUtil {
      */
     public int thirdLogin(int iAccountType, String strThirdID, String strUserName) throws IOException {
         RequestBody formBody = new FormEncodingBuilder()
-                .add("iAccountType",String.valueOf(iAccountType))
+                .add("iAccountType", String.valueOf(iAccountType))
                 .add("strThirdID", strThirdID)
                 .add("strUserName", strUserName)
                 .build();
@@ -158,36 +157,6 @@ public class OkHttpUtil {
         }else{
             return -1;
         }
-    }
-
-    /**
-     *
-     * @param iAccountType
-     * @param iUserID
-     * @param strThirdID
-     * @param strPassword
-     * @param userInfo
-     * @return
-     * @throws IOException
-     */
-    public boolean setPersonInfo(int iAccountType, int iUserID, String strThirdID, String strPassword, User userInfo) throws IOException {
-
-        RequestBody formBody = new FormEncodingBuilder()
-                .add("iAccountType",String.valueOf(iAccountType))
-                .add("iUserID", String.valueOf(iUserID))
-                .add("strThirdID", strThirdID)
-                .add("strPassword", strPassword)
-                .add("strPersonalInfo", new Gson().toJson(userInfo))
-                .build();
-        Request request = new Request.Builder()
-                .url(Util.URL_SET_PERSONAL_INFO)
-                .post(formBody)
-                .build();
-        Response response = client.newCall(request).execute();
-        if(!response.isSuccessful())throw new IOException("Unexcepted cod "+response);
-        JSONObject result = JSONObject.parseObject(response.body().string());
-        int iResult = result.getIntValue("iResult");
-        return iResult == 1 ? true:false;
     }
 
     public boolean setPersonInfo(Context context) throws IOException {
@@ -230,33 +199,45 @@ public class OkHttpUtil {
         int iResult = result.getIntValue("iResult");
         return iResult == 1 ? true:false;
     }
-    /**
-     *
-     * @param iAccountType
-     * @param iUserID
-     * @param strPassword
-     * @param strThirdID
-     * @return
-     * @throws IOException
-     */
-    public User getPersonalInfo(int iAccountType, int iUserID, String strPassword, String strThirdID) throws IOException {
-        RequestBody formBody = new FormEncodingBuilder()
-                .add("iAccountType", String.valueOf(iAccountType))
-                .add("iUserID", String.valueOf(iUserID))
-                .add("strPassword", strPassword)
-                .add("strThirdID", strThirdID)
-                .build();
-        Request request = new Request.Builder()
-                .url(Util.URL_GET_PERSONAL_INFO)
-                .post(formBody)
-                .build();
-        Response response = client.newCall(request).execute();
-        if(!response.isSuccessful())throw new IOException("Unexcepted cod "+response);
-        JSONObject result = JSONObject.parseObject(response.body().string());
-        User user = new Gson().fromJson(response.body().toString(), User.class);
-        return user;
-    }
 
+
+    public boolean getPersonalInfo(Context context, int iAccountType, int iUserID, String strPassword, String strThirdID) {
+        try {
+            RequestBody formBody = new FormEncodingBuilder()
+                    .add("iAccountType", String.valueOf(iAccountType))
+                    .add("iUserID", String.valueOf(iUserID))
+                    .add("strPassword", strPassword)
+                    .add("strThirdID", strThirdID)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(Util.URL_GET_PERSONAL_INFO)
+                    .post(formBody)
+                    .build();
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException("Unexcepted cod " + response);
+            JSONObject result = JSONObject.parseObject(response.body().string());
+            JSONObject personInfoJson = result.getJSONObject("strPersonInfo");
+            UserSharedPreference userSharedPreference = new UserSharedPreference(context);
+            userSharedPreference.setiUserID(personInfoJson.getIntValue("iUserID"));
+            userSharedPreference.setStrUserName(personInfoJson.getString("strUserName"));
+            userSharedPreference.setiGender(personInfoJson.getIntValue("iGender"));
+            userSharedPreference.setStrEmail(personInfoJson.getString("strEmail"));
+            userSharedPreference.setStrAboutMe(personInfoJson.getString("strAboutMe"));
+            userSharedPreference.setiUserType(personInfoJson.getIntValue("iUserType"));
+            userSharedPreference.setStrSourceCollege(personInfoJson.getString("strSourceCollege"));
+            userSharedPreference.setStrSourceMajor(personInfoJson.getString("strSourceMajor"));
+            userSharedPreference.setStrFirstTargetCollege(personInfoJson.getString("strFirstTargetCollege"));
+            userSharedPreference.setStrFirstTargetMajor(personInfoJson.getString("strFirstTargetMajor"));
+            userSharedPreference.setStrSecondTargetCollege(personInfoJson.getString("strSecondTargetCollege"));
+            userSharedPreference.setStrSecondTargetMajor(personInfoJson.getString("strSecondTargetMajor"));
+            userSharedPreference.setStrAcceptedCollege(personInfoJson.getString("strAcceptedCollege"));
+            userSharedPreference.setStrAcceptedMajor(personInfoJson.getString("strAcceptedMajor"));
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     /**
      *
      * @return
@@ -511,20 +492,23 @@ public class OkHttpUtil {
         for(DoneQuestion doneQuestion : doneQuestions){
             jsonArray.add(gson.toJson(doneQuestion));
         }
-        JSONObject questions = new JSONObject();
-        questions.put("questions", jsonArray.toJSONString());
-        JSONArray tests = new JSONArray();
-        JSONObject test = new JSONObject();
-        test.put("lTestID", lTestID);
-        test.put("strTestKPID", strTestKPID);
-        test.put("questions", questions);
-        tests.add(test);
+
+        JSONObject testItem = new JSONObject();
+        testItem.put("lTestID", lTestID);
+        testItem.put("strTestKPID", strTestKPID);
+        testItem.put("questions", jsonArray);
+
+        JSONArray test = new JSONArray();
+        test.add(testItem);
+
+        JSONObject tests = new JSONObject();
+        tests.put("test",test);
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
                 .add("strQuestions", tests.toJSONString())
                 .build();
         Request request = new Request.Builder()
-                .url(Util.URL_GET_KPs)
+                .url(Util.URL_UPLOAD_DONE_QUESTION)
                 .post(formBody)
                 .build();
         Response response = client.newCall(request).execute();

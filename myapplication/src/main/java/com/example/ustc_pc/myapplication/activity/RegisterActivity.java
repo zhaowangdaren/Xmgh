@@ -45,6 +45,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mVA = (ViewAnimator)findViewById(R.id.viewAnimator_register);
         View view1 = View.inflate(this, R.layout.layout_phone_register, null);
         mVA.addView(view1, 0);
@@ -221,7 +223,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_register, menu);
+//        getMenuInflater().inflate(R.menu.menu_register, menu);
         return true;
     }
 
@@ -237,6 +239,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return true;
         }
 
+        if(id == android.R.id.home){
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

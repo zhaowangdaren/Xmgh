@@ -2,6 +2,7 @@ package com.example.ustc_pc.myapplication.fragment;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,16 +11,14 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.net.Util;
-import com.example.ustc_pc.myapplication.unit.Answer;
-import com.example.ustc_pc.myapplication.unit.QuestionNew;
+import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
+import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
 
 import java.util.List;
 
@@ -42,8 +41,8 @@ public class BasicAnalysisFragment extends Fragment {
     private static final String ARG_SUM_QUESTIONS_NUM = "ARG_SUM_QUESTIONS_NUM";
     // TODO: Rename and change types of parameters
     private DoneQuestion mDoneQuestion;
-    private QuestionNew mQuestionNew;
-    private Answer mAnswer;
+    private QuestionUnmultiSon mQuestion;
+    private UnmultiSonAnslysis mAnalysis;
 
     private int mIndex;
     private int mQuestionsNum;
@@ -65,8 +64,8 @@ public class BasicAnalysisFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static BasicAnalysisFragment newInstance(DoneQuestion mDoneQuestion,
-                                                    QuestionNew mQuestionNew,
-                                                    Answer mAnswer,
+                                                    QuestionUnmultiSon mQuestionNew,
+                                                    UnmultiSonAnslysis mAnswer,
                                                     int index,
                                                     String strKpName,
                                                     int questionsNum) {
@@ -91,8 +90,8 @@ public class BasicAnalysisFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDoneQuestion = (DoneQuestion)getArguments().getSerializable(ARG_DONE_QUESTION);
-            mQuestionNew = (QuestionNew)getArguments().getSerializable(ARG_QUESTION);
-            mAnswer = (Answer)getArguments().getSerializable(ARG_ANSWER);
+            mQuestion = (QuestionUnmultiSon)getArguments().getSerializable(ARG_QUESTION);
+            mAnalysis = (UnmultiSonAnslysis)getArguments().getSerializable(ARG_ANSWER);
 
             mIndex = getArguments().getInt(ARG_INDEX,0);
             mQuestionsNum = getArguments().getInt(ARG_SUM_QUESTIONS_NUM, 0);
@@ -113,6 +112,7 @@ public class BasicAnalysisFragment extends Fragment {
         return view;
     }
 
+    private String mUserAnswer, mRightAnswer;
     class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.QuestionRecyclerViewHolder>{
 
 
@@ -130,7 +130,7 @@ public class BasicAnalysisFragment extends Fragment {
                     holder = new QuestionRecyclerViewHolder(view, viewType);
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_OPTION:
-                    view = View.inflate(getActivity(), R.layout.layout_question_son, null);
+                    view = View.inflate(getActivity(), R.layout.layout_question_option_item, null);
                     holder = new QuestionRecyclerViewHolder(view, viewType);
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
@@ -147,20 +147,64 @@ public class BasicAnalysisFragment extends Fragment {
             switch (getItemViewType(position)){
                 case Util.TYPE_QUESTION_LAYOUT_HEADER:
                     holder.questionTypeTV.setText(mStrKPName);
-                    holder.questionIndexTV.setText(""+mIndex + 1);
+                    int index = mIndex + 1;
+                    holder.questionIndexTV.setText(""+index);
                     holder.questionSumTV.setText(""+ mQuestionsNum);
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_FATHER:
-                    holder.questionFatherTV.setText(mQuestionNew.getStrSubject());
+                    holder.questionFatherTV.setText(Html.fromHtml(mQuestion.getStrSubject()));
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_OPTION:
-                    OptionListAdapter optionListAdapter = new OptionListAdapter(mQuestionNew.getQuestionSons().get(0).getOptions());
-                    holder.optionListView.setAdapter(optionListAdapter);
+//                    OptionListAdapter optionListAdapter = new OptionListAdapter(mQuestion.getOptions());
+//                    holder.optionListView.setAdapter(optionListAdapter);
 //                    holder.optionListView.setOnItemClickListener(new ListViewItemClick(optionListAdapter));
+                    QuestionUnmultiSon.QuestionOption questionOption = mQuestion.getOptions().get(position - 2);
+                    holder.checkedTextView.setText(questionOption.getID());
+                    holder.optionTV.setText(questionOption.getStrOption());
+                    if(questionOption.isAnswer()){
+                        holder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_right));
+                        holder.checkedTextView.setTextColor(getResources().getColor(R.color.white));//white
+                        return;
+                    }
+                    //user select wrong
+                    if( !(questionOption.isAnswer()) && questionOption.isSelected() ){
+                        holder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_error));
+                        holder.checkedTextView.setTextColor(getResources().getColor(R.color.white));//white
+                        return;
+                    }
+
+                    holder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
-                    holder.analysisTV.setText( Html.fromHtml(mAnswer.getAnswerSons().get(0).getStrAnalysis()) );
+                    GetUserAnswerAndRightAnswer getUserAnswerAndRightAnswer = new GetUserAnswerAndRightAnswer(holder);
+                    getUserAnswerAndRightAnswer.execute();
+                    holder.analysisTV.setText( Html.fromHtml(mAnalysis.getStrAnalysis()) );
                     break;
+            }
+        }
+        private class GetUserAnswerAndRightAnswer extends AsyncTask<Integer, Integer, StringBuffer[]>{
+
+            private QuestionRecyclerViewHolder holder;
+            public GetUserAnswerAndRightAnswer(QuestionRecyclerViewHolder holder){
+                this.holder = holder;
+            }
+
+            @Override
+            protected StringBuffer[] doInBackground(Integer... integers) {
+                StringBuffer userAnswerSB = new StringBuffer();
+                StringBuffer rightAnswerSB = new StringBuffer();
+                List<QuestionUnmultiSon.QuestionOption> questionOptions = mQuestion.getOptions();
+                for(QuestionUnmultiSon.QuestionOption questionOption : questionOptions){
+                    if(questionOption.isSelected())userAnswerSB.append(questionOption.getID());
+                    if(questionOption.isAnswer())rightAnswerSB.append(questionOption.getID());
+                }
+                return new StringBuffer[]{userAnswerSB, rightAnswerSB};
+            }
+            @Override
+            protected void onPostExecute(StringBuffer[] result){
+                if(result == null || result.length < 2)return;
+                holder.yourAnswerTV.setText(result[0].toString());
+                holder.rightAnswerTV.setText(result[1].toString());
             }
         }
 
@@ -170,22 +214,21 @@ public class BasicAnalysisFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
-            return 4;
+            return mQuestion.getOptions().size() + 3;
         }
 
         @Override
         public int getItemViewType(int position){
-            switch (position){
-                case 0:
-                    return Util.TYPE_QUESTION_LAYOUT_HEADER;
-                case 1:
-                    return Util.TYPE_QUESTION_LAYOUT_FATHER;
-                case 2:
-                    return Util.TYPE_QUESTION_LAYOUT_OPTION;
-                case 3:
-                    return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
-                default: return Util.TYPE_QUESTION_LAYOUT_FATHER;
-            }
+            if(position == 0)return Util.TYPE_QUESTION_LAYOUT_HEADER;
+
+            if(position == 1)return Util.TYPE_QUESTION_LAYOUT_FATHER;
+
+            if( position >= 2 && position <(mQuestion.getOptions().size() + 2) )
+                return Util.TYPE_QUESTION_LAYOUT_OPTION;
+
+            if(position >= (mQuestion.getOptions().size() + 2))
+                return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
+            return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
         }
 
         public class QuestionRecyclerViewHolder extends RecyclerView.ViewHolder{
@@ -196,10 +239,12 @@ public class BasicAnalysisFragment extends Fragment {
             TextView questionFatherTV;
 
             //layout option
-            ListView optionListView;
+            CheckedTextView checkedTextView;
+            TextView optionTV;
 
             //layout question analysis
-            TextView analysisTV;
+
+            TextView yourAnswerTV, rightAnswerTV, analysisTV;
 
             public QuestionRecyclerViewHolder(View view, int iType){
                 super(view);
@@ -213,9 +258,12 @@ public class BasicAnalysisFragment extends Fragment {
                         questionFatherTV = (TextView)view.findViewById(R.id.textView_layout_question_father);
                         break;
                     case Util.TYPE_QUESTION_LAYOUT_OPTION:
-                        optionListView = (ListView)view.findViewById(R.id.listView_question_option_list);
+                        checkedTextView = (CheckedTextView) view.findViewById(R.id.checkedTV_option);
+                        optionTV = (TextView) view.findViewById(R.id.textView_option_content);
                         break;
                     case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
+                        yourAnswerTV = (TextView)view.findViewById(R.id.textView_your_answer);
+                        rightAnswerTV = (TextView)view.findViewById(R.id.textView_right_answer);
                         analysisTV = (TextView)view.findViewById(R.id.textView_question_analysis);
                         break;
                 }
@@ -223,84 +271,84 @@ public class BasicAnalysisFragment extends Fragment {
         }
     }
 
-    class OptionListAdapter extends BaseAdapter {
-        List<QuestionNew.QuestionSon.QuestionOption> options;
-        public OptionListAdapter(List<QuestionNew.QuestionSon.QuestionOption> options){
-            this.options = options;
-        }
-        @Override
-        public int getCount() {
-            return options.size();
-        }
-
-        @Override
-        public QuestionNew.QuestionSon.QuestionOption getItem(int i) {
-            return options.get(i);
-
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            OptionViewHolder optionViewHolder;
-            if(convertView == null){
-                convertView = View.inflate(parent.getContext(), R.layout.layout_question_option_item, null);
-                optionViewHolder = new OptionViewHolder();
-                optionViewHolder.checkedTextView = (CheckedTextView) convertView.findViewById(R.id.checkedTV_option);
-                optionViewHolder.textView = (TextView) convertView.findViewById(R.id.textView_option_content);
-                convertView.setTag(optionViewHolder);
-            }else{
-                optionViewHolder = (OptionViewHolder) convertView.getTag();
-            }
-
-//            switch(position){
-//                case 0:
-//                    optionViewHolder.checkedTextView.setText(""+41);
-//                    break;
-//                case 1:
-//                    optionViewHolder.checkedTextView.setText("B");
-//                    break;
-//                case 2:
-//                    optionViewHolder.checkedTextView.setText("C");
-//                    break;
-//                case 3:
-//                    optionViewHolder.checkedTextView.setText("D");
-//                    break;
-//                default:optionViewHolder.checkedTextView.setText("E");
+//    class OptionListAdapter extends BaseAdapter {
+//        List<QuestionUnmultiSon.QuestionOption> options;
+//        public OptionListAdapter(List<QuestionUnmultiSon.QuestionOption> options){
+//            this.options = options;
+//        }
+//        @Override
+//        public int getCount() {
+//            return options.size();
+//        }
+//
+//        @Override
+//        public QuestionUnmultiSon.QuestionOption getItem(int i) {
+//            return options.get(i);
+//
+//        }
+//
+//        @Override
+//        public long getItemId(int i) {
+//            return i;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//
+//            OptionViewHolder optionViewHolder;
+//            if(convertView == null){
+//                convertView = View.inflate(parent.getContext(), R.layout.layout_question_option_item, null);
+//                optionViewHolder = new OptionViewHolder();
+//                optionViewHolder.checkedTextView = (CheckedTextView) convertView.findViewById(R.id.checkedTV_option);
+//                optionViewHolder.textView = (TextView) convertView.findViewById(R.id.textView_option_content);
+//                convertView.setTag(optionViewHolder);
+//            }else{
+//                optionViewHolder = (OptionViewHolder) convertView.getTag();
 //            }
-            optionViewHolder.checkedTextView.setText(""+41+position);
-
-            optionViewHolder.textView.setText(getItem(position).strOption);
-            if(options.get(position).isAnswer){
-                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_right));
-                optionViewHolder.checkedTextView.setTextColor(-1);//white
-            }else if(options.get(position).isSelected){
-                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_error));
-                optionViewHolder.checkedTextView.setTextColor(-1);//white
-            }else{
-                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
-            }
-            if(options.get(position).isSelected){
-                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_click));
-                optionViewHolder.checkedTextView.setTextColor(-1);//white
-            }else{
-                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
-                optionViewHolder.checkedTextView.setTextColor(-16777216);//black
-            }
-
-            return convertView;
-        }
-
-        class OptionViewHolder {
-            CheckedTextView checkedTextView;
-            TextView textView;
-        }
-    }
+//
+////            switch(position){
+////                case 0:
+////                    optionViewHolder.checkedTextView.setText(""+41);
+////                    break;
+////                case 1:
+////                    optionViewHolder.checkedTextView.setText("B");
+////                    break;
+////                case 2:
+////                    optionViewHolder.checkedTextView.setText("C");
+////                    break;
+////                case 3:
+////                    optionViewHolder.checkedTextView.setText("D");
+////                    break;
+////                default:optionViewHolder.checkedTextView.setText("E");
+////            }
+//            optionViewHolder.checkedTextView.setText(""+41+position);
+//
+//            optionViewHolder.textView.setText(getItem(position).getStrOption());
+//            if(options.get(position).isAnswer()){
+//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_right));
+//                optionViewHolder.checkedTextView.setTextColor(-1);//white
+//            }else if(options.get(position).isSelected()){
+//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_error));
+//                optionViewHolder.checkedTextView.setTextColor(-1);//white
+//            }else{
+//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
+//            }
+//            if(options.get(position).isSelected()){
+//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_click));
+//                optionViewHolder.checkedTextView.setTextColor(-1);//white
+//            }else{
+//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
+//                optionViewHolder.checkedTextView.setTextColor(-16777216);//black
+//            }
+//
+//            return convertView;
+//        }
+//
+//        class OptionViewHolder {
+//            CheckedTextView checkedTextView;
+//            TextView textView;
+//        }
+//    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

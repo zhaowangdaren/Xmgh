@@ -22,9 +22,9 @@ import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
-import com.example.ustc_pc.myapplication.unit.Answer;
-import com.example.ustc_pc.myapplication.unit.QuestionNew;
+import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 import com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView;
+import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,12 +38,12 @@ import java.util.List;
  * @author zy
  */
 public class CABaseTestActivity extends AppCompatActivity implements View.OnClickListener{
-    List<QuestionNew> mQuestions;
-    List<Answer> mAnswers;
+    List<QuestionUnmultiSon> mQuestions;
+    List<UnmultiSonAnslysis> mAnalysises;
     List<DoneQuestion> mDoneQuestions;
 
 
-    private long mlTestID;
+    private int miTestID;
     private int mICourseID;
     private int mIQuestionType;
     private String mStrKPName, mStrKPID;
@@ -60,10 +60,12 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_answer);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
-        mQuestions = (List<QuestionNew>)intent.getSerializableExtra("questions");
+        mQuestions = (List<QuestionUnmultiSon>)intent.getSerializableExtra("questions");
         if(mQuestions == null)mQuestions = new ArrayList<>();
-        mlTestID = intent.getLongExtra("mlTestID", -1);
+        miTestID = intent.getIntExtra("miTestID", -1);
         mICourseID = intent.getIntExtra("mICourseID", -1);
         mIQuestionType = intent.getIntExtra("mIQuestionType", -1);
         mStrKPID = intent.getStringExtra("mStrKPID");
@@ -76,6 +78,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
         mShowAllAnalysisBT = (Button) findViewById(R.id.button_show_all_analysis);
         mShowAllAnalysisBT.setOnClickListener(this);
         mKPNameTV = (TextView)findViewById(R.id.textView_test_kp_name);
+        mKPNameTV.setText(mStrKPName);
         mSpendTime = (TextView)findViewById(R.id.textView_test_spend_time);
         mSpendTime.setText(mStrTestSpendTime);
 
@@ -97,7 +100,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_check_answer, menu);
+//        getMenuInflater().inflate(R.menu.menu_check_answer, menu);
         return true;
     }
 
@@ -113,6 +116,10 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
             return true;
         }
 
+        if(id == android.R.id.home){
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -123,7 +130,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 Intent intent = new Intent(this, ShowAnalysisActivity.class);
                 intent.putExtra("mDoneQuestions", (Serializable)mDoneQuestions);
                 intent.putExtra("mQuestions",(Serializable)mQuestions);
-                intent.putExtra("mAnswers", (Serializable)mAnswers);
+                intent.putExtra("mAnalysises", (Serializable) mAnalysises);
                 intent.putExtra("mStrKPName",mStrKPName);
 
                 startActivity(intent);
@@ -150,65 +157,67 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
             //relative path
             String strKpIDRPPath = "";
             for(int i=0; i< kpIDs.length; i++){
-                strKpIDRPPath += kpIDs + "/";
+                strKpIDRPPath += kpIDs[i] + "/";
             }
             //absolute path
-            String strKpIdAPPath = Util.APP_PATH + strCourseID + "/" + strQuestionType + "/" + strKpIDRPPath;
+            String strKpIdAPPath = Util.APP_PATH + "/"+ strCourseID + "/" + strQuestionType + "/" + strKpIDRPPath;
             if( !(new File(strKpIdAPPath).exists())){
                 Log.e("Error Mutl...Activity", "Kp id absolute un exists");
                 return null;
             }
             String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
-            List<Answer> answers = Util.parseAnswerFromFile(questionsAPath);
+            List<UnmultiSonAnslysis> answers = Util.parseUnmultiSonAnslysisFromFile(questionsAPath);
 
             if(answers != null && !answers.isEmpty()){
+                mAnalysises = answers;
                 List<DoneQuestion> doneQuestions = recordResult(answers);
                 return doneQuestions;
             }
             return null;
         }
 
-        private List<DoneQuestion> recordResult(List<Answer> answers) {
-            if(mQuestions.size() != answers.size()){
+        private List<DoneQuestion> recordResult(List<UnmultiSonAnslysis> analysises) {
+            if(mQuestions.size() != analysises.size()){
                 Log.e("Error","The questions num does not match the answers num!");
                 return null;
             }
             Collections.sort(mQuestions);
-            Collections.sort(answers);
+            Collections.sort(analysises);
 
-
-            for(int i = 0; i < answers.size(); i++){
-                List<Answer.AnswerSon> answerSons = answers.get(i).getAnswerSons();
-                List<Answer.AnswerSon.AnswerOption> answerOptions = answerSons.get(0).getAnswer();
-                for(int j = 0; j<answerOptions.size(); j++){
-                    int ID = answerOptions.get(i).getID();
-                    setAnswer(i, ID);
+            //set answer
+            for(int i=0; i<analysises.size(); i++){
+                List<String> answers = analysises.get(i).getAnswer();
+                for(int j = 0; j<answers.size(); j++){
+                    setAnswer(i, answers.get(j));
                 }
             }
-            List<DoneQuestion> result = new ArrayList<>(answers.size());
-            for(int i = 0; i < answers.size(); i++){
-                QuestionNew questionNew = mQuestions.get(i);
+
+            List<DoneQuestion> result = new ArrayList<>(analysises.size());
+            for(int i = 0; i < analysises.size(); i++){
+                QuestionUnmultiSon questionUnmultiSon = mQuestions.get(i);
                 boolean isCorrect = true;
                 StringBuffer strUserAnswer = new StringBuffer("");
-                List<QuestionNew.QuestionSon.QuestionOption> questionOptions = questionNew.getQuestionSons().get(0).getOptions();
+                List<QuestionUnmultiSon.QuestionOption> questionOptions = questionUnmultiSon.getOptions();
                 for(int j = 0; j< questionOptions.size(); j++){
-                    if(!(questionOptions.get(j).isAnswer && questionOptions.get(j).isSelected)){
+                    if( ! ( questionOptions.get(j).isAnswer() && questionOptions.get(j).isSelected())){
                         isCorrect = false;
                     }
-                    if(questionOptions.get(j).isAnswer)strUserAnswer.append(questionOptions.get(j).ID + ",");
+                    if(questionOptions.get(j).isSelected())strUserAnswer.append(questionOptions.get(j).getID() + ",");
                 }
-                long lQuestionSpendTime = questionNew.getQuestionSons().get(0).getlStopTime()
-                        - questionNew.getQuestionSons().get(0).getlStartTime();
+                long lQuestionSpendTime = questionUnmultiSon.getlStopTime()
+                        - questionUnmultiSon.getlStartTime();
                 DoneQuestion doneQuestion = new DoneQuestion(
                         mICourseID,
                         mIQuestionType,
-                        questionNew.getiQuestionID(),
+                        (long)(questionUnmultiSon.getiQuestionID()),
                         false,
                         isCorrect,
                         null,
                         strUserAnswer.toString(),
                         lQuestionSpendTime,
-                        mStrKPID);
+                        mStrKPID,
+                        miTestID
+                );
                 result.add(doneQuestion);
 
                 if(isCorrect)mCorrectNum++;
@@ -216,15 +225,14 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
             return result;
         }
 
-        private void setAnswer(int position, int answerID){
-            List<QuestionNew.QuestionSon.QuestionOption> questionOptions = mQuestions.get(position).getQuestionSons().get(0).getOptions();
+        private void setAnswer(int position, String answerID){
+            List<QuestionUnmultiSon.QuestionOption> questionOptions = mQuestions.get(position).getOptions();
             int optionNum = questionOptions.size();
-            for(int i = 0; i<optionNum; i++){
-                if(questionOptions.get(i).ID == answerID){
-                    questionOptions.get(i).isAnswer = true;
-                }
+            for(int i =0; i<optionNum; i++){
+                if(questionOptions.get(i).getID().equals(answerID)) questionOptions.get(i).setIsAnswer(true);
             }
         }
+
         @Override
         protected void onPostExecute(List<DoneQuestion> result){
             if(result != null && !result.isEmpty()){
@@ -235,7 +243,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 mScoreTV.setText("" + mCorrectNum);
 
                 saveDoneQuestion2DB();
-                uploadDoneQuestion(new UserSharedPreference(context).getiUserID(), mlTestID, mStrKPID, mDoneQuestions);
+                uploadDoneQuestion(new UserSharedPreference(context).getiUserID(), miTestID, mStrKPID, mDoneQuestions);
             }
             progressDialog.dismiss();
         }

@@ -23,8 +23,7 @@
         <com.example.ustc_pc.myapplication.imageView.CircleImageView
             android:layout_margin="@dimen/view_margin"
             android:id="@+id/imageView_personal_head"
-            android:src="@mipmap/default_header"
-            android:background="@drawable/bg_head_photo"
+            android:src="@drawable/ic_account_circle_black_48dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"/>

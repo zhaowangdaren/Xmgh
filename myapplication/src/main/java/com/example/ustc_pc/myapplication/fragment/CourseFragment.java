@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.activity.ActivityViewAssessment;
 import com.example.ustc_pc.myapplication.activity.BaseTestActivity;
 import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.db.KPsDBHelper;
@@ -396,7 +397,7 @@ public class CourseFragment extends Fragment {
             public void onClick(View view) {
 //                String strCourseID = String.valueOf(mICourseID);
 //                String strQuestionType = String.valueOf(Util.BASIC_TEST);
-//                String strKPID = mShowingKPs.get(index).getStrKPID();
+//                String strKPID = mShowingKPs.get(index).getStrQuestionKpID();
 //                DownloadQuestionsAsyncTask downloadQuestionsAsyncTask = new DownloadQuestionsAsyncTask(getActivity());
 //                downloadQuestionsAsyncTask.execute(strCourseID, strQuestionType, strKPID);
             }
@@ -417,10 +418,20 @@ public class CourseFragment extends Fragment {
                 if(iType == TYPE_ITEM){
                     openCloseitemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
                     downloafIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_start_test);
+                }else{
+                    itemView.setOnClickListener(new ScoreViewClickListener());
                 }
             }
         }
     }
 
+    private class ScoreViewClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity(), ActivityViewAssessment.class);
+            intent.putExtra("mICourseID",mICourseID);
+            startActivity(intent);
+        }
+    }
 
 }

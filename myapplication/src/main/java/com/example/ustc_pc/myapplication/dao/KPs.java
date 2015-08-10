@@ -11,7 +11,7 @@ public class KPs implements Serializable, Comparable<KPs>{
 
     private Long id;
     private Integer iUserID;
-    private Boolean isExpand = false;
+    private Boolean isExpand =false;
     private String strKPID;
     private Integer iCourseID;
     private String strName;

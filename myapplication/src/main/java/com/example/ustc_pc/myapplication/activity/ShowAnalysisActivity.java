@@ -1,8 +1,8 @@
 package com.example.ustc_pc.myapplication.activity;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,18 +19,19 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.fragment.BasicAnalysisFragment;
-import com.example.ustc_pc.myapplication.unit.Answer;
-import com.example.ustc_pc.myapplication.unit.QuestionNew;
+import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
+import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
 
 import java.util.List;
 
-public class ShowAnalysisActivity extends AppCompatActivity {
+public class ShowAnalysisActivity extends AppCompatActivity implements BasicAnalysisFragment.OnFragmentInteractionListener{
 
     List<DoneQuestion> mDoneQuestions;
-    List<Answer> mAnswers;
-    List<QuestionNew> mQuestionNews;
+    List<UnmultiSonAnslysis> mAnalysises;
+    List<QuestionUnmultiSon> mQuestions;
     String mStrKPName;
     ViewPager mViewPager;
+    private MenuItem mFavoriteMenuItem;
 
     private boolean mHasEditDoneQuestion = false;
     @Override
@@ -38,23 +39,51 @@ public class ShowAnalysisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_analysis);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         mDoneQuestions = (List<DoneQuestion>) intent.getSerializableExtra("mDoneQuestions");
-        mAnswers = (List<Answer>) intent.getSerializableExtra("mAnswers");
-        mQuestionNews = (List<QuestionNew>)intent.getSerializableExtra("mQuestions");
+        mAnalysises = (List<UnmultiSonAnslysis>) intent.getSerializableExtra("mAnalysises");
+        mQuestions = (List<QuestionUnmultiSon>)intent.getSerializableExtra("mQuestions");
         mStrKPName = intent.getStringExtra("mStrKPName");
+
 
         mViewPager = (ViewPager)findViewById(R.id.viewPager_actvity_show_analysis);
         QuestionPagerAdapter questionPagerAdapter = new QuestionPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(questionPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
+    }
+
+    private class ViewPagerChangeListener implements ViewPager.OnPageChangeListener{
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if(mDoneQuestions.get(position).getIsFavorite()){
+                mFavoriteMenuItem.setIcon(getResources().getDrawable(R.drawable.ic_grade_amber_24dp));
+            }else{
+                mFavoriteMenuItem.setIcon(getResources().getDrawable(R.drawable.ic_grade_white_24dp));
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_show_analysis, menu);
+        mFavoriteMenuItem = menu.findItem(R.id.action_favorite_question);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -66,14 +95,24 @@ public class ShowAnalysisActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (id){
             case R.id.action_favorite_question:
+                mFavoriteMenuItem = item;
                 int index = mViewPager.getCurrentItem();
-                if(mDoneQuestions.get(index).getIsFavorite())
+                if(mDoneQuestions.get(index).getIsFavorite()) {
                     mDoneQuestions.get(index).setIsFavorite(false);
-                else mDoneQuestions.get(index).setIsFavorite(true);
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_grade_white_24dp));
+                }
+                else {
+                    mDoneQuestions.get(index).setIsFavorite(true);
+                    item.setIcon(getResources().getDrawable(R.drawable.ic_grade_amber_24dp));
+                }
                 mHasEditDoneQuestion = true;
+
                 return true;
             case R.id.action_note:
                 showNoteDialog();
+                return true;
+            case android.R.id.home:
+                finish();
                 return true;
         }
 
@@ -107,6 +146,11 @@ public class ShowAnalysisActivity extends AppCompatActivity {
             }).start();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     private class NoteDialogSureBTClick implements View.OnClickListener {
         Dialog noteDialog;
         int index;
@@ -121,6 +165,7 @@ public class ShowAnalysisActivity extends AppCompatActivity {
             String strNote = noteET.getText().toString();
             mDoneQuestions.get(index).setStrNote(strNote);
             mHasEditDoneQuestion = true;
+            noteDialog.dismiss();
         }
     }
 
@@ -134,11 +179,11 @@ public class ShowAnalysisActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             Fragment fragment = BasicAnalysisFragment.newInstance(
                     mDoneQuestions.get(position)
-                    ,mQuestionNews.get(position)
-                    ,mAnswers.get(position)
-                    ,position
-                    ,mStrKPName
-                    ,getCount());
+                    , mQuestions.get(position)
+                    , mAnalysises.get(position)
+                    , position
+                    , mStrKPName
+                    , getCount());
             return fragment;
         }
 

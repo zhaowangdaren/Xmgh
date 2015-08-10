@@ -4,7 +4,7 @@
     android:orientation="horizontal"
     android:padding="@dimen/view_margin"
     android:layout_margin="@dimen/view_margin"
-    >
+    android:weightSum="1">
     <CheckedTextView
         android:id="@+id/checkedTV_option"
         android:layout_width="@dimen/option_size"
@@ -17,9 +17,11 @@
         android:textColor="#000" />
 
     <TextView
+        android:gravity="center_vertical"
+        android:text="Option Item"
         android:id="@+id/textView_option_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp" />
 </LinearLayout>

@@ -11,27 +11,33 @@ public class DoneQuestion implements Serializable{
 
     private Integer iCourseID;
     private Integer iQuestionType;
-    private Integer iQuestionID;
+    private Long lQuestionID;
     private Boolean isFavorite = false;
     private Boolean isCorrect = false;
     private String strNote;
     private String strUserAnswer;
-    private Long iSpendTime;
-    private String strKPID;
+    private Long lSpendTime;
+    private String strQuestionKpID;
+    private Integer iTestID;
 
     public DoneQuestion() {
     }
 
-    public DoneQuestion(Integer iCourseID, Integer iQuestionType, Integer iQuestionID, Boolean isFavorite, Boolean isCorrect, String strNote, String strUserAnswer, Long iSpendTime, String strKPID) {
+    public DoneQuestion(Long lQuestionID) {
+        this.lQuestionID = lQuestionID;
+    }
+
+    public DoneQuestion(Integer iCourseID, Integer iQuestionType, Long lQuestionID, Boolean isFavorite, Boolean isCorrect, String strNote, String strUserAnswer, Long lSpendTime, String strQuestionKpID, Integer iTestID) {
         this.iCourseID = iCourseID;
         this.iQuestionType = iQuestionType;
-        this.iQuestionID = iQuestionID;
+        this.lQuestionID = lQuestionID;
         this.isFavorite = isFavorite;
         this.isCorrect = isCorrect;
         this.strNote = strNote;
         this.strUserAnswer = strUserAnswer;
-        this.iSpendTime = iSpendTime;
-        this.strKPID = strKPID;
+        this.lSpendTime = lSpendTime;
+        this.strQuestionKpID = strQuestionKpID;
+        this.iTestID = iTestID;
     }
 
     public Integer getICourseID() {
@@ -50,12 +56,12 @@ public class DoneQuestion implements Serializable{
         this.iQuestionType = iQuestionType;
     }
 
-    public Integer getIQuestionID() {
-        return iQuestionID;
+    public Long getLQuestionID() {
+        return lQuestionID;
     }
 
-    public void setIQuestionID(Integer iQuestionID) {
-        this.iQuestionID = iQuestionID;
+    public void setLQuestionID(Long lQuestionID) {
+        this.lQuestionID = lQuestionID;
     }
 
     public Boolean getIsFavorite() {
@@ -90,20 +96,28 @@ public class DoneQuestion implements Serializable{
         this.strUserAnswer = strUserAnswer;
     }
 
-    public Long getISpendTime() {
-        return iSpendTime;
+    public Long getLSpendTime() {
+        return lSpendTime;
     }
 
-    public void setISpendTime(Long iSpendTime) {
-        this.iSpendTime = iSpendTime;
+    public void setLSpendTime(Long lSpendTime) {
+        this.lSpendTime = lSpendTime;
     }
 
-    public String getStrKPID() {
-        return strKPID;
+    public String getStrQuestionKpID() {
+        return strQuestionKpID;
     }
 
-    public void setStrKPID(String strKPID) {
-        this.strKPID = strKPID;
+    public void setStrQuestionKpID(String strQuestionKpID) {
+        this.strQuestionKpID = strQuestionKpID;
+    }
+
+    public Integer getITestID() {
+        return iTestID;
+    }
+
+    public void setITestID(Integer iTestID) {
+        this.iTestID = iTestID;
     }
 
 }

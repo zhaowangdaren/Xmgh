@@ -20,7 +20,7 @@
 
             <com.example.ustc_pc.myapplication.imageView.CircleImageView
                 android:id="@+id/imageView_personal_head"
-                android:background="@drawable/bg_percent_paper"
+                android:background="@drawable/ic_account_circle_black_48dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

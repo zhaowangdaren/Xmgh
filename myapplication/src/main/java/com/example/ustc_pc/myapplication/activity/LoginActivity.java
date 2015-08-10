@@ -115,11 +115,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private int mIAccountType;
+
     /**
      *
      * @param iAccountType
      */
     private void login(int iAccountType){
+        this.mIAccountType = iAccountType;
         LoginAsyncTask loginAsyncTask = new LoginAsyncTask(this);
         String strThirdID="";
         String strUserName = "";
@@ -258,13 +261,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         @Override
-        protected void onPostExecute(Integer result){
-            if(result <= 0){
+        protected void onPostExecute(Integer iUserID){
+            if(iUserID <= 0){
                 Toast.makeText(context, getString(R.string.login_failed),Toast.LENGTH_SHORT).show();
             }else{
                 //record user info
                 UserSharedPreference userSharedPreference = new UserSharedPreference(context);
-                userSharedPreference.setiUserID(result);
+                userSharedPreference.setiUserID(iUserID);
                 int iAccountType = userSharedPreference.getiAccountType();
                 if(iAccountType == Util.PHONE_LOGIN){
                     userSharedPreference.setStrPhoneNumber(params1);
@@ -274,9 +277,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     userSharedPreference.setStrUserName(params2);
                 }
                 userSharedPreference.setIsLogin(true);
-                //get user selected course
-                GetCoursesAsync getCoursesAsync = new GetCoursesAsync(context);
-                getCoursesAsync.execute();
+
+
+                //get person info
+                GetPersonInfoAsync getPersonInfoAsync = new GetPersonInfoAsync(context);
+                getPersonInfoAsync.execute(String.valueOf(iUserID), params2, params2);
             }
             progressDialog.dismiss();
 
@@ -316,6 +321,36 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private class GetPersonInfoAsync extends AsyncTask<String, Integer, Boolean>{
+        Context context;
+        ProgressDialog progressDialog;
+        public GetPersonInfoAsync(Context context){
+            this.context = context;
+        }
+        @Override
+        protected void onPreExecute(){
+            progressDialog = ProgressDialog.show(context, null,getString(R.string.getting_personal_info));
+        }
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            int iUserID = Integer.valueOf(strings[0]);
+            String password = strings[1];
+            String strThirdID = strings[2];
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            boolean isSuccess = okHttpUtil.getPersonalInfo(context,mIAccountType,iUserID, password, strThirdID);
+            if(!isSuccess){
+                Log.e("Error", "Get personal info failed in LoginActivity.");
+            }
+            return isSuccess;
+        }
 
+        @Override
+        protected void onPostExecute(Boolean result){
+            progressDialog.dismiss();
+            //get user selected course
+            GetCoursesAsync getCoursesAsync = new GetCoursesAsync(context);
+            getCoursesAsync.execute();
+        }
+    }
 
 }

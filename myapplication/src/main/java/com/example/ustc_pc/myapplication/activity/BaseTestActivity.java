@@ -29,7 +29,7 @@ import com.example.ustc_pc.myapplication.fragment.AnswerSheetFragment;
 import com.example.ustc_pc.myapplication.fragment.BaseTestFragment;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
-import com.example.ustc_pc.myapplication.unit.QuestionNew;
+import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -44,13 +44,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFragment.OnFragmentInteractionListener{
+public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFragment.OnFragmentInteractionListener, BaseTestFragment.OnFragmentInteractionListener{
 
     ViewAnimator mVA;
     View mBaseTestView, mErrorView;
 
     ViewPager mViewPager;
-    List<QuestionNew> mQuestions;
+    List<QuestionUnmultiSon> mQuestions;
     QuestionsPagerAdapter mQuestionsPagerAdapter;
 
     private int mICourseID;
@@ -82,38 +82,40 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
 
         mViewPager = (ViewPager) mBaseTestView.findViewById(R.id.viewPager_actvity_base_test);
         mQuestions = new ArrayList<>();
-        mQuestionsPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mQuestionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
         DownloadQuestionsAsyncTask downloadQuestionsAsyncTask = new DownloadQuestionsAsyncTask(this);
         downloadQuestionsAsyncTask.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
 
     }
 
+    private int mCurrentPosition = 0;
     private class ViewPagerChangeListener implements ViewPager.OnPageChangeListener{
 
         @Override
         public void onPageScrolled(int position, float positionOffset,
                                    int positionOffsetPixels) {
-
         }
 
         @Override
         public void onPageSelected(int position) {
             if(position < mQuestions.size()){
-                mQuestions.get(position).getQuestionSons().get(0).setlStartTime(
-                        System.currentTimeMillis());
+                mQuestions.get(position).setlStartTime(System.currentTimeMillis());
+//                mQuestions.get(position).getQuestionSons().get(0).setlStartTime(
+//                        System.currentTimeMillis());
                 if(position > 0){
-                    mQuestions.get(position).getQuestionSons().get(0).setlStopTime(
-                        System.currentTimeMillis()
-                    );
+                    mQuestions.get(position - 1).setlStopTime(System.currentTimeMillis());
+//                    mQuestions.get(position).getQuestionSons().get(0).setlStopTime(
+//                        System.currentTimeMillis()
+//                    );
                 }
             }else{
                 if(position == mQuestions.size()){
-                    mQuestions.get(position - 1).getQuestionSons().get(0).setlStopTime(
-                            System.currentTimeMillis());
+                    mQuestions.get(position - 1).setlStopTime(System.currentTimeMillis());
+//                    mQuestions.get(position - 1).getQuestionSons().get(0).setlStopTime(
+//                            System.currentTimeMillis());
                 }
             }
+            mQuestionsPagerAdapter.notifyDataSetChanged();
+            mCurrentPosition = position;
         }
 
         @Override
@@ -127,8 +129,9 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
     private void startTimer(){
         mlTestStartTime = System.currentTimeMillis();
         //init the first question start time
-        mQuestions.get(0).getQuestionSons().get(0).setlStartTime(mlTestStartTime);
-
+        if(mQuestions.size() > 0) mQuestions.get(0).setlStartTime(mlTestStartTime);
+//        mQuestions.get(0).getQuestionSons().get(0).setlStartTime(mlTestStartTime);
+        mUpdateTimerRun.run();
     }
 
     private Runnable mUpdateTimerRun = new Runnable() {
@@ -208,7 +211,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         intent.putExtra("mlTestStartTime",mlTestStartTime);
         intent.putExtra("mlTestEndTime",mlTestEndTime);
         intent.putExtra("mStrTestSpendTime",mStrTestSpendTime);
-        intent.putExtra("mlTestID",miTestID);
+        intent.putExtra("miTestID",miTestID);
         startActivity(intent);
         finish();
     }
@@ -221,11 +224,10 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
 
         @Override
         public Fragment getItem(int position) {
-
             Fragment fragment = null;
             if(position < mQuestions.size()){
                 fragment = BaseTestFragment.newInstance(
-                        mQuestions.get(position), mStrKPName, position, getCount());
+                        mQuestions.get(position), mStrKPName, position, getCount() - 1);
             }else{
                 fragment = AnswerSheetFragment.newInstance(mQuestions,miTestID);
             }
@@ -236,8 +238,16 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
         public int getCount() {
             return mQuestions.size() + 1;
         }
+
+        @Override
+        public int getItemPosition(Object object){
+            if(object instanceof AnswerSheetFragment){
+                ((AnswerSheetFragment)object).onResume();
+            }
+            return super.getItemPosition(object);
+        }
     }
-    private class ParseQuestionsAsyncTask extends AsyncTask<String, Integer, List<QuestionNew>>{
+    private class ParseQuestionsAsyncTask extends AsyncTask<String, Integer, List<QuestionUnmultiSon>>{
 
         ProgressDialog progressDialog;
         Context context;
@@ -249,7 +259,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             progressDialog = ProgressDialog.show(context, null,getString(R.string.parseing_questions));
         }
         @Override
-        protected List<QuestionNew> doInBackground(String... strings) {
+        protected List<QuestionUnmultiSon> doInBackground(String... strings) {
             String strCourseID = strings[0];
             String strQuestionType = strings[1];
             String strKPID = strings[2];
@@ -267,15 +277,17 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
                 return null;
             }
             String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
-            List<QuestionNew> questions = Util.parseMultiSonQuestionsFromFile(questionsAPath);
+            List<QuestionUnmultiSon> questions = Util.parseUnmultiSonQueFromFile(questionsAPath);
             return questions;
         }
 
         @Override
-        protected void onPostExecute(List<QuestionNew> result){
+        protected void onPostExecute(List<QuestionUnmultiSon> result){
             if(result != null && !result.isEmpty()){
                 mQuestions.addAll(result);
-                mQuestionsPagerAdapter.notifyDataSetChanged();
+                mQuestionsPagerAdapter = new QuestionsPagerAdapter(getSupportFragmentManager());
+                mViewPager.setAdapter(mQuestionsPagerAdapter);
+                mViewPager.setOnPageChangeListener(new ViewPagerChangeListener());
                 if(mVA.getCurrentView().equals(mErrorView))mVA.showPrevious();
                 startTimer();
             }else{

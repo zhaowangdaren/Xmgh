@@ -97,15 +97,6 @@ public class UserSharedPreference {
         editor.putBoolean("isUserInfoChanged", true);
         editor.apply();
     }
-    public String getRealName(){
-        return mSharedPre.getString("realName", "");
-    }
-
-    public void setAccountNumber(String number){
-        SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("accountNumber", number);
-        editor.apply();
-    }
 
     public String getAccountNumber(){
         return mSharedPre.getString("accountNumber", "");
@@ -227,7 +218,7 @@ public class UserSharedPreference {
 
     public void setiGender(Integer iGender) {
         SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putInt("iGender", 0);
+        editor.putInt("iGender", iGender);
         editor.apply();
     }
 
@@ -247,7 +238,7 @@ public class UserSharedPreference {
 
     public void setStrAboutMe(String strAboutMe) {
         SharedPreferences.Editor editor = mSharedPre.edit();
-        editor.putString("strAboutMe",strEmail);
+        editor.putString("strAboutMe",strAboutMe);
         editor.apply();
     }
 
@@ -332,7 +323,7 @@ public class UserSharedPreference {
     }
 
     public String getStrAcceptedMajor() {
-        return mSharedPre.getString("strAcceptedCollege", "");
+        return mSharedPre.getString("strAcceptedMajor", "");
     }
 
     public void setStrAcceptedMajor(String strAcceptedMajor) {

@@ -18,12 +18,10 @@ import de.greenrobot.dao.internal.DaoConfig;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig userDaoConfig;
     private final DaoConfig courseDaoConfig;
     private final DaoConfig kPsDaoConfig;
     private final DaoConfig doneQuestionDaoConfig;
 
-    private final UserDao userDao;
     private final CourseDao courseDao;
     private final KPsDao kPsDao;
     private final DoneQuestionDao doneQuestionDao;
@@ -31,9 +29,6 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
-
-        userDaoConfig = daoConfigMap.get(UserDao.class).clone();
-        userDaoConfig.initIdentityScope(type);
 
         courseDaoConfig = daoConfigMap.get(CourseDao.class).clone();
         courseDaoConfig.initIdentityScope(type);
@@ -44,26 +39,19 @@ public class DaoSession extends AbstractDaoSession {
         doneQuestionDaoConfig = daoConfigMap.get(DoneQuestionDao.class).clone();
         doneQuestionDaoConfig.initIdentityScope(type);
 
-        userDao = new UserDao(userDaoConfig, this);
         courseDao = new CourseDao(courseDaoConfig, this);
         kPsDao = new KPsDao(kPsDaoConfig, this);
         doneQuestionDao = new DoneQuestionDao(doneQuestionDaoConfig, this);
 
-        registerDao(User.class, userDao);
         registerDao(Course.class, courseDao);
         registerDao(KPs.class, kPsDao);
         registerDao(DoneQuestion.class, doneQuestionDao);
     }
     
     public void clear() {
-        userDaoConfig.getIdentityScope().clear();
         courseDaoConfig.getIdentityScope().clear();
         kPsDaoConfig.getIdentityScope().clear();
         doneQuestionDaoConfig.getIdentityScope().clear();
-    }
-
-    public UserDao getUserDao() {
-        return userDao;
     }
 
     public CourseDao getCourseDao() {

@@ -181,4 +181,7 @@
     <string name="check_note">查看笔记</string>
     <string name="check_favorite">查看收藏</string>
     <string name="basic_test">基础训练</string>
+    <string name="your_answer">你的答案：</string>
+    <string name="right_answer">正确答案</string>
+    <string name="getting_personal_info">获取个人信息中...</string>
 </resources>
