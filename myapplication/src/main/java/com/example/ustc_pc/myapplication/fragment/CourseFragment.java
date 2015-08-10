@@ -29,6 +29,7 @@ import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.net.Util;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -319,7 +320,7 @@ public class CourseFragment extends Fragment {
                 }
                 holder.openCloseitemIV.setOnClickListener(new OnOpenCloseItemIVClickListener(index));
                 holder.downloafIV.setOnClickListener(new OnItemDownloadIVClickListener(index));
-                // Let different level kp on different offset
+                // Let different level AssessmentScoreKp on different offset
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
                 float offset = getResources().getDimension(R.dimen.activity_horizontal_margin);
@@ -405,9 +406,9 @@ public class CourseFragment extends Fragment {
 
         public class KPsViewHolder extends RecyclerView.ViewHolder {
 
-            //open or close kp Item
+            //open or close AssessmentScoreKp Item
             private ImageView openCloseitemIV;
-            //header score TextView's id same as item kp's name TextView
+            //header score TextView's id same as item AssessmentScoreKp's name TextView
             private TextView contentTV;
             //Download questions
             private ImageView downloafIV;
@@ -430,6 +431,7 @@ public class CourseFragment extends Fragment {
         public void onClick(View view) {
             Intent intent = new Intent(getActivity(), ActivityViewAssessment.class);
             intent.putExtra("mICourseID",mICourseID);
+            intent.putExtra("mAllKPses",(Serializable)mAllKPses);
             startActivity(intent);
         }
     }

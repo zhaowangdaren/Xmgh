@@ -1,47 +1,76 @@
 package com.example.ustc_pc.myapplication.unit;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ustc-pc on 2015/3/26.
  */
 public class AssessmentScore {
-    public int _iCourseID = 1;
-    public int _iSumScore = 0;
-    public int _iFirstKpNum = 0;
-    public ArrayList<DoneKpSocre> _arrayDoneKps;
-    public String _strComment = "";
+    private Integer iSumSocre;
+    private List<AssessmentScoreKp> assessmentScoreKps;
 
-    public int _iFinishedArg = 0, _iUnfinishedArg = 0;
-    public AssessmentScore(int sumScore, int kpNum){
-        _iSumScore = sumScore;
-        _iFirstKpNum = kpNum;
-        _arrayDoneKps = new ArrayList<>();
-
+    public AssessmentScore(){
+        assessmentScoreKps = new ArrayList<>();
     }
 
-    public AssessmentScore(int courseID, int sumScore, int firstKPNum) {
-        _iCourseID = courseID;
-        _iSumScore = sumScore;
-        _iFirstKpNum = firstKPNum;
-       _arrayDoneKps = new ArrayList<>();
+    public AssessmentScore(Integer iSumSocre, List<AssessmentScoreKp> AssessmentScoreKps) {
+        this.iSumSocre = iSumSocre;
+        this.assessmentScoreKps = AssessmentScoreKps;
     }
 
-    public void addDoneKpSocre(String id, String name, double score){
-        DoneKpSocre doneKpSocre = new DoneKpSocre(id, name, score);
-        _arrayDoneKps.add(doneKpSocre);
+    public void addkp(AssessmentScoreKp kp){
+        this.assessmentScoreKps.add(kp);
+    }
+    public Integer getiSumSocre() {
+        return iSumSocre;
     }
 
-    public class DoneKpSocre{
-        public String _id = "";
-        public String _name = "";
-        public double _iScore = 0;
-        public int _iColor= 813727872;//tran_gray
-        public DoneKpSocre(String id, String name, double score){
-            _id= id;
-            _name = name;
-            _iScore = score;
+    public void setiSumSocre(Integer iSumSocre) {
+        this.iSumSocre = iSumSocre;
+    }
 
+    public List<AssessmentScoreKp> getAssessmentScoreKps() {
+        return assessmentScoreKps;
+    }
+
+    public void setAssessmentScoreKps(List<AssessmentScoreKp> assessmentScoreKps) {
+        this.assessmentScoreKps = assessmentScoreKps;
+    }
+
+    public class AssessmentScoreKp {
+        private String strKPName;
+        private String strKPID;
+        private Integer iProgress;
+
+        public AssessmentScoreKp(String strKPName, String strKPID, Integer iProgress) {
+            this.strKPName = strKPName;
+            this.strKPID = strKPID;
+            this.iProgress = iProgress;
+        }
+
+        public String getStrKPID() {
+            return strKPID;
+        }
+
+        public void setStrKPID(String strKPID) {
+            this.strKPID = strKPID;
+        }
+
+        public Integer getiProgress() {
+            return iProgress;
+        }
+
+        public void setiProgress(Integer iProgress) {
+            this.iProgress = iProgress;
+        }
+
+        public String getStrKPName() {
+            return strKPName;
+        }
+
+        public void setStrKPName(String strKPName) {
+            this.strKPName = strKPName;
         }
     }
 }

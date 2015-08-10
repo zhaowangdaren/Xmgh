@@ -46,6 +46,7 @@ public class Util {
     public static String URL_GET_COURSES_INFO = URL_HOME + "/GetCoursesInfo";
     public static String URL_GET_BASIC_TEST_ONLINE = URL_HOME + "/GetBasicTestOnline";
     public static String URL_UPLOAD_DONE_QUESTION = URL_HOME + "/UploadDoneQuestions";
+    public static String URL_GET_ASSESSED_SCORE = URL_HOME + "/GetAssessedScore";
 
     public static int iNo_USERID = -1;
     public static int NO_LAST_COURSE = -1;

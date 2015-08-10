@@ -13,6 +13,7 @@ import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
+import com.example.ustc_pc.myapplication.unit.AssessmentScore;
 import com.google.gson.Gson;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -542,5 +543,30 @@ public class OkHttpUtil {
 
     public Bitmap getImageFromServer(String data) {
         return null;
+    }
+
+
+    public AssessmentScore getAssessedScore(int iUserID, int iCourseID) {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("iUserID", String.valueOf(iUserID))
+                .add("iCourseID", String.valueOf(iCourseID))
+                .build();
+        Request request = new Request.Builder()
+                .url(Util.URL_GET_ASSESSED_SCORE)
+                .post(formBody)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
+            AssessmentScore assessmentScore = new Gson().fromJson(
+                    response.body().string(),
+                    AssessmentScore.class
+            );
+            return assessmentScore;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

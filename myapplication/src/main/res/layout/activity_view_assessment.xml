@@ -1,20 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.ustc_pc.myapplication.activity.ActivityViewAssessment"
     tools:ignore="MergeRootFrame"
+    android:paddingLeft="@dimen/activity_horizontal_margin_half"
+    android:paddingRight="@dimen/activity_horizontal_margin_half"
+    android:paddingTop="@dimen/activity_horizontal_margin_half"
+    android:paddingBottom="@dimen/activity_horizontal_margin_half"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/swipe_refresh"
     android:background="#e0e0e0"
-    >
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:paddingLeft="@dimen/activity_horizontal_margin_half"
-        android:paddingRight="@dimen/activity_horizontal_margin_half"
-        android:paddingTop="@dimen/activity_horizontal_margin_half"
-        android:paddingBottom="@dimen/activity_horizontal_margin_half"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swipe_refresh">
+        >
         <ScrollView
             android:scrollbarStyle="outsideOverlay"
             android:layout_width="match_parent"
@@ -107,5 +103,4 @@
                 </LinearLayout>
 
         </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-</RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -317,7 +317,7 @@ public class CourseBaseFragment extends Fragment {
                 }
                 holder.openCloseitemIV.setOnClickListener(new OnOpenCloseItemIVClickListener(index));
                 holder.startTestIV.setOnClickListener(new OnItemStartTestIVClickListener(index));
-                // Let different level kp on different offset
+                // Let different level AssessmentScoreKp on different offset
 
                 RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.openCloseitemIV.getLayoutParams();
                 float offset = getResources().getDimension(R.dimen.activity_horizontal_margin);
@@ -406,9 +406,9 @@ public class CourseBaseFragment extends Fragment {
 
         public class KPsViewHolder extends RecyclerView.ViewHolder {
 
-            //open or close kp Item
+            //open or close AssessmentScoreKp Item
             private ImageView openCloseitemIV;
-            //header score TextView's id same as item kp's name TextView
+            //header score TextView's id same as item AssessmentScoreKp's name TextView
             private TextView contentTV;
             //Download questions
             private ImageView startTestIV;

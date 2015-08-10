@@ -32,7 +32,7 @@ public class BaseTestFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_QUESTION = "question";
-    public static final String ARG_KP_NAME = "kp";
+    public static final String ARG_KP_NAME = "AssessmentScoreKp";
     public static final String ARG_INDEX = "index";
     public static final String ARG_SUM = "sum";
     // TODO: Rename and change types of parameters
