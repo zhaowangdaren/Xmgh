@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView
+        <com.example.ustc_pc.myapplication.viewUnit.ScrollViewWithGridView
             android:layout_margin="@dimen/view_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,7 +1,5 @@
 package com.example.ustc_pc.myapplication.unit;
 
-import com.example.ustc_pc.myapplication.net.Util;
-
 import java.io.Serializable;
 import java.util.List;
 

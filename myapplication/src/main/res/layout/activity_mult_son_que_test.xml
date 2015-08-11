@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ustc_pc.myapplication.activity.MutlSonQuestionActivity">
+    tools:context="com.example.ustc_pc.myapplication.activity.MultiSonQuestionActivity">
 
     <ViewAnimator
         android:id="@+id/viewAnimator_test_activity"

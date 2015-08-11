@@ -14,12 +14,12 @@ import com.example.ustc_pc.myapplication.unit.QuestionNew;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MutlQuestionSonFragment.OnFragmentInteractionListener} interface
+ * {@link MultiQuestionSonFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MutlQuestionSonFragment#newInstance} factory method to
+ * Use the {@link MultiQuestionSonFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MutlQuestionSonFragment extends Fragment {
+public class MultiQuestionSonFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_QUESTION = "question";
@@ -34,18 +34,18 @@ public class MutlQuestionSonFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param questionNew
-     * @return A new instance of fragment MutlQuestionSonFragment.
+     * @return A new instance of fragment MultiQuestionSonFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MutlQuestionSonFragment newInstance(QuestionNew questionNew) {
-        MutlQuestionSonFragment fragment = new MutlQuestionSonFragment();
+    public static MultiQuestionSonFragment newInstance(QuestionNew questionNew) {
+        MultiQuestionSonFragment fragment = new MultiQuestionSonFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_QUESTION, questionNew);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public MutlQuestionSonFragment() {
+    public MultiQuestionSonFragment() {
         // Required empty public constructor
     }
 

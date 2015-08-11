@@ -25,7 +25,7 @@ public class ViewArc extends View{
      */
     private int _type = 0;
 
-    private ArrayList<AssessmentScore.DoneKpSocre> _datas;
+    private ArrayList<AssessmentScore.AssessmentScoreKp> _datas;
 
     public ViewArc(Context context) {
         super(context);
@@ -44,7 +44,7 @@ public class ViewArc extends View{
      * @param arg
      * @param type 0-papers finished percent; 1-paper error percent; 2-view assessment
      */
-    public ViewArc(Context context, ArrayList<AssessmentScore.DoneKpSocre> datas ,int arg, int type){
+    public ViewArc(Context context, ArrayList<AssessmentScore.AssessmentScoreKp> datas ,int arg, int type){
         super(context);
         _datas = datas;
         _arg = arg;
@@ -102,11 +102,12 @@ public class ViewArc extends View{
         float y = getResources().getDimension(R.dimen.score_percent_diameter) ;
         float basic = getResources().getDimension(R.dimen.score_percent_radius) ;
         for(int i = 0; i<size; i++){
-            paint.setColor(_datas.get(i)._iColor);
-            float x1 = (x-basic)  * ((float)_datas.get(i)._iScore)  + basic ;
-            float y1 = (y-basic) * (float)_datas.get(i)._iScore  + basic ;
+            //TODO set different color for those kp
+//            paint.setColor(_datas.get(i)._iColor);
+
+            float x1 = (x-basic)  * ((float)_datas.get(i).getiProgress())  + basic ;
+            float y1 = (y-basic) * (float)_datas.get(i).getiProgress()  + basic ;
             rectF = new RectF((x - x1 ) /2, (y - y1 ) / 2, (x + x1 ) / 2, (y + y1 ) / 2);
-//            paint.setColor(-16777216);
             canvas.drawArc(rectF, startArg, averageArg, true, paint);
             startArg += averageArg;
         }

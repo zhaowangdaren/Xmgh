@@ -1,4 +1,4 @@
-package com.example.ustc_pc.myapplication.net;
+package com.example.ustc_pc.myapplication.unit;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -9,10 +9,6 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.ustc_pc.myapplication.unit.Answer;
-import com.example.ustc_pc.myapplication.unit.QuestionNew;
-import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
-import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
 import com.google.gson.Gson;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -236,9 +232,9 @@ public class Util {
         return result;
     }
 
-    public static List<UnmultiSonAnslysis> parseUnmultiSonAnslysisFromFile(String[] questionsAPath){
+    public static List<UnmultiSonAnalysis> parseUnmultiSonAnslysisFromFile(String[] questionsAPath){
         if(questionsAPath == null || questionsAPath.length <= 0)return null;
-        List<UnmultiSonAnslysis> result = new ArrayList<>(questionsAPath.length);
+        List<UnmultiSonAnalysis> result = new ArrayList<>(questionsAPath.length);
         for(int i =0 ;i<questionsAPath.length; i++){
             String analysisFilePath = questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS;
             if( !(new File(analysisFilePath).exists()))analysisFilePath = questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS_ANOTHER;
@@ -253,7 +249,7 @@ public class Util {
             for(int j = 0; j<answerJSONArray.size(); j++){
                 answers.add(answerJSONArray.getJSONObject(j).getString("ID"));
             }
-            result.add(new UnmultiSonAnslysis(iQuestionID,iMultiSonQuestion,strAnalysis,answers));
+            result.add(new UnmultiSonAnalysis(iQuestionID,iMultiSonQuestion,strAnalysis,answers));
         }
         return result;
     }

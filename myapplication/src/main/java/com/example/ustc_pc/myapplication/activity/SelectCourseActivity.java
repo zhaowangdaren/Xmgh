@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelecteCourseActivity extends AppCompatActivity implements AbsListView.OnItemClickListener ,View.OnClickListener{
+public class SelectCourseActivity extends AppCompatActivity implements AbsListView.OnItemClickListener ,View.OnClickListener{
 
     GridView gridView;
     List<Course> mCourses;

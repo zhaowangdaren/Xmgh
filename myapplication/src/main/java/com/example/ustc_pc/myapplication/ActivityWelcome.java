@@ -14,10 +14,10 @@ import android.view.View;
 import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
-import com.example.ustc_pc.myapplication.activity.LoginActivity;
 import com.example.ustc_pc.myapplication.activity.CourseActivity;
+import com.example.ustc_pc.myapplication.activity.LoginActivity;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
-import com.example.ustc_pc.myapplication.unit.FileOperation;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.io.File;
 
@@ -68,14 +68,11 @@ public class ActivityWelcome extends Activity implements View.OnClickListener{
 
     private void initFilePath() {
         File file = new File(Environment.getExternalStorageDirectory().getPath());
-        if( !file.exists() ){
-            FileOperation.setAppPath(this);
-        }else{
-            file = new File(FileOperation.APP_PATH);
-            if( !file.exists()){
-                file.mkdir();
-            }
+        file = new File(Util.APP_PATH);
+        if( !file.exists()){
+            file.mkdir();
         }
+
     }
 
     Handler handler = new  Handler(){
@@ -102,20 +99,7 @@ public class ActivityWelcome extends Activity implements View.OnClickListener{
         }
         finish();
     }
-    /**
-     * 检查三个科目的知识点文件是否存在
-     * @return
-     */
-    private boolean checkInitFileExist(){
-        File file1 = new File(FileOperation.APP_PATH);
-        if( !file1.exists()){
-            file1.mkdir();
-            return false;
-        }
-        File file = new File(FileOperation.APP_PATH + "courses.json");
 
-        return file.exists();
-    }
 
     @Override
     public void onClick(View v) {

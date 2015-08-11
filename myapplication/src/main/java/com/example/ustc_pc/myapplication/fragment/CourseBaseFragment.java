@@ -20,14 +20,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.activity.ActivityViewAssessment;
 import com.example.ustc_pc.myapplication.activity.BaseTestActivity;
 import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.db.KPsDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -419,10 +421,21 @@ public class CourseBaseFragment extends Fragment {
                 if(iType == TYPE_ITEM){
                     openCloseitemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
                     startTestIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_start_test);
+                }else{
+                    itemView.setOnClickListener(new ScoreViewClickListener());
                 }
             }
         }
     }
 
+    private class ScoreViewClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity(), ActivityViewAssessment.class);
+            intent.putExtra("mICourseID",mICourseID);
+            intent.putExtra("mAllKPses",(Serializable)mAllKPses);
+            startActivity(intent);
+        }
+    }
 
 }

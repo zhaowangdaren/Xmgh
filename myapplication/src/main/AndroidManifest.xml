@@ -32,10 +32,6 @@
         <activity android:name=".activity.LoginActivity"
             android:label="@string/login"/>
         <activity
-            android:name=".activity.ActivityWriteInfo"
-            android:label="@string/title_activity_activity_write_info" >
-        </activity>
-        <activity
             android:name=".activity.ActivityPersonal"
             android:label="@string/title_activity_activity_personal" >
         </activity>
@@ -64,7 +60,7 @@
                 android:value="com.example.ustc_pc.myapplication.activity.LoginActivity" />
         </activity>
         <activity
-            android:name=".activity.SelecteCourseActivity"
+            android:name=".activity.SelectCourseActivity"
             android:label="@string/title_activity_selecte_course" >
         </activity>
         <activity
@@ -76,7 +72,7 @@
             android:label="@string/title_activity_course" >
         </activity>
         <activity
-            android:name=".activity.MutlSonQuestionActivity"
+            android:name=".activity.MultiSonQuestionActivity"
             android:label="@string/title_activity_test" >
         </activity>
         <activity

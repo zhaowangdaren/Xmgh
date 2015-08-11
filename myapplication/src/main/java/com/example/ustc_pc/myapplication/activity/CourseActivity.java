@@ -121,7 +121,7 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
                 startActivity(intent);
                 break;
             case R.id.button_left_menu_add_course:
-                Intent intent1 = new Intent(this, SelecteCourseActivity.class);
+                Intent intent1 = new Intent(this, SelectCourseActivity.class);
                 startActivity(intent1);
                 break;
         }

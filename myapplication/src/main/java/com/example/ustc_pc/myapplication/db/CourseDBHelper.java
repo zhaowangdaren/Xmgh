@@ -7,7 +7,7 @@ import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.dao.CourseDao;
 import com.example.ustc_pc.myapplication.dao.DaoMaster;
 import com.example.ustc_pc.myapplication.dao.DaoSession;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.util.ArrayList;
 import java.util.List;

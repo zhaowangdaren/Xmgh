@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Created by ustc-pc on 2015/8/10.
  */
-public class UnmultiSonAnslysis implements Serializable, Comparable<UnmultiSonAnslysis>{
+public class UnmultiSonAnalysis implements Serializable, Comparable<UnmultiSonAnalysis>{
     private Integer iQuestionID;
     private Integer iMultiSonQuestion;
     private String strAnalysis;
     private List<String> answer;
 
 
-    public UnmultiSonAnslysis(Integer iQuestionID, Integer iMultiSonQuestion, String strAnalysis, List<String> answer) {
+    public UnmultiSonAnalysis(Integer iQuestionID, Integer iMultiSonQuestion, String strAnalysis, List<String> answer) {
         this.iQuestionID = iQuestionID;
         this.iMultiSonQuestion = iMultiSonQuestion;
         this.strAnalysis = strAnalysis;
@@ -53,7 +53,7 @@ public class UnmultiSonAnslysis implements Serializable, Comparable<UnmultiSonAn
     }
 
     @Override
-    public int compareTo(UnmultiSonAnslysis unmultiSonAnslysis) {
-        return this.iQuestionID.compareTo(unmultiSonAnslysis.getiQuestionID());
+    public int compareTo(UnmultiSonAnalysis unmultiSonAnalysis) {
+        return this.iQuestionID.compareTo(unmultiSonAnalysis.getiQuestionID());
     }
 }

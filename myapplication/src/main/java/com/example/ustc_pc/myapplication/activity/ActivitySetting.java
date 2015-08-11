@@ -20,8 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ustc_pc.myapplication.R;
-import com.example.ustc_pc.myapplication.net.Util;
-import com.example.ustc_pc.myapplication.unit.FileOperation;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -232,7 +231,7 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
                 //download the file
                 inputStream = connection.getInputStream();
 
-                outputStream = new FileOutputStream(FileOperation.APP_PATH + params[1]);
+                outputStream = new FileOutputStream(Util.APP_PATH + params[1]);
                 byte data[] = new byte[4096];
                 long total = 0;
                 int count;
@@ -283,7 +282,7 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
                 Log.e("Download error:", result);
             }else {
                 Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
-                File file = new File(FileOperation.APP_PATH + mFileName);
+                File file = new File(Util.APP_PATH + mFileName);
                 installApk(file);
             }
         }

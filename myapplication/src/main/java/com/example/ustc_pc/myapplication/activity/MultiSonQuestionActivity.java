@@ -22,9 +22,9 @@ import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.example.ustc_pc.myapplication.R;
-import com.example.ustc_pc.myapplication.fragment.MutlQuestionSonFragment;
+import com.example.ustc_pc.myapplication.fragment.MultiQuestionSonFragment;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 import com.example.ustc_pc.myapplication.unit.QuestionNew;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -38,7 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MutlSonQuestionActivity extends AppCompatActivity {
+public class MultiSonQuestionActivity extends AppCompatActivity {
 
     public static final int TYPE_QUESTION_LAYOUT_HEADER = 0, TYPE_QUESTION_LAYOUT_FATHER = 1,
             TYPE_QUESTION_LAYOUT_SON = 2;
@@ -195,7 +195,7 @@ public class MutlSonQuestionActivity extends AppCompatActivity {
         }
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = MutlQuestionSonFragment.newInstance(mQuestions.get(index));
+            Fragment fragment = MultiQuestionSonFragment.newInstance(mQuestions.get(index));
             return fragment;
         }
 

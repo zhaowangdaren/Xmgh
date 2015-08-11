@@ -28,7 +28,7 @@ import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.fragment.AnswerSheetFragment;
 import com.example.ustc_pc.myapplication.fragment.BaseTestFragment;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;

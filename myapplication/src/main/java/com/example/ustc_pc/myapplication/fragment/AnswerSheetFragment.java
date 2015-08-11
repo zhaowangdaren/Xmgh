@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
-import com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView;
+import com.example.ustc_pc.myapplication.viewUnit.ScrollViewWithGridView;
 
 import java.io.Serializable;
 import java.util.ArrayList;

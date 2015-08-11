@@ -23,7 +23,7 @@ import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -211,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(isNeverSelected){
                     startSelectCourseActivity();
                 }else{
-                    startMainActivity();
+                    startCourseActivity();
                 }
             }else{
                 mViewAnimator.showNext();
@@ -220,14 +220,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void startMainActivity(){
+    private void startCourseActivity(){
         Intent intent = new Intent(this, CourseActivity.class);
         startActivity(intent);
         finish();
     }
 
     private void startSelectCourseActivity(){
-        Intent intent = new Intent(this, SelecteCourseActivity.class);
+        Intent intent = new Intent(this, SelectCourseActivity.class);
         startActivity(intent);
         finish();
     }

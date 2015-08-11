@@ -21,10 +21,10 @@ import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
-import com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView;
-import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
+import com.example.ustc_pc.myapplication.viewUnit.ScrollViewWithGridView;
+import com.example.ustc_pc.myapplication.unit.UnmultiSonAnalysis;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class CABaseTestActivity extends AppCompatActivity implements View.OnClickListener{
     List<QuestionUnmultiSon> mQuestions;
-    List<UnmultiSonAnslysis> mAnalysises;
+    List<UnmultiSonAnalysis> mAnalysises;
     List<DoneQuestion> mDoneQuestions;
 
 
@@ -166,7 +166,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 return null;
             }
             String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
-            List<UnmultiSonAnslysis> answers = Util.parseUnmultiSonAnslysisFromFile(questionsAPath);
+            List<UnmultiSonAnalysis> answers = Util.parseUnmultiSonAnslysisFromFile(questionsAPath);
 
             if(answers != null && !answers.isEmpty()){
                 mAnalysises = answers;
@@ -176,7 +176,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
             return null;
         }
 
-        private List<DoneQuestion> recordResult(List<UnmultiSonAnslysis> analysises) {
+        private List<DoneQuestion> recordResult(List<UnmultiSonAnalysis> analysises) {
             if(mQuestions.size() != analysises.size()){
                 Log.e("Error","The questions num does not match the answers num!");
                 return null;

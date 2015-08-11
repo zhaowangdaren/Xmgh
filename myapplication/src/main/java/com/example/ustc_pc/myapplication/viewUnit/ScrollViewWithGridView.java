@@ -1,14 +1,16 @@
-package com.example.ustc_pc.myapplication.unit;
+package com.example.ustc_pc.myapplication.viewUnit;
 
-import android.widget.ListView;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.widget.GridView;
 
 /**
- * Created by ustc-pc on 2015/2/8.
+ * Created by ustc-pc on 2015/2/16.
  */
-public class ScrollViewWithListView extends ListView {
-    public ScrollViewWithListView(android.content.Context context,
-                                  android.util.AttributeSet attrs) {
+public class ScrollViewWithGridView extends GridView{
+    public ScrollViewWithGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
     }
 
     /**
@@ -18,6 +20,5 @@ public class ScrollViewWithListView extends ListView {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
                 MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, expandSpec);
-
     }
 }

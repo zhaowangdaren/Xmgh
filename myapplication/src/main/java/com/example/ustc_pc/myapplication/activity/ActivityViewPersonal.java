@@ -23,7 +23,7 @@ import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.imageView.CircleImageView;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 public class ActivityViewPersonal extends AppCompatActivity implements View.OnClickListener{
 

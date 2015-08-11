@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
-import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
+import com.example.ustc_pc.myapplication.unit.UnmultiSonAnalysis;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class BasicAnalysisFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private DoneQuestion mDoneQuestion;
     private QuestionUnmultiSon mQuestion;
-    private UnmultiSonAnslysis mAnalysis;
+    private UnmultiSonAnalysis mAnalysis;
 
     private int mIndex;
     private int mQuestionsNum;
@@ -65,7 +65,7 @@ public class BasicAnalysisFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static BasicAnalysisFragment newInstance(DoneQuestion mDoneQuestion,
                                                     QuestionUnmultiSon mQuestionNew,
-                                                    UnmultiSonAnslysis mAnswer,
+                                                    UnmultiSonAnalysis mAnswer,
                                                     int index,
                                                     String strKpName,
                                                     int questionsNum) {
@@ -91,7 +91,7 @@ public class BasicAnalysisFragment extends Fragment {
         if (getArguments() != null) {
             mDoneQuestion = (DoneQuestion)getArguments().getSerializable(ARG_DONE_QUESTION);
             mQuestion = (QuestionUnmultiSon)getArguments().getSerializable(ARG_QUESTION);
-            mAnalysis = (UnmultiSonAnslysis)getArguments().getSerializable(ARG_ANSWER);
+            mAnalysis = (UnmultiSonAnalysis)getArguments().getSerializable(ARG_ANSWER);
 
             mIndex = getArguments().getInt(ARG_INDEX,0);
             mQuestionsNum = getArguments().getInt(ARG_SUM_QUESTIONS_NUM, 0);

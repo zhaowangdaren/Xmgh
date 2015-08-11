@@ -20,14 +20,14 @@ import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.fragment.BasicAnalysisFragment;
 import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
-import com.example.ustc_pc.myapplication.unit.UnmultiSonAnslysis;
+import com.example.ustc_pc.myapplication.unit.UnmultiSonAnalysis;
 
 import java.util.List;
 
 public class ShowAnalysisActivity extends AppCompatActivity implements BasicAnalysisFragment.OnFragmentInteractionListener{
 
     List<DoneQuestion> mDoneQuestions;
-    List<UnmultiSonAnslysis> mAnalysises;
+    List<UnmultiSonAnalysis> mAnalysises;
     List<QuestionUnmultiSon> mQuestions;
     String mStrKPName;
     ViewPager mViewPager;
@@ -43,7 +43,7 @@ public class ShowAnalysisActivity extends AppCompatActivity implements BasicAnal
 
         Intent intent = getIntent();
         mDoneQuestions = (List<DoneQuestion>) intent.getSerializableExtra("mDoneQuestions");
-        mAnalysises = (List<UnmultiSonAnslysis>) intent.getSerializableExtra("mAnalysises");
+        mAnalysises = (List<UnmultiSonAnalysis>) intent.getSerializableExtra("mAnalysises");
         mQuestions = (List<QuestionUnmultiSon>)intent.getSerializableExtra("mQuestions");
         mStrKPName = intent.getStringExtra("mStrKPName");
 

@@ -21,7 +21,7 @@ import com.avos.avoscloud.AVOSCloud;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
-import com.example.ustc_pc.myapplication.net.Util;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.io.IOException;
 

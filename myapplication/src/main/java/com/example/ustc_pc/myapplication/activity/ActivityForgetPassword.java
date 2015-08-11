@@ -2,7 +2,7 @@ package com.example.ustc_pc.myapplication.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.example.ustc_pc.myapplication.R;
 
-public class ActivityForgetPassword extends ActionBarActivity implements View.OnClickListener{
+public class ActivityForgetPassword extends AppCompatActivity implements View.OnClickListener{
 
     EditText mAuthCodeET, mNewPassword;
     Button mSubmitBT;
@@ -20,8 +20,6 @@ public class ActivityForgetPassword extends ActionBarActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
-//        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-//        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initView();

@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/answer_sheets"/>
 
-            <com.example.ustc_pc.myapplication.unit.ScrollViewWithGridView
+            <com.example.ustc_pc.myapplication.viewUnit.ScrollViewWithGridView
                 android:layout_margin="@dimen/view_margin"
                 android:id="@+id/gridView_answer_sheets"
                 android:layout_width="match_parent"
