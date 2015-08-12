@@ -263,6 +263,8 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             String strCourseID = strings[0];
             String strQuestionType = strings[1];
             String strKPID = strings[2];
+            String strTestID = strings[3];
+            /**
             String[] kpIDs = strKPID.split("\\.");
 
             //relative path
@@ -278,6 +280,10 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             }
             String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
             List<QuestionUnmultiSon> questions = Util.parseUnmultiSonQueFromFile(questionsAPath);
+             */
+
+            List<QuestionUnmultiSon> questions = Util.parseUnmultiSonQueFromFile(strCourseID
+                    ,strQuestionType,strTestID, strKPID);
             return questions;
         }
 
@@ -324,19 +330,20 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
          */
         @Override
         protected Boolean doInBackground(String... strings) {
-            int iCourseID = Integer.valueOf(strings[0]);
-            int iQuestionType = Integer.valueOf(strings[1]);
+            String strCourseID = strings[0];
+            String strQuestionType = strings[1];
             String strKPID = strings[2];
             OkHttpUtil okHttpUtil = new OkHttpUtil();
             InputStream inputStream = null;
             OutputStream outputStream = null;
+            int iTestID ;
             try {
                 HashMap<String, Object> result = okHttpUtil.getBasicTestOnline(
                         new UserSharedPreference(context).getiUserID()
-                        , iCourseID
-                        , iQuestionType
+                        , strCourseID
+                        , strQuestionType
                         , strKPID);
-                int iTestID = (int)result.get("iTestID");
+                 iTestID = (int)result.get("iTestID");
                 miTestID = iTestID;
                 String strURL = (String)result.get("strURL");
                 URL downloadURL = new URL(strURL);
@@ -387,15 +394,9 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             //Extract zip file
             String zipFilePath = Util.APP_PATH +strFileName;
 
-            //the target path format is : APP_PATH/CourseId/QuestionType
-            String unZipTargetPath = Util.APP_PATH + "/" + strings[0] + "/" + strings[1];
-            String[] strKPIDs = strKPID.split("\\.");
-            for(int i =0; i<strKPIDs.length; i++){
-                unZipTargetPath += "/"+strKPIDs[i];
-            }
-            unZipTargetPath += "/";
+            //the target path format is : APP_PATH/CourseId/QuestionType/testID/kpid
+            String unZipTargetPath = Util.getQuesFolderPath(strCourseID, strQuestionType, String.valueOf(iTestID), strKPID);
             boolean isUnzipSuccess = Util.unZip(zipFilePath, unZipTargetPath);
-
             return isUnzipSuccess;
         }
 
@@ -415,7 +416,12 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
             else {
                 Toast.makeText(context, "Download Successed", Toast.LENGTH_SHORT).show();
                 ParseQuestionsAsyncTask parseQuestionsAsyncTask = new ParseQuestionsAsyncTask(context);
-                parseQuestionsAsyncTask.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
+                parseQuestionsAsyncTask.execute(
+                        String.valueOf(mICourseID)
+                        , String.valueOf(mIQuestionType)
+                        , mStrKPID
+                        , String.valueOf(miTestID)
+                );
             }
             progressDialog.dismiss();
         }

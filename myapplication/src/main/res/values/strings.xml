@@ -184,4 +184,6 @@
     <string name="your_answer">你的答案：</string>
     <string name="right_answer">正确答案</string>
     <string name="getting_personal_info">获取个人信息中...</string>
+    <string name="title_activity_show_recorded_que">ShowRecordedQueActivity</string>
+    <string name="parse_failed">解析失败</string>
 </resources>

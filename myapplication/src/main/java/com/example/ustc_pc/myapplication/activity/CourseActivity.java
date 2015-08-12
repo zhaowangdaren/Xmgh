@@ -34,6 +34,7 @@ import com.example.ustc_pc.myapplication.fragment.CourseNoteFragment;
 import com.example.ustc_pc.myapplication.fragment.CourseSimulateFragment;
 import com.example.ustc_pc.myapplication.fragment.CourseSpecialFragment;
 import com.example.ustc_pc.myapplication.fragment.CourseZhenTiFragment;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -287,7 +288,8 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startCheckNoteFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseNoteFragment courseNoteFragment = CourseNoteFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        CourseNoteFragment courseNoteFragment =
+                CourseNoteFragment.newInstance(mSelectedCourses.get(position).getICourseID(), Util.BASIC_TEST);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseNoteFragment)
@@ -298,7 +300,8 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startCheckFavoriteFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseFavoriteFragment courseFavoriteFragment = CourseFavoriteFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        CourseFavoriteFragment courseFavoriteFragment =
+                CourseFavoriteFragment.newInstance(mSelectedCourses.get(position).getICourseID(), Util.BASIC_TEST);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseFavoriteFragment)
@@ -309,7 +312,8 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startCheckErrorFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseErrorFragment courseErrorFragment = CourseErrorFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        CourseErrorFragment courseErrorFragment =
+                CourseErrorFragment.newInstance(mSelectedCourses.get(position).getICourseID(), Util.BASIC_TEST);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseErrorFragment)

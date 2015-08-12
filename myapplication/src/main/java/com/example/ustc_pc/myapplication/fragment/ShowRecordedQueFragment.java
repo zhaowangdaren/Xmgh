@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -16,72 +15,67 @@ import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.DoneQuestion;
-import com.example.ustc_pc.myapplication.unit.Util;
 import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 import com.example.ustc_pc.myapplication.unit.UnmultiSonAnalysis;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BasicAnalysisFragment.OnFragmentInteractionListener} interface
+ * {@link ShowRecordedQueFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BasicAnalysisFragment#newInstance} factory method to
+ * Use the {@link ShowRecordedQueFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BasicAnalysisFragment extends Fragment {
+public class ShowRecordedQueFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_DONE_QUESTION = "ARG_DONE_QUESTION";
-    private static final String ARG_QUESTION = "ARG_QUESTION";
-    private static final String ARG_ANSWER = "ARG_ANSWER";
-    private static final String ARG_INDEX = "ARG_INDEX";
+    private static final String ARG_DONE_QUE = "ARG_DONE_QUE";
+    private static final String ARG_QUESTION = "param2";
+    private static final String ARG_ANALYSIS = "ARG_ANALYSIS";
     private static final String ARG_KP_NAME = "ARG_KP_NAME";
-    private static final String ARG_SUM_QUESTIONS_NUM = "ARG_SUM_QUESTIONS_NUM";
+    private static final String ARG_INDEX = "ARG_INDEX";
+    private static final String ARG_QUES_NUM = "ARG_QUES_NUM";
+
     // TODO: Rename and change types of parameters
-    private DoneQuestion mDoneQuestion;
-    private QuestionUnmultiSon mQuestion;
-    private UnmultiSonAnalysis mAnalysis;
-
-    private int mIndex;
-    private int mQuestionsNum;
+    private DoneQuestion doneQuestion;
+    private QuestionUnmultiSon questionUnmultiSon;
+    private UnmultiSonAnalysis unmultiSonAnalysis;
     private String mStrKPName;
-
-
-    private RecyclerView mRecyclerView;
-
+    private int mIndex, mQuestionsNum;
     private OnFragmentInteractionListener mListener;
 
+    //View
+    private RecyclerView mRV;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param mDoneQuestion Parameter 1.
-     * @param mQuestionNew Parameter 2.
-     * @param mAnswer Parameter 3.
-     * @return A new instance of fragment BasicAnalysisFragment.
+     * @param doneQuestion Parameter 1.
+     * @param questionUnmultiSon Parameter 2.
+     * @param unmultiSonAnalysis Parameter 2.
+     * @return A new instance of fragment ShowRecordedQueFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BasicAnalysisFragment newInstance(DoneQuestion mDoneQuestion,
-                                                    QuestionUnmultiSon mQuestionNew,
-                                                    UnmultiSonAnalysis mAnswer,
-                                                    int index,
-                                                    String strKpName,
-                                                    int questionsNum) {
-        BasicAnalysisFragment fragment = new BasicAnalysisFragment();
+    public static ShowRecordedQueFragment newInstance(DoneQuestion doneQuestion
+            , QuestionUnmultiSon questionUnmultiSon
+            , UnmultiSonAnalysis unmultiSonAnalysis
+            , String strKpName, int index, int questionsNum) {
+        ShowRecordedQueFragment fragment = new ShowRecordedQueFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_DONE_QUESTION, mDoneQuestion);
-        args.putSerializable(ARG_QUESTION, mQuestionNew);
-        args.putSerializable(ARG_ANSWER, mAnswer);
-        args.putInt(ARG_INDEX, index);
+        args.putSerializable(ARG_DONE_QUE, doneQuestion);
+        args.putSerializable(ARG_QUESTION, questionUnmultiSon);
+        args.putSerializable(ARG_ANALYSIS, unmultiSonAnalysis);
         args.putString(ARG_KP_NAME, strKpName);
-        args.putInt(ARG_SUM_QUESTIONS_NUM, questionsNum);
+        args.putInt(ARG_INDEX, index);
+        args.putInt(ARG_QUES_NUM, questionsNum);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public BasicAnalysisFragment() {
+    public ShowRecordedQueFragment() {
         // Required empty public constructor
     }
 
@@ -89,14 +83,12 @@ public class BasicAnalysisFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mDoneQuestion = (DoneQuestion)getArguments().getSerializable(ARG_DONE_QUESTION);
-            mQuestion = (QuestionUnmultiSon)getArguments().getSerializable(ARG_QUESTION);
-            mAnalysis = (UnmultiSonAnalysis)getArguments().getSerializable(ARG_ANSWER);
-
-            mIndex = getArguments().getInt(ARG_INDEX,0);
-            mQuestionsNum = getArguments().getInt(ARG_SUM_QUESTIONS_NUM, 0);
+            doneQuestion = (DoneQuestion) getArguments().getSerializable(ARG_DONE_QUE);
+            questionUnmultiSon = (QuestionUnmultiSon) getArguments().getSerializable(ARG_QUESTION);
+            unmultiSonAnalysis = (UnmultiSonAnalysis) getArguments().getSerializable(ARG_ANALYSIS);
             mStrKPName = getArguments().getString(ARG_KP_NAME);
-
+            mIndex = getArguments().getInt(ARG_INDEX);
+            mQuestionsNum = getArguments().getInt(ARG_QUES_NUM);
         }
     }
 
@@ -104,15 +96,11 @@ public class BasicAnalysisFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_basic_analysis, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_layout_question);
-        QuestionRecyclerViewAdapter adapter = new QuestionRecyclerViewAdapter();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(adapter);
+        View view = inflater.inflate(R.layout.fragment_show_recorded_que, container, false);
+        mRV = (RecyclerView) view.findViewById(R.id.recyclerView_layout_question);
         return view;
     }
 
-    private String mUserAnswer, mRightAnswer;
     class QuestionRecyclerViewAdapter
             extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.QuestionRecyclerViewHolder>{
 
@@ -153,13 +141,13 @@ public class BasicAnalysisFragment extends Fragment {
                     holder.questionSumTV.setText(""+ mQuestionsNum);
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_FATHER:
-                    holder.questionFatherTV.setText(Html.fromHtml(mQuestion.getStrSubject()));
+                    holder.questionFatherTV.setText(Html.fromHtml(questionUnmultiSon.getStrSubject()));
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_OPTION:
 //                    OptionListAdapter optionListAdapter = new OptionListAdapter(mQuestion.getOptions());
 //                    holder.optionListView.setAdapter(optionListAdapter);
 //                    holder.optionListView.setOnItemClickListener(new ListViewItemClick(optionListAdapter));
-                    QuestionUnmultiSon.QuestionOption questionOption = mQuestion.getOptions().get(position - 2);
+                    QuestionUnmultiSon.QuestionOption questionOption = questionUnmultiSon.getOptions().get(position - 2);
                     holder.checkedTextView.setText(questionOption.getID());
                     holder.optionTV.setText(questionOption.getStrOption());
                     if(questionOption.isAnswer()){
@@ -179,11 +167,11 @@ public class BasicAnalysisFragment extends Fragment {
                 case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
                     GetUserAnswerAndRightAnswer getUserAnswerAndRightAnswer = new GetUserAnswerAndRightAnswer(holder);
                     getUserAnswerAndRightAnswer.execute();
-                    holder.analysisTV.setText( Html.fromHtml(mAnalysis.getStrAnalysis()) );
+                    holder.analysisTV.setText( Html.fromHtml(unmultiSonAnalysis.getStrAnalysis()) );
                     break;
             }
         }
-        private class GetUserAnswerAndRightAnswer extends AsyncTask<Integer, Integer, StringBuffer[]>{
+        private class GetUserAnswerAndRightAnswer extends AsyncTask<Integer, Integer, StringBuffer[]> {
 
             private QuestionRecyclerViewHolder holder;
             public GetUserAnswerAndRightAnswer(QuestionRecyclerViewHolder holder){
@@ -194,7 +182,7 @@ public class BasicAnalysisFragment extends Fragment {
             protected StringBuffer[] doInBackground(Integer... integers) {
                 StringBuffer userAnswerSB = new StringBuffer();
                 StringBuffer rightAnswerSB = new StringBuffer();
-                List<QuestionUnmultiSon.QuestionOption> questionOptions = mQuestion.getOptions();
+                List<QuestionUnmultiSon.QuestionOption> questionOptions = questionUnmultiSon.getOptions();
                 for(QuestionUnmultiSon.QuestionOption questionOption : questionOptions){
                     if(questionOption.isSelected())userAnswerSB.append(questionOption.getID());
                     if(questionOption.isAnswer())rightAnswerSB.append(questionOption.getID());
@@ -215,7 +203,7 @@ public class BasicAnalysisFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
-            return mQuestion.getOptions().size() + 3;
+            return questionUnmultiSon.getOptions().size() + 3;
         }
 
         @Override
@@ -224,10 +212,10 @@ public class BasicAnalysisFragment extends Fragment {
 
             if(position == 1)return Util.TYPE_QUESTION_LAYOUT_FATHER;
 
-            if( position >= 2 && position <(mQuestion.getOptions().size() + 2) )
+            if( position >= 2 && position <(questionUnmultiSon.getOptions().size() + 2) )
                 return Util.TYPE_QUESTION_LAYOUT_OPTION;
 
-            if(position >= (mQuestion.getOptions().size() + 2))
+            if(position >= (questionUnmultiSon.getOptions().size() + 2))
                 return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
             return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
         }
@@ -271,93 +259,12 @@ public class BasicAnalysisFragment extends Fragment {
             }
         }
     }
-
-//    class OptionListAdapter extends BaseAdapter {
-//        List<QuestionUnmultiSon.QuestionOption> options;
-//        public OptionListAdapter(List<QuestionUnmultiSon.QuestionOption> options){
-//            this.options = options;
-//        }
-//        @Override
-//        public int getCount() {
-//            return options.size();
-//        }
-//
-//        @Override
-//        public QuestionUnmultiSon.QuestionOption getItem(int i) {
-//            return options.get(i);
-//
-//        }
-//
-//        @Override
-//        public long getItemId(int i) {
-//            return i;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//
-//            OptionViewHolder optionViewHolder;
-//            if(convertView == null){
-//                convertView = View.inflate(parent.getContext(), R.layout.layout_question_option_item, null);
-//                optionViewHolder = new OptionViewHolder();
-//                optionViewHolder.checkedTextView = (CheckedTextView) convertView.findViewById(R.id.checkedTV_option);
-//                optionViewHolder.textView = (TextView) convertView.findViewById(R.id.textView_option_content);
-//                convertView.setTag(optionViewHolder);
-//            }else{
-//                optionViewHolder = (OptionViewHolder) convertView.getTag();
-//            }
-//
-////            switch(position){
-////                case 0:
-////                    optionViewHolder.checkedTextView.setText(""+41);
-////                    break;
-////                case 1:
-////                    optionViewHolder.checkedTextView.setText("B");
-////                    break;
-////                case 2:
-////                    optionViewHolder.checkedTextView.setText("C");
-////                    break;
-////                case 3:
-////                    optionViewHolder.checkedTextView.setText("D");
-////                    break;
-////                default:optionViewHolder.checkedTextView.setText("E");
-////            }
-//            optionViewHolder.checkedTextView.setText(""+41+position);
-//
-//            optionViewHolder.textView.setText(getItem(position).getStrOption());
-//            if(options.get(position).isAnswer()){
-//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_right));
-//                optionViewHolder.checkedTextView.setTextColor(-1);//white
-//            }else if(options.get(position).isSelected()){
-//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_answer_error));
-//                optionViewHolder.checkedTextView.setTextColor(-1);//white
-//            }else{
-//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
-//            }
-//            if(options.get(position).isSelected()){
-//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_click));
-//                optionViewHolder.checkedTextView.setTextColor(-1);//white
-//            }else{
-//                optionViewHolder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
-//                optionViewHolder.checkedTextView.setTextColor(-16777216);//black
-//            }
-//
-//            return convertView;
-//        }
-//
-//        class OptionViewHolder {
-//            CheckedTextView checkedTextView;
-//            TextView textView;
-//        }
-//    }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
 
     @Override
     public void onAttach(Activity activity) {

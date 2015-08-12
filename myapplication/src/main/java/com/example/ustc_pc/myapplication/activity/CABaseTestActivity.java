@@ -26,7 +26,6 @@ import com.example.ustc_pc.myapplication.unit.QuestionUnmultiSon;
 import com.example.ustc_pc.myapplication.viewUnit.ScrollViewWithGridView;
 import com.example.ustc_pc.myapplication.unit.UnmultiSonAnalysis;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
     private void parseAnswer() {
         if(mICourseID < 0 || mIQuestionType < 0)return;
         ParseAnswerAsync parseAnswerAsync = new ParseAnswerAsync(this);
-        parseAnswerAsync.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), mStrKPID);
+        parseAnswerAsync.execute(String.valueOf(mICourseID), String.valueOf(mIQuestionType), String.valueOf(miTestID), mStrKPID);
     }
 
     @Override
@@ -151,23 +150,10 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
         protected List<DoneQuestion> doInBackground(String... strings) {
             String strCourseID = strings[0];
             String strQuestionType = strings[1];
-            String strKPID = strings[2];
-            String[] kpIDs = strKPID.split("\\.");
-
-            //relative path
-            String strKpIDRPPath = "";
-            for(int i=0; i< kpIDs.length; i++){
-                strKpIDRPPath += kpIDs[i] + "/";
-            }
-            //absolute path
-            String strKpIdAPPath = Util.APP_PATH + "/"+ strCourseID + "/" + strQuestionType + "/" + strKpIDRPPath;
-            if( !(new File(strKpIdAPPath).exists())){
-                Log.e("Error Mutl...Activity", "Kp id absolute un exists");
-                return null;
-            }
-            String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
-            List<UnmultiSonAnalysis> answers = Util.parseUnmultiSonAnslysisFromFile(questionsAPath);
-
+            String strTestID = strings[2];
+            String strKPID = strings[3];
+            List<UnmultiSonAnalysis> answers =
+                    Util.parseUnmultiSonAnswerFromFile(strCourseID, strQuestionType, strTestID, strKPID);
             if(answers != null && !answers.isEmpty()){
                 mAnalysises = answers;
                 List<DoneQuestion> doneQuestions = recordResult(answers);

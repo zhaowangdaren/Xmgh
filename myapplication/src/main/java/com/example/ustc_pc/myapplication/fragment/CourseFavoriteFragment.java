@@ -3,6 +3,7 @@ package com.example.ustc_pc.myapplication.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,11 +11,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.activity.ShowRecordedQueActivity;
 import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.db.DoneQuestionDBHelper;
 import com.example.ustc_pc.myapplication.db.KPsDBHelper;
@@ -30,13 +33,14 @@ import java.util.List;
  * Use the {@link CourseFavoriteFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CourseFavoriteFragment extends Fragment {
+public class CourseFavoriteFragment extends Fragment implements AdapterView.OnItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
+    private static final String ARG_COURSE_ID = "ARG_COURSE_ID";
+    private static final String ARG_TEST_TYPE = "ARG_TEST_TYPE";
     // TODO: Rename and change types of parameters
-    private int mCourseID;
+    private int mICourseID;
+    private int mITestType;
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,10 +52,11 @@ public class CourseFavoriteFragment extends Fragment {
      * @return A new instance of fragment CourseFavoriteFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CourseFavoriteFragment newInstance(int param1) {
+    public static CourseFavoriteFragment newInstance(int param1, int iTestType) {
         CourseFavoriteFragment fragment = new CourseFavoriteFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, param1);
+        args.putInt(ARG_COURSE_ID, param1);
+        args.putInt(ARG_TEST_TYPE, iTestType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +69,8 @@ public class CourseFavoriteFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCourseID = getArguments().getInt(ARG_PARAM1);
+            mICourseID = getArguments().getInt(ARG_COURSE_ID);
+            mITestType = getArguments().getInt(ARG_TEST_TYPE);
             mKPses = new ArrayList<>();
         }
     }
@@ -81,10 +87,21 @@ public class CourseFavoriteFragment extends Fragment {
         mLV = (ListView) view.findViewById(R.id.listView_favorite_fragment);
         mLvAdapter = new LVAdapter();
         mLV.setAdapter(mLvAdapter);
+        mLV.setOnItemClickListener(this);
 
-        GetFavoriteQueAsync getErrorQueAsync = new GetFavoriteQueAsync(getActivity());
-        getErrorQueAsync.execute(mCourseID);
+        GetFavoriteQueAsync getFavoriteQueAsync = new GetFavoriteQueAsync(getActivity());
+        getFavoriteQueAsync.execute(mICourseID);
         return view;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        KPs kPs = mKPses.get(position);
+        Intent intent = new Intent(getActivity(), ShowRecordedQueActivity.class);
+        intent.putExtra("mICourseID", mICourseID);
+        intent.putExtra("mITestType",mITestType);
+        intent.putExtra("mKps",kPs);
+        startActivity(intent);
     }
 
     private class LVAdapter extends BaseAdapter {

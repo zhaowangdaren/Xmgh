@@ -28,9 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.LoginActivity"
-            android:label="@string/login"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/login" />
         <activity
             android:name=".activity.ActivityPersonal"
             android:label="@string/title_activity_activity_personal" >
@@ -86,6 +86,10 @@
         <activity
             android:name=".activity.ShowAnalysisActivity"
             android:label="@string/title_activity_show_analysis" >
+        </activity>
+        <activity
+            android:name=".activity.ShowRecordedQueActivity"
+            android:label="@string/title_activity_show_recorded_que" >
         </activity>
     </application>
 

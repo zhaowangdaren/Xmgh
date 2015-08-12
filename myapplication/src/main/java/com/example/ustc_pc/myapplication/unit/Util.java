@@ -9,6 +9,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.ustc_pc.myapplication.dao.DoneQuestion;
 import com.google.gson.Gson;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -191,7 +192,33 @@ public class Util {
         }
     }
 
-    public static List<QuestionUnmultiSon> parseUnmultiSonQueFromFile(String[] questionAPaths){
+    //get folder path , which save lots of question
+    public static String getQuesFolderPath(String strCourseID, String strQueType, String strTestID, String strKPID){
+        StringBuffer result = new StringBuffer( Util.APP_PATH + "/" + strCourseID + "/" + strQueType + "/" + strTestID );
+        String[] strKPIDs = strKPID.split("\\.");
+        for(int i = 0; i<strKPIDs.length; i++){
+            result.append("/");
+            result.append(strKPIDs[i]);
+        }
+        result.append("/");
+        return result.toString();
+    }
+
+    public static List<QuestionUnmultiSon> parseUnmultiSonQueFromFile(String strCourseID
+            , String strQuestionType, String strTestID, String strKPID){
+        //absolute path
+        String strKpIdAPPath = getQuesFolderPath(strCourseID, strQuestionType,strTestID,strKPID);
+        if( !(new File(strKpIdAPPath).exists())){
+            Log.e("Error Mutl...Activity", "Kp id absolute un exists");
+            return null;
+        }
+
+        String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
+        List<QuestionUnmultiSon> questions = Util.parseUnmultiSonQueFromFile(questionsAPath);
+        return questions;
+    }
+
+    private static List<QuestionUnmultiSon> parseUnmultiSonQueFromFile(String[] questionAPaths){
         if(questionAPaths == null || questionAPaths.length <= 0)return null;
 
         List<QuestionUnmultiSon> result = new ArrayList<>(questionAPaths.length);
@@ -217,6 +244,45 @@ public class Util {
         return result;
     }
 
+    public static List<QuestionUnmultiSon> parseUnmultiSonQueFromFile(List<DoneQuestion> doneQuestionList) {
+        if(doneQuestionList == null) return null;
+        List<QuestionUnmultiSon> result = new ArrayList<>(doneQuestionList.size());
+        for(DoneQuestion doneQuestion : doneQuestionList){
+            int iCourseID = doneQuestion.getICourseID();
+            int iQuesType = doneQuestion.getIQuestionType();
+            int iTestID = doneQuestion.getITestID();
+            String strKPID = doneQuestion.getStrQuestionKpID();
+            long iQueID = doneQuestion.getLQuestionID();
+
+            String queFolderPath = getQuesFolderPath(String.valueOf(iCourseID), String.valueOf(iQuesType), String.valueOf(iTestID), strKPID);
+            String quePath = queFolderPath + "/" + String.valueOf(iQueID) + "/";
+            QuestionUnmultiSon questionUnmultiSon = parseUnmultiSonQueFromFile(quePath);
+            if(questionUnmultiSon != null)result.add(questionUnmultiSon);
+        }
+        return result;
+    }
+
+    private static QuestionUnmultiSon parseUnmultiSonQueFromFile(String quePath) {
+        if(quePath == null)return null;
+
+        String queFilePath = quePath + "/" + Util.FILE_NAME_QUESTION;
+        File file = new File(queFilePath);
+        if(!file.exists()){
+            queFilePath = quePath + "/" + Util.FILE_NAME_QUESTION_ANOTHER;
+        }
+        String strQuestion = Util.getFileFromSD(queFilePath);
+        if(strQuestion == null || strQuestion.length() < 10)return null;
+        try {
+            JSONObject jsonQuestion = JSON.parseObject(strQuestion);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        Gson gson = new Gson();
+        QuestionUnmultiSon questionUnmultiSon = gson.fromJson(strQuestion,QuestionUnmultiSon.class);
+        return questionUnmultiSon;
+    }
+
     public static List<Answer> parseMultiSonAnswerFromFile(String[] questionsAPath) {
         if(questionsAPath == null || questionsAPath.length <= 0)return null;
         List<Answer> result = new ArrayList<>(questionsAPath.length);
@@ -232,7 +298,19 @@ public class Util {
         return result;
     }
 
-    public static List<UnmultiSonAnalysis> parseUnmultiSonAnslysisFromFile(String[] questionsAPath){
+    public static List<UnmultiSonAnalysis> parseUnmultiSonAnswerFromFile(String strCourseID, String strQuestionType, String strTestID, String strKPID) {
+        //absolute path
+        String strKpIdAPPath = getQuesFolderPath(strCourseID, strQuestionType,strTestID,strKPID);
+        if( !(new File(strKpIdAPPath).exists())){
+            Log.e("Error Mutl...Activity", "Kp id absolute un exists");
+            return null;
+        }
+        String[] questionsAPath = Util.getAllQuestionsAPath(strKpIdAPPath);
+        List<UnmultiSonAnalysis> analysises = Util.parseUnmultiSonAnswerFromFile(questionsAPath);
+        return analysises;
+    }
+
+    private static List<UnmultiSonAnalysis> parseUnmultiSonAnswerFromFile(String[] questionsAPath){
         if(questionsAPath == null || questionsAPath.length <= 0)return null;
         List<UnmultiSonAnalysis> result = new ArrayList<>(questionsAPath.length);
         for(int i =0 ;i<questionsAPath.length; i++){
@@ -253,4 +331,45 @@ public class Util {
         }
         return result;
     }
+
+
+    public static List<UnmultiSonAnalysis> parseUnmultiSonAnswerFromFile(List<DoneQuestion> doneQuestionList) {
+        if(doneQuestionList == null) return null;
+        List<UnmultiSonAnalysis> result = new ArrayList<>(doneQuestionList.size());
+
+        for(DoneQuestion doneQuestion : doneQuestionList){
+            int iCourseID = doneQuestion.getICourseID();
+            int iQuesType = doneQuestion.getIQuestionType();
+            int iTestID = doneQuestion.getITestID();
+            String strKPID = doneQuestion.getStrQuestionKpID();
+            long iQueID = doneQuestion.getLQuestionID();
+
+            String queFolderPath = getQuesFolderPath(String.valueOf(iCourseID), String.valueOf(iQuesType), String.valueOf(iTestID), strKPID);
+            String quePath = queFolderPath + "/" + String.valueOf(iQueID) + "/";
+            UnmultiSonAnalysis unmultiSonAnalysis = parseUnmultiSonAnswerFromFile(quePath);
+            if(unmultiSonAnalysis != null)
+                result.add(unmultiSonAnalysis);
+        }
+        return result;
+    }
+
+    private static UnmultiSonAnalysis parseUnmultiSonAnswerFromFile(String quePath) {
+        if(quePath == null )return null;
+        String analysisFilePath = quePath + "/" + Util.FILE_NAME_ANALYSIS;
+        if( !(new File(analysisFilePath).exists()))analysisFilePath = quePath + "/" + Util.FILE_NAME_ANALYSIS_ANOTHER;
+        String strAnalysisJson = Util.getFileFromSD(analysisFilePath);
+        if(strAnalysisJson == null)return null;
+        JSONObject jsonAnalysis = JSON.parseObject(strAnalysisJson);
+        int iQuestionID = jsonAnalysis.getIntValue("iQuestionID");
+        int iMultiSonQuestion = jsonAnalysis.getIntValue("iMultiSonQuestion");
+        String strAnalysis = jsonAnalysis.getString("strAnalysis");
+        JSONArray answerJSONArray = jsonAnalysis.getJSONArray("answer");
+        List<String> answers = new ArrayList<>(answerJSONArray.size());
+        for(int j = 0; j<answerJSONArray.size(); j++){
+            answers.add(answerJSONArray.getJSONObject(j).getString("ID"));
+        }
+        return new UnmultiSonAnalysis(iQuestionID,iMultiSonQuestion,strAnalysis,answers);
+    }
+
+
 }

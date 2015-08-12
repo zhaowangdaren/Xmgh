@@ -405,10 +405,10 @@ public class OkHttpUtil {
         return new URL(strURL);
     }
 
-    public HashMap<String, Object> getBasicTestOnline(int iUserID, int iCourseID, int iQuestionType, String strKPID) throws IOException {
+    public HashMap<String, Object> getBasicTestOnline(int iUserID, String iCourseID, String iQuestionType, String strKPID) throws IOException {
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
-                .add("iCourseID", String.valueOf(iCourseID))
+                .add("iCourseID", iCourseID)
                 .add("strKPID", strKPID)
                 .add("iQuestionType", String.valueOf(iQuestionType))
                 .build();
