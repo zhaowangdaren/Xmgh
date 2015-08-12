@@ -488,23 +488,34 @@ public class OkHttpUtil {
             , long lTestID, String strTestKPID
             , List<DoneQuestion> doneQuestions) throws IOException {
         if(doneQuestions.size() == 0)return true;
-        JSONArray jsonArray = new JSONArray();
+        JSONArray test = new JSONArray();
 
-        Gson gson = new Gson();
+        JSONArray questionJsonArray = new JSONArray();
         for(DoneQuestion doneQuestion : doneQuestions){
-            jsonArray.add(gson.toJson(doneQuestion));
+            JSONObject queJsonObject = new JSONObject();
+            queJsonObject.put("iCourseID", doneQuestion.getICourseID());
+            queJsonObject.put("iQuestionType",doneQuestion.getIQuestionType());
+            queJsonObject.put("iQuestionID",doneQuestion.getLQuestionID().intValue());
+            queJsonObject.put("strQuestionKpID", doneQuestion.getStrQuestionKpID());
+            queJsonObject.put("isFavorite", doneQuestion.getIsFavorite());
+            queJsonObject.put("isCorrect",doneQuestion.getIsCorrect());
+            String strNote = doneQuestion.getStrNote();
+            if(strNote == null) strNote ="";
+            queJsonObject.put("strNote",strNote);
+            queJsonObject.put("strUserAnswer",doneQuestion.getStrUserAnswer());
+            queJsonObject.put("iSpendTime", doneQuestion.getLSpendTime().intValue());
+            questionJsonArray.add(queJsonObject);
         }
 
         JSONObject testItem = new JSONObject();
         testItem.put("lTestID", lTestID);
         testItem.put("strTestKPID", strTestKPID);
-        testItem.put("questions", jsonArray);
+        testItem.put("questions", questionJsonArray);
 
-        JSONArray test = new JSONArray();
         test.add(testItem);
 
         JSONObject tests = new JSONObject();
-        tests.put("test",test);
+        tests.put("test", test);
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
                 .add("strQuestions", tests.toJSONString())

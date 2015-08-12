@@ -177,6 +177,12 @@ public class CourseBaseFragment extends Fragment {
                 OkHttpUtil okHttpUtil = new OkHttpUtil();
                 try {
                     kPses = okHttpUtil.getKPs(new UserSharedPreference(context).getiUserID(),iCourseID);
+                    if(kPses != null && !kPses.isEmpty()){
+                        for(KPs kPs : kPses){
+                            kPs.setICourseID(iCourseID);
+                        }
+                        kPsDBHelper.insertKPses(kPses);
+                    }
                 } catch (IOException e) {
                     Log.e("Error: ", "GetCourseKPsAsyncTask "+ e.toString());
                 }

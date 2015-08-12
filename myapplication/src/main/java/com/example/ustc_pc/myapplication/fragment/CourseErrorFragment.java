@@ -99,6 +99,7 @@ public class CourseErrorFragment extends Fragment implements AdapterView.OnItemC
         intent.putExtra("mICourseID", mICourseID);
         intent.putExtra("mITestType",mITestType);
         intent.putExtra("mKps",kPs);
+        intent.putExtra(ShowRecordedQueActivity.ARG_SHOW_QUE_TYPE,ShowRecordedQueActivity.TYPE_ERROR_QUE);
         startActivity(intent);
     }
 

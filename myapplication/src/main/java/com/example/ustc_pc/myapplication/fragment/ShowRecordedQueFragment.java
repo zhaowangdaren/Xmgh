@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -98,6 +99,9 @@ public class ShowRecordedQueFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_show_recorded_que, container, false);
         mRV = (RecyclerView) view.findViewById(R.id.recyclerView_layout_question);
+        mRV.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRV.setAdapter(new QuestionRecyclerViewAdapter());
+
         return view;
     }
 
@@ -125,6 +129,10 @@ public class ShowRecordedQueFragment extends Fragment {
                 case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
                     view = View.inflate(getActivity(),R.layout.layout_question_analysis,null);
                     holder = new QuestionRecyclerViewHolder(view,viewType);
+                    break;
+                case Util.TYPE_QUESTION_LAYOUT_NOTE:
+                    view = View.inflate(getActivity(),R.layout.layout_question_note,null);
+                    holder = new QuestionRecyclerViewHolder(view, viewType);
                     break;
             }
             return holder;
@@ -165,35 +173,37 @@ public class ShowRecordedQueFragment extends Fragment {
                     holder.checkedTextView.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_option_unclick));
                     break;
                 case Util.TYPE_QUESTION_LAYOUT_ANALYSIS:
-                    GetUserAnswerAndRightAnswer getUserAnswerAndRightAnswer = new GetUserAnswerAndRightAnswer(holder);
-                    getUserAnswerAndRightAnswer.execute();
+                    GetUserRightAnswer getUserRightAnswer = new GetUserRightAnswer(holder);
+                    getUserRightAnswer.execute();
+                    holder.yourAnswerTV.setText(doneQuestion.getStrUserAnswer());
                     holder.analysisTV.setText( Html.fromHtml(unmultiSonAnalysis.getStrAnalysis()) );
                     break;
+                case Util.TYPE_QUESTION_LAYOUT_NOTE:
+                    String strNote = doneQuestion.getStrNote();
+                    if(strNote != null)
+                        holder.noteTV.setText(strNote);
             }
         }
-        private class GetUserAnswerAndRightAnswer extends AsyncTask<Integer, Integer, StringBuffer[]> {
+        private class GetUserRightAnswer extends AsyncTask<Integer, Integer, String> {
 
             private QuestionRecyclerViewHolder holder;
-            public GetUserAnswerAndRightAnswer(QuestionRecyclerViewHolder holder){
+            public GetUserRightAnswer(QuestionRecyclerViewHolder holder){
                 this.holder = holder;
             }
 
             @Override
-            protected StringBuffer[] doInBackground(Integer... integers) {
-                StringBuffer userAnswerSB = new StringBuffer();
-                StringBuffer rightAnswerSB = new StringBuffer();
-                List<QuestionUnmultiSon.QuestionOption> questionOptions = questionUnmultiSon.getOptions();
-                for(QuestionUnmultiSon.QuestionOption questionOption : questionOptions){
-                    if(questionOption.isSelected())userAnswerSB.append(questionOption.getID());
-                    if(questionOption.isAnswer())rightAnswerSB.append(questionOption.getID());
+            protected String doInBackground(Integer... integers) {
+                List<String> answers = unmultiSonAnalysis.getAnswer();
+                StringBuffer stringBuffer = new StringBuffer();
+                for(String string : answers){
+                    stringBuffer.append(string);
                 }
-                return new StringBuffer[]{userAnswerSB, rightAnswerSB};
+                return stringBuffer.toString();
             }
             @Override
-            protected void onPostExecute(StringBuffer[] result){
-                if(result == null || result.length < 2)return;
-                holder.yourAnswerTV.setText(result[0].toString());
-                holder.rightAnswerTV.setText(result[1].toString());
+            protected void onPostExecute(String result){
+                if(result == null || result.length() < 1)return;
+                holder.rightAnswerTV.setText(result);
             }
         }
 
@@ -203,7 +213,7 @@ public class ShowRecordedQueFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
-            return questionUnmultiSon.getOptions().size() + 3;
+            return questionUnmultiSon.getOptions().size() + 4;
         }
 
         @Override
@@ -215,8 +225,10 @@ public class ShowRecordedQueFragment extends Fragment {
             if( position >= 2 && position <(questionUnmultiSon.getOptions().size() + 2) )
                 return Util.TYPE_QUESTION_LAYOUT_OPTION;
 
-            if(position >= (questionUnmultiSon.getOptions().size() + 2))
+            if(position >= (questionUnmultiSon.getOptions().size() + 2) && position < (getItemCount() - 1))
                 return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
+            if(position == (getItemCount() - 1))
+                return Util.TYPE_QUESTION_LAYOUT_NOTE;
             return Util.TYPE_QUESTION_LAYOUT_ANALYSIS;
         }
 
@@ -232,8 +244,10 @@ public class ShowRecordedQueFragment extends Fragment {
             TextView optionTV;
 
             //layout question analysis
-
             TextView yourAnswerTV, rightAnswerTV, analysisTV;
+
+            //layout note
+            TextView noteTV;
 
             public QuestionRecyclerViewHolder(View view, int iType){
                 super(view);
@@ -254,6 +268,9 @@ public class ShowRecordedQueFragment extends Fragment {
                         yourAnswerTV = (TextView)view.findViewById(R.id.textView_your_answer);
                         rightAnswerTV = (TextView)view.findViewById(R.id.textView_right_answer);
                         analysisTV = (TextView)view.findViewById(R.id.textView_question_analysis);
+                        break;
+                    case Util.TYPE_QUESTION_LAYOUT_NOTE:
+                        noteTV = (TextView)view.findViewById(R.id.textView_note_content);
                         break;
                 }
             }

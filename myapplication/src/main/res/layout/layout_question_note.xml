@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/note"
+        android:padding="@dimen/activity_horizontal_margin_half"
+        android:id="@+id/textView_note_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:background="@color/transparency_gray"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/note"
+        android:id="@+id/textView_note_content"
+        android:layout_below="@+id/textView_note_header" />
+
+</RelativeLayout>

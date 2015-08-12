@@ -101,6 +101,7 @@ public class CourseFavoriteFragment extends Fragment implements AdapterView.OnIt
         intent.putExtra("mICourseID", mICourseID);
         intent.putExtra("mITestType",mITestType);
         intent.putExtra("mKps",kPs);
+        intent.putExtra(ShowRecordedQueActivity.ARG_SHOW_QUE_TYPE,ShowRecordedQueActivity.TYPE_FAV_QUE);
         startActivity(intent);
     }
 

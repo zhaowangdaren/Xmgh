@@ -101,6 +101,8 @@ public class CourseNoteFragment extends Fragment implements AdapterView.OnItemCl
         intent.putExtra("mICourseID", mICourseID);
         intent.putExtra("mITestType",mITestType);
         intent.putExtra("mKps",kPs);
+        intent.putExtra(ShowRecordedQueActivity.ARG_SHOW_QUE_TYPE
+                ,ShowRecordedQueActivity.TYPE_NOTE_QUE);
         startActivity(intent);
     }
 

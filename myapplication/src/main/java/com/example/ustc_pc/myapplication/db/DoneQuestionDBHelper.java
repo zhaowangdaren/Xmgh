@@ -78,7 +78,7 @@ public class DoneQuestionDBHelper {
             String kpID = doneQuestion.getStrQuestionKpID();
             if(lastKPID == null || !lastKPID.equals(kpID)){
                 lastKPID = kpID;
-                result.add(lastKPID);
+                result.add(kpID);
             }
         }
         return result;

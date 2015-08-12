@@ -55,7 +55,7 @@ public class ShowRecordedQueActivity extends AppCompatActivity implements ShowRe
         mITestType = getIntent().getIntExtra("mITestType",Util.BASIC_TEST);
         mKps = (KPs) getIntent().getSerializableExtra("mKps");
         mShowType = getIntent().getIntExtra(ARG_SHOW_QUE_TYPE,TYPE_ERROR_QUE);
-
+        setTitle(null);
         mVP = (ViewPager)findViewById(R.id.viewPager_actvity_show_recorded_que);
 
         GetRecordedQueAsync getRecordedQueAsync = new GetRecordedQueAsync(this);
@@ -64,6 +64,20 @@ public class ShowRecordedQueActivity extends AppCompatActivity implements ShowRe
 
     }
 
+    @Override
+    public void setTitle(CharSequence charSequence){
+        switch (mShowType){
+            case TYPE_ERROR_QUE:
+                getSupportActionBar().setTitle(getString(R.string.show_error_question) + mKps.getStrName());
+                break;
+            case TYPE_FAV_QUE:
+                getSupportActionBar().setTitle(getString(R.string.show_favorite) + mKps.getStrName());
+                break;
+            case TYPE_NOTE_QUE:
+                getSupportActionBar().setTitle(getString(R.string.show_note) + mKps.getStrName());
+                break;
+        }
+    }
     private class QuestionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public QuestionsPagerAdapter(FragmentManager fm) {
@@ -135,7 +149,7 @@ public class ShowRecordedQueActivity extends AppCompatActivity implements ShowRe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_show_recorded_que, menu);
+//        getMenuInflater().inflate(R.menu.menu_show_recorded_que, menu);
         return true;
     }
 
@@ -151,6 +165,10 @@ public class ShowRecordedQueActivity extends AppCompatActivity implements ShowRe
             return true;
         }
 
+        if(id == android.R.id.home){
+            finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

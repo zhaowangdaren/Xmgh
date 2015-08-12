@@ -67,9 +67,8 @@ public class KPsDBHelper {
     public List<KPs> queryKPsByKPID(int iCourseID, List<String> strKPIDs) {
         if (strKPIDs == null)return null;
         List<KPs> kPses = kPsDao.queryBuilder()
-                .where(KPsDao.Properties.StrKPID.in(strKPIDs), KPsDao.Properties.ICourseID.eq(iCourseID))
+                .where(KPsDao.Properties.StrKPID.in(strKPIDs),KPsDao.Properties.ICourseID.eq(iCourseID))
                 .list();
-
         return kPses;
     }
 }

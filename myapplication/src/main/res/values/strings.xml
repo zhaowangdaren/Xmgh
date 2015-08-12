@@ -186,4 +186,7 @@
     <string name="getting_personal_info">获取个人信息中...</string>
     <string name="title_activity_show_recorded_que">ShowRecordedQueActivity</string>
     <string name="parse_failed">解析失败</string>
+    <string name="show_error_question">错题：</string>
+    <string name="show_favorite">收藏：</string>
+    <string name="show_note">笔记：</string>
 </resources>

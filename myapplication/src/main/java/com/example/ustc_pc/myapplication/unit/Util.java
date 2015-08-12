@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +57,7 @@ public class Util {
     public static int BASIC_TEST = 1, REAL_TEST = 2, SPECIAL_TEST = 3, MOCK_TEST = 4;
 
     public static final int TYPE_QUESTION_LAYOUT_HEADER = 0, TYPE_QUESTION_LAYOUT_FATHER = 1,
-            TYPE_QUESTION_LAYOUT_OPTION = 2, TYPE_QUESTION_LAYOUT_ANALYSIS = 4;
+            TYPE_QUESTION_LAYOUT_OPTION = 2, TYPE_QUESTION_LAYOUT_ANALYSIS = 4, TYPE_QUESTION_LAYOUT_NOTE = 5;
 
     public static final int MULTI_SON_QUESTION = 1, NO_MULTI_SON_QUESTION = -1;
     public static final int MULTI_SELECT = 1, UN_MULTI_SELECT = -1;
@@ -64,7 +65,6 @@ public class Util {
     public static final String FILE_NAME_QUESTION = "question_unMultiSonQuestion.json", FILE_NAME_QUESTION_ANOTHER = "question_MultiSonQuestion.json";
     public static final String FILE_NAME_ANALYSIS = "analysis_unMultiSonQuestion.json", FILE_NAME_ANALYSIS_ANOTHER = "analysis_MultiSonQuestion.json";
     public static final int NO_GENDER = 0, MAN = 1, WOMAN = 2;
-
 
 
     public static boolean createFile(String filePath, String fileName){
@@ -161,10 +161,18 @@ public class Util {
     public static String[] getAllQuestionsAPath(String absolutePath){
         File file  = new File(absolutePath);
         String[] questionsFolderName = file.list();
+        List<String> result = new ArrayList<>();
         for(int i = 0; i<questionsFolderName.length; i++){
-            questionsFolderName[i] = absolutePath + questionsFolderName[i];
+            try{
+                Integer.valueOf(questionsFolderName[i]);
+                questionsFolderName[i] = absolutePath + questionsFolderName[i];
+                result.add(questionsFolderName[i]);
+            }catch (Exception e) {
+                continue;
+
+            }
         }
-        return questionsFolderName;
+        return (String[]) result.toArray(new String[result.size()]);
     }
 
     public static List<QuestionNew> parseMultiSonQuestionsFromFile(String[] questionsAPath) {
@@ -255,7 +263,7 @@ public class Util {
             long iQueID = doneQuestion.getLQuestionID();
 
             String queFolderPath = getQuesFolderPath(String.valueOf(iCourseID), String.valueOf(iQuesType), String.valueOf(iTestID), strKPID);
-            String quePath = queFolderPath + "/" + String.valueOf(iQueID) + "/";
+            String quePath = queFolderPath + String.valueOf(iQueID) + "/";
             QuestionUnmultiSon questionUnmultiSon = parseUnmultiSonQueFromFile(quePath);
             if(questionUnmultiSon != null)result.add(questionUnmultiSon);
         }
@@ -265,10 +273,10 @@ public class Util {
     private static QuestionUnmultiSon parseUnmultiSonQueFromFile(String quePath) {
         if(quePath == null)return null;
 
-        String queFilePath = quePath + "/" + Util.FILE_NAME_QUESTION;
+        String queFilePath = quePath + Util.FILE_NAME_QUESTION;
         File file = new File(queFilePath);
         if(!file.exists()){
-            queFilePath = quePath + "/" + Util.FILE_NAME_QUESTION_ANOTHER;
+            queFilePath = quePath +Util.FILE_NAME_QUESTION_ANOTHER;
         }
         String strQuestion = Util.getFileFromSD(queFilePath);
         if(strQuestion == null || strQuestion.length() < 10)return null;
@@ -345,7 +353,7 @@ public class Util {
             long iQueID = doneQuestion.getLQuestionID();
 
             String queFolderPath = getQuesFolderPath(String.valueOf(iCourseID), String.valueOf(iQuesType), String.valueOf(iTestID), strKPID);
-            String quePath = queFolderPath + "/" + String.valueOf(iQueID) + "/";
+            String quePath = queFolderPath + String.valueOf(iQueID) + "/";
             UnmultiSonAnalysis unmultiSonAnalysis = parseUnmultiSonAnswerFromFile(quePath);
             if(unmultiSonAnalysis != null)
                 result.add(unmultiSonAnalysis);
@@ -355,8 +363,8 @@ public class Util {
 
     private static UnmultiSonAnalysis parseUnmultiSonAnswerFromFile(String quePath) {
         if(quePath == null )return null;
-        String analysisFilePath = quePath + "/" + Util.FILE_NAME_ANALYSIS;
-        if( !(new File(analysisFilePath).exists()))analysisFilePath = quePath + "/" + Util.FILE_NAME_ANALYSIS_ANOTHER;
+        String analysisFilePath = quePath + Util.FILE_NAME_ANALYSIS;
+        if( !(new File(analysisFilePath).exists()))analysisFilePath = quePath + Util.FILE_NAME_ANALYSIS_ANOTHER;
         String strAnalysisJson = Util.getFileFromSD(analysisFilePath);
         if(strAnalysisJson == null)return null;
         JSONObject jsonAnalysis = JSON.parseObject(strAnalysisJson);
