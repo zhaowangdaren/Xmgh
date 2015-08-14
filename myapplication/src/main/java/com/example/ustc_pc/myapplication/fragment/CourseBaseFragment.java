@@ -286,8 +286,8 @@ public class CourseBaseFragment extends Fragment {
         }
     }
 
-    private static int TYPE_HEADER = 1;
-    private static int TYPE_ITEM = 2;
+    private static int TYPE_KP_HEADER = 1;
+    private static int TYPE_KP_ITEM = 2;
 
     class KPsAdapter extends RecyclerView.Adapter<KPsAdapter.KPsViewHolder>{
 
@@ -295,7 +295,7 @@ public class CourseBaseFragment extends Fragment {
         public KPsAdapter.KPsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             KPsViewHolder holder;
             View view;
-            if(viewType == TYPE_HEADER){
+            if(viewType == TYPE_KP_HEADER){
                 view = View.inflate(getActivity(),R.layout.layout_kps_header, null);
                 float displayHeight = ((float)mScreenHeight) * 7 / 16;
                 view.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)displayHeight ));
@@ -310,7 +310,7 @@ public class CourseBaseFragment extends Fragment {
         @Override
         public void onBindViewHolder(KPsAdapter.KPsViewHolder holder, int position) {
 
-            if (getItemViewType(position) == TYPE_HEADER) {
+            if (getItemViewType(position) == TYPE_KP_HEADER) {
                 // TODO : Set score
                 holder.contentTV.setText("0");
             } else {//KP item
@@ -334,6 +334,7 @@ public class CourseBaseFragment extends Fragment {
                 holder.openCloseitemIV.setLayoutParams(lp);
 
                 if(!mShowingKPs.get(index).getHasChild())holder.openCloseitemIV.setVisibility(View.INVISIBLE);
+                else holder.openCloseitemIV.setVisibility(View.VISIBLE);
             }
         }
 
@@ -344,8 +345,8 @@ public class CourseBaseFragment extends Fragment {
 
         @Override
         public int getItemViewType(int position){
-            if(position == 0)return TYPE_HEADER;
-            return TYPE_ITEM;
+            if(position == 0)return TYPE_KP_HEADER;
+            return TYPE_KP_ITEM;
         }
 
         @Override
@@ -424,7 +425,7 @@ public class CourseBaseFragment extends Fragment {
             public KPsViewHolder(View itemView, int iType) {
                 super(itemView);
                 contentTV = (TextView) itemView.findViewById(R.id.textView_kps_content);
-                if(iType == TYPE_ITEM){
+                if(iType == TYPE_KP_ITEM){
                     openCloseitemIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item);
                     startTestIV = (ImageView)itemView.findViewById(R.id.imageView_kps_item_start_test);
                 }else{
