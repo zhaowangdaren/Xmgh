@@ -19,12 +19,14 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
 import com.example.ustc_pc.myapplication.db.CourseDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
+import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ public class SelectCourseActivity extends AppCompatActivity implements AbsListVi
     CourseItemAdapter courseItemAdapter;
 
     Button mFinishBT;
+
+    // View failed
+    RelativeLayout mFailedRL;
 
     private boolean isChanged = false;
 
@@ -59,6 +64,10 @@ public class SelectCourseActivity extends AppCompatActivity implements AbsListVi
             gridView.setOnItemClickListener(this);
             mFinishBT.setOnClickListener(this);
         }
+
+
+        mFailedRL = (RelativeLayout) findViewById(R.id.relativeLayout_load_failed);
+        mFailedRL.setOnClickListener(this);
     }
 
 
@@ -110,6 +119,14 @@ public class SelectCourseActivity extends AppCompatActivity implements AbsListVi
                     finishSelectCourseAsyncTask.execute(mCourses);
                 }else {
                     startCourseActivity();
+                }
+                break;
+            case R.id.relativeLayout_load_failed:
+                if(Util.isConnect(this)) {
+                    GetAllCoursesFromServerAsync getAllCoursesFromServerAsync = new GetAllCoursesFromServerAsync(this);
+                    getAllCoursesFromServerAsync.execute();
+                }else{
+                    Toast.makeText(this, R.string.network_error, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -242,15 +259,66 @@ public class SelectCourseActivity extends AppCompatActivity implements AbsListVi
         @Override
         protected List<Course> doInBackground(Integer... params) {
             CourseDBHelper courseDBHelper = CourseDBHelper.getInstance(context);
-
             return courseDBHelper.getAllCourses();
         }
 
         @Override
         protected void onPostExecute(List<Course> result){
-            if(result == null || result.isEmpty())return;
+            if(result == null || result.isEmpty()){
+                if(Util.isConnect(context)) {
+                    GetAllCoursesFromServerAsync getAllCoursesFromServerAsync = new GetAllCoursesFromServerAsync(context);
+                    getAllCoursesFromServerAsync.execute();
+                }else{
+                    mFailedRL.setVisibility(View.VISIBLE);
+                    Toast.makeText(context, getString(R.string.network_error),Toast.LENGTH_SHORT).show();
+                }
+            }
             else{
                 mCourses = result;
+                courseItemAdapter.notifyDataSetChanged();
+            }
+            progressDialog.dismiss();
+        }
+    }
+
+    class GetAllCoursesFromServerAsync extends AsyncTask<Integer, Integer, ArrayList<Course>>{
+
+        ProgressDialog progressDialog;
+        Context context;
+        public GetAllCoursesFromServerAsync(Context context){
+            this.context = context;
+        }
+        @Override
+        protected void onPreExecute(){
+            mFailedRL.setVisibility(View.GONE);
+            progressDialog = ProgressDialog.show(context, null,getString(R.string.getting_courses));
+        }
+
+        @Override
+        protected ArrayList<Course> doInBackground(Integer... integers) {
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            ArrayList<Course> allCourses = null;
+            try {
+                allCourses = okHttpUtil.getAllCoursesInfo();
+            } catch (IOException e) {
+                Log.e("Error:", "Get Courses AsyncTask"+ e.toString());
+                return null;
+            }
+            if(allCourses == null || allCourses.isEmpty() )return null;
+            //insert All Courses into db
+            CourseDBHelper courseDBHelper = CourseDBHelper.getInstance(context);
+            courseDBHelper.insertCourses(allCourses);
+            return allCourses;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Course> result){
+            if(result == null || result.isEmpty()){
+                mFailedRL.setVisibility(View.VISIBLE);
+            }else{
+                mFailedRL.setVisibility(View.GONE);
+                mCourses = result;
+                courseItemAdapter.notifyDataSetChanged();
             }
             progressDialog.dismiss();
         }

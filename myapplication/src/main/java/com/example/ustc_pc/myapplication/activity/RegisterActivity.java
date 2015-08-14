@@ -2,6 +2,8 @@ package com.example.ustc_pc.myapplication.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewAnimator;
@@ -19,11 +22,14 @@ import android.widget.ViewAnimator;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVOSCloud;
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.dao.Course;
+import com.example.ustc_pc.myapplication.db.CourseDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.unit.Util;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,6 +43,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     TextView  mPhoneTV;
     EditText mSMSAuthET, mPasswordET;
 
+// View failed
+    RelativeLayout mFailedRL;
 
     String mStrPhoneNumber, mStrPassword;
 
@@ -63,6 +71,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mPhoneTV = (TextView)view2.findViewById(R.id.textView_phone_number);
         mSMSAuthET = (EditText)view2.findViewById(R.id.editText_auth_code_register);
         mPasswordET = (EditText)view2.findViewById(R.id.editText_password_register);
+
+        mFailedRL = (RelativeLayout)findViewById(R.id.relativeLayout_load_failed);
     }
 
     @Override
@@ -109,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 //                registAsyncTask.execute(mStrPhoneNumber, strPassword);
 //            }
 //        });
-        RegistImageViewAsyncTask registAsyncTask = new RegistImageViewAsyncTask(RegisterActivity.this);
+        RegistAsyncTask registAsyncTask = new RegistAsyncTask(RegisterActivity.this);
         registAsyncTask.execute(mStrPhoneNumber, strPassword);
     }
 
@@ -129,15 +139,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
         mStrPhoneNumber = strPhone;
-        PhoneCheckImageViewAsync phoneCheckAsync = new PhoneCheckImageViewAsync(this);
+        PhoneCheckAsync phoneCheckAsync = new PhoneCheckAsync(this);
         phoneCheckAsync.execute(mStrPhoneNumber);
     }
 
-    class RegistImageViewAsyncTask extends AsyncTask<String, Integer, Integer> {
+    class RegistAsyncTask extends AsyncTask<String, Integer, Integer> {
 
         ProgressDialog progressDialog;
         Context context;
-        public RegistImageViewAsyncTask(Context context){
+        public RegistAsyncTask(Context context){
             this.context = context;
         }
         @Override
@@ -169,16 +179,66 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 userSharedPreference.setiUserID(result);
                 userSharedPreference.setStrPhoneNumber(mStrPhoneNumber);
                 userSharedPreference.setPassword(mStrPassword);
+                Toast.makeText(context,getString(R.string.register_succ), Toast.LENGTH_SHORT).show();
+                GetCoursesAsync getCoursesAsync = new GetCoursesAsync(context);
+                getCoursesAsync.execute();
             }
             progressDialog.dismiss();
         }
     }
 
-    class PhoneCheckImageViewAsync extends AsyncTask<String, Integer, Boolean> {
+    class GetCoursesAsync extends AsyncTask<Integer, Integer, Boolean>{
 
         ProgressDialog progressDialog;
         Context context;
-        public PhoneCheckImageViewAsync(Context context){
+        public GetCoursesAsync(Context context){
+            this.context = context;
+        }
+        @Override
+        protected void onPreExecute(){
+            mFailedRL.setVisibility(View.GONE);
+            progressDialog = ProgressDialog.show(context, null,getString(R.string.getting_courses));
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            ArrayList<Course> allCourses = null;
+            try {
+                allCourses = okHttpUtil.getAllCoursesInfo();
+            } catch (IOException e) {
+                Log.e("Error:", "Get Courses AsyncTask"+ e.toString());
+                return false;
+            }
+            if(allCourses.isEmpty())return false;
+            //insert All Courses into db
+            CourseDBHelper courseDBHelper = CourseDBHelper.getInstance(context);
+            courseDBHelper.insertCourses(allCourses);
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result){
+            if(result){
+                startSelectCourseActivity();
+            }else{
+               mFailedRL.setVisibility(View.VISIBLE);
+            }
+            progressDialog.dismiss();
+        }
+    }
+
+    private void startSelectCourseActivity(){
+        Intent intent = new Intent(this, SelectCourseActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    class PhoneCheckAsync extends AsyncTask<String, Integer, Boolean> {
+
+        ProgressDialog progressDialog;
+        Context context;
+        public PhoneCheckAsync(Context context){
             this.context = context;
         }
         @Override
@@ -212,6 +272,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 new AlertDialog.Builder(context)
                         .setTitle(R.string.hint)
                         .setMessage(R.string.has_registered)
+                        .setPositiveButton(getString(R.string.sure), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
                         .show();
             }else{
                 mPhoneTV.setText(mStrPhoneNumber);

@@ -103,7 +103,7 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         if(bitmap != null) mLeftMenuHeadIV.setImageBitmap(bitmap);
 
         mLeftMenuUserNameTV = (TextView)findViewById(R.id.textView_left_menu_username);
-        mLeftMenuUserNameTV.setText(new UserSharedPreference(this).getStrUserName());
+        showUserName();
 
         mLeftMenuLV = (ListView)findViewById(R.id.listView_left_drawer);
         mAddCourseBT = (Button)findViewById(R.id.button_left_menu_add_course);
@@ -113,6 +113,18 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         mLeftMenuLV.setOnItemClickListener(new LeftMenuLVItemClickListener());
     }
 
+    private void showUserName(){
+        UserSharedPreference userSharedPreference = new UserSharedPreference(this);
+        String strNickName = userSharedPreference.getStrUserName();
+        if(strNickName == null || strNickName.length() <= 0){
+            int iUserType = userSharedPreference.getiUserType();
+            if(iUserType == Util.PHONE_LOGIN)
+                strNickName = userSharedPreference.getStrPhoneNumber();
+        }
+        if(strNickName != null) {
+            mLeftMenuUserNameTV.setText(strNickName);
+        }
+    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 

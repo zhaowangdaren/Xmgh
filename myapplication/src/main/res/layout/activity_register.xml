@@ -14,4 +14,26 @@
 
     </ViewAnimator>
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/relativeLayout_load_failed"
+        android:background="#e0e0e0"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <ImageView
+            android:src="@drawable/ic_error_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView3"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_please_try_again"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
 </RelativeLayout>
