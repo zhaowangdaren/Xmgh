@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -97,6 +98,9 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         mRelativeLayoutLeftHead.setOnClickListener(this);
         //TODO : Set user head view
         mLeftMenuHeadIV = (ImageView) findViewById(R.id.imageView_left_menu_head);
+        UserSharedPreference userSharedPreference = new UserSharedPreference(this);
+        Bitmap bitmap = userSharedPreference.getUserPhotoBitmap();
+        if(bitmap != null) mLeftMenuHeadIV.setImageBitmap(bitmap);
 
         mLeftMenuUserNameTV = (TextView)findViewById(R.id.textView_left_menu_username);
         mLeftMenuUserNameTV.setText(new UserSharedPreference(this).getStrUserName());
