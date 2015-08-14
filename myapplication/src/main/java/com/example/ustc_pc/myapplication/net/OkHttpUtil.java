@@ -94,7 +94,7 @@ public class OkHttpUtil {
                 .build();
         Response response = client.newCall(request).execute();
         if(!response.isSuccessful())throw new IOException("Unexcepted cod "+response);
-        JSONObject result = JSONObject.parseObject(response.body().string());
+        JSONObject result = JSONObject.parseObject(response.body().toString());
         int iResult = result.getIntValue("iResult");
         if(iResult == 1){
             return result.getIntValue("iUserID");
