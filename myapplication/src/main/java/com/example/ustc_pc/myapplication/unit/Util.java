@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * Created by ustc-pc on 2015/7/25.
  */
 public class Util {
-    public static final String URL_HOME = "http://192.168.2.45/xmghProject/account";
+    public static final String URL_HOME = "http://120.26.210.13:8001/xmghProject/account";
     public static final String URL_PHONE_CHECK = URL_HOME+"/PhoneCheck";
 
     public static String URL_REGISTER_BY_PHONE = URL_HOME+"/PhoneRegister";
