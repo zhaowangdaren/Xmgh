@@ -343,6 +343,7 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
                         , strCourseID
                         , strQuestionType
                         , strKPID);
+                if(result == null)return false;
                  iTestID = (int)result.get("iTestID");
                 miTestID = iTestID;
                 String strURL = (String)result.get("strURL");
@@ -410,9 +411,10 @@ public class BaseTestActivity extends AppCompatActivity implements AnswerSheetFr
 
         @Override
         protected void onPostExecute(Boolean result){
-            if(!result)
+            if(!result) {
                 Toast.makeText(context, "Download Failed", Toast.LENGTH_SHORT).show();
-
+                if(mVA.getCurrentView().equals(mBaseTestView))mVA.showNext();
+            }
             else {
                 Toast.makeText(context, "Download Successed", Toast.LENGTH_SHORT).show();
                 ParseQuestionsAsyncTask parseQuestionsAsyncTask = new ParseQuestionsAsyncTask(context);

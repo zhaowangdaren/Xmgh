@@ -405,7 +405,7 @@ public class OkHttpUtil {
         return new URL(strURL);
     }
 
-    public HashMap<String, Object> getBasicTestOnline(int iUserID, String iCourseID, String iQuestionType, String strKPID) throws IOException {
+    public HashMap<String, Object> getBasicTestOnline(int iUserID, String iCourseID, String iQuestionType, String strKPID){
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
                 .add("iCourseID", iCourseID)
@@ -416,25 +416,45 @@ public class OkHttpUtil {
                 .url(Util.URL_GET_BASIC_TEST_ONLINE)
                 .post(formBody)
                 .build();
-        Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexcepted cod " + response);
-        String strResult = response.body().string();
-        if (strResult.length() <= 0) throw new IOException("Unexcepted cod " + response);
-        JSONObject jsonObject;
         try {
-            jsonObject = JSON.parseObject(strResult);
-            int iTestID = jsonObject.getIntValue("iTestID");
-            String strURL = jsonObject.getString("strURL");
-            if (strURL == null || strURL.length() <= 0)
-                throw new IOException("Unexcepted cod " + response);
-            HashMap<String, Object> result = new HashMap<>();
-            result.put("iTestID", iTestID);
-            result.put("strURL", strURL);
-            return result;
-        }catch (JSONException e){
-            Log.e("Error",e.toString());
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException("Unexcepted cod " + response);
+            String strResult = response.body().string();
+            if (strResult.length() <= 0) throw new IOException("Unexcepted cod " + response);
+            JSONObject jsonObject;
+            try {
+                jsonObject = JSON.parseObject(strResult);
+                int iTestID = jsonObject.getIntValue("iTestID");
+                String strURL = jsonObject.getString("strURL");
+                if (strURL == null || strURL.length() <= 0)
+                    throw new IOException("Unexcepted cod " + response);
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("iTestID", iTestID);
+                result.put("strURL", strURL);
+                return result;
+            } catch (Exception e) {
+                Log.e("Error", e.toString());
+                return null;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
             return null;
         }
+    }
+
+    public JSONObject checkUpdate(){
+        Request request = new Request.Builder()
+                .url(Util.URL_CHECK_UPDATE)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
+            JSONObject jsonObject = JSON.parseObject(response.body().string());
+            return jsonObject;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     public void downloadQuestions(int iCourseID, int iQuestionType, String strKPID)throws IOException{
         RequestBody formBody = new FormEncodingBuilder()

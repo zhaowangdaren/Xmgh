@@ -103,6 +103,7 @@ public class CourseBaseFragment extends Fragment {
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         mScreenHeight = metrics.heightPixels;
+        if( mKPsAdapter != null)mKPsAdapter.notifyDataSetChanged();
     }
     private void initKPs() {
         mAllKPses = new ArrayList<>();
@@ -110,8 +111,10 @@ public class CourseBaseFragment extends Fragment {
         GetCourseKPsAsyncTask getCourseKPsAsyncTask = new GetCourseKPsAsyncTask(getActivity());
         getCourseKPsAsyncTask.execute(mICourseID);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mKPsAdapter = new KPsAdapter();
+        mRecyclerView.setAdapter(mKPsAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -180,6 +183,7 @@ public class CourseBaseFragment extends Fragment {
                     if(kPses != null && !kPses.isEmpty()){
                         for(KPs kPs : kPses){
                             kPs.setICourseID(iCourseID);
+                            kPs.setIsExpand(false);
                         }
                         kPsDBHelper.insertKPses(kPses);
                     }
@@ -196,8 +200,8 @@ public class CourseBaseFragment extends Fragment {
             if(result != null && !result.isEmpty()) mAllKPses = result;
             List<KPs> firstLevelKPs = add1LevelKPs(mAllKPses);
             if(firstLevelKPs != null && !firstLevelKPs.isEmpty())mShowingKPs.addAll(firstLevelKPs);
-            mKPsAdapter = new KPsAdapter();
-            mRecyclerView.setAdapter(mKPsAdapter);
+
+            mKPsAdapter.notifyDataSetChanged();
         }
     }
 

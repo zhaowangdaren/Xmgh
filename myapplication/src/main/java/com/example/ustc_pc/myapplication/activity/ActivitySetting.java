@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +19,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.ustc_pc.myapplication.R;
+import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.unit.Util;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,7 +32,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ActivitySetting extends ActionBarActivity implements View.OnClickListener{
+public class ActivitySetting extends AppCompatActivity implements View.OnClickListener{
 
     private TextView mUpdateTV, mAboutTV;
 
@@ -108,7 +107,7 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
         if(!Util.isConnect(this)){
             Toast.makeText(this, getString(R.string.no_network_try_again), Toast.LENGTH_SHORT).show();
         }else{
-            CheckUpdateAsync checkUpdateAsync = new CheckUpdateAsync();
+            CheckUpdateAsync checkUpdateAsync = new CheckUpdateAsync(this);
             checkUpdateAsync.execute();
         }
     }
@@ -153,38 +152,38 @@ public class ActivitySetting extends ActionBarActivity implements View.OnClickLi
         return 0;
     }
 
-    private class CheckUpdateAsync extends AsyncTask<String, Integer, String>{
+    private class CheckUpdateAsync extends AsyncTask<String, Integer, JSONObject>{
 
         ProgressDialog progressDialog;
+        Context context;
+        public CheckUpdateAsync(Context context){
+            this.context = context;
+        }
+
         @Override
         protected void onPreExecute(){
             progressDialog = ProgressDialog.show(ActivitySetting.this, null,getString(R.string.loading));
         }
 
         @Override
-        protected String doInBackground(String... params) {
-
-            return null;
+        protected JSONObject doInBackground(String... params) {
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            JSONObject result = okHttpUtil.checkUpdate();
+            return result;
         }
 
         @Override
-        protected void onPostExecute(String result){
+        protected void onPostExecute(JSONObject result){
             progressDialog.dismiss();
-            if(result != null && result.length() > 0) {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    mVersion = Float.valueOf(jsonObject.getString("version"));
-                    mURL = jsonObject.getString("url");
-                    mFileName = jsonObject.getString("fileName");
-                    showUpdateAble();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            if(result != null){
+                mVersion = result.getFloatValue("version");
+                mURL = result.getString("url");
+                mFileName = result.getString("fileName");
+                showUpdateAble();
             }else{
 
             }
         }
-
     }
     private class UpdateDownloadTask extends AsyncTask<String, Integer, String>{
 
