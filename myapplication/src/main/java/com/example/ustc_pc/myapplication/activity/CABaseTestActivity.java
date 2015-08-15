@@ -185,10 +185,10 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
                 StringBuffer strUserAnswer = new StringBuffer("");
                 List<QuestionUnmultiSon.QuestionOption> questionOptions = questionUnmultiSon.getOptions();
                 for(int j = 0; j< questionOptions.size(); j++){
-                    if( ! ( questionOptions.get(j).isAnswer() && questionOptions.get(j).isSelected())){
-                        isCorrect = false;
+                    if( questionOptions.get(j).isAnswer()){
+                        if( !(questionOptions.get(j).isSelected()) ){ isCorrect = false;}
                     }
-                    if(questionOptions.get(j).isSelected())strUserAnswer.append(questionOptions.get(j).getID() + ",");
+                    if( questionOptions.get(j).isSelected() ) strUserAnswer.append(questionOptions.get(j).getID() + ",");
                 }
                 long lQuestionSpendTime = questionUnmultiSon.getlStopTime()
                         - questionUnmultiSon.getlStartTime();
@@ -215,7 +215,9 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
             List<QuestionUnmultiSon.QuestionOption> questionOptions = mQuestions.get(position).getOptions();
             int optionNum = questionOptions.size();
             for(int i =0; i<optionNum; i++){
-                if(questionOptions.get(i).getID().equals(answerID)) questionOptions.get(i).setIsAnswer(true);
+                if(questionOptions.get(i).getID().equals(answerID)) {
+                    questionOptions.get(i).setIsAnswer(true);
+                }
             }
         }
 
@@ -279,27 +281,33 @@ public class CABaseTestActivity extends AppCompatActivity implements View.OnClic
             if(convertView == null){
                 convertView = View.inflate(parent.getContext(), R.layout.layout_question_option_item, null);
                 viewHolder = new ASViewHolder();
-                viewHolder.textView = (CheckedTextView)convertView.findViewById(R.id.checkedTV_option);
+                viewHolder.checkedTextView = (CheckedTextView)convertView.findViewById(R.id.checkedTV_option);
+                viewHolder.textView = (TextView)convertView.findViewById(R.id.textView_option_content);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ASViewHolder) convertView.getTag();
             }
 
             if(getItem(position).getIsCorrect()){
-                viewHolder.textView.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.bg_answer_right));
-                viewHolder.textView.setTextColor(-1);//white
+                viewHolder.textView.setText(R.string.right);
+                viewHolder.checkedTextView.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.bg_answer_right));
+                viewHolder.checkedTextView.setTextColor(-1);//white
+
             }else {
-                viewHolder.textView.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.bg_answer_error));
-                viewHolder.textView.setTextColor(-1);//white
+                viewHolder.textView.setText(R.string.error);
+                viewHolder.checkedTextView.setBackgroundDrawable(parent.getContext().getResources().getDrawable(R.drawable.bg_answer_error));
+                viewHolder.checkedTextView.setTextColor(-1);//white
+
             }
             int index = position + 1;
-            viewHolder.textView.setText("" + index);
+            viewHolder.checkedTextView.setText("" + index);
 
             return convertView;
         }
 
         class ASViewHolder{
-            CheckedTextView textView;
+            CheckedTextView checkedTextView;
+            TextView textView;
         }
     }
 

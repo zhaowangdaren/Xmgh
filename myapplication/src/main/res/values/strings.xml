@@ -182,11 +182,17 @@
     <string name="check_favorite">查看收藏</string>
     <string name="basic_test">基础训练</string>
     <string name="your_answer">你的答案：</string>
-    <string name="right_answer">正确答案</string>
+    <string name="right_answer">正确答案：</string>
     <string name="getting_personal_info">获取个人信息中...</string>
     <string name="title_activity_show_recorded_que">ShowRecordedQueActivity</string>
     <string name="parse_failed">解析失败</string>
     <string name="show_error_question">错题：</string>
     <string name="show_favorite">收藏：</string>
     <string name="show_note">笔记：</string>
+    <string name="pay_attention_on_sms">小马已经给您的手机发送了一条含有验证码的短信，请注意查收，并将验证码填在下方</string>
+    <string name="unregistered">未注册</string>
+    <string name="reset_password_success">修改密码成功</string>
+    <string name="reset_password_failed">修改密码失败</string>
+    <string name="right">正确</string>
+    <string name="error">错误</string>
 </resources>

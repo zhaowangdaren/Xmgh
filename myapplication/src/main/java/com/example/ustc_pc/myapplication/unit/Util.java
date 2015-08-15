@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * Created by ustc-pc on 2015/7/25.
  */
 public class Util {
-    public static final String URL_HOME = "http://120.26.210.13:8001/xmghProject/account";
+    public static final String URL_HOME = "http://120.26.210.13:8080/xmghProject/account";
     public static final String URL_PHONE_CHECK = URL_HOME+"/PhoneCheck";
 
     public static String URL_REGISTER_BY_PHONE = URL_HOME+"/PhoneRegister";
@@ -44,7 +44,7 @@ public class Util {
     public static String URL_GET_BASIC_TEST_ONLINE = URL_HOME + "/GetBasicTestOnline";
     public static String URL_UPLOAD_DONE_QUESTION = URL_HOME + "/UploadDoneQuestions";
     public static String URL_GET_ASSESSED_SCORE = URL_HOME + "/GetAssessedScore";
-    public static String URL_CHECK_UPDATE = "http://120.26.210.13:8001/xmghProject/" + "version.json";
+    public static String URL_CHECK_UPDATE = "http://120.26.210.13:8080/xmghProject/" + "version.json";
 
     public static int iNo_USERID = -1;
     public static int NO_LAST_COURSE = -1;
@@ -236,6 +236,9 @@ public class Util {
             File file = new File(queFilePath);
             if(!file.exists()){
                 queFilePath = questionAPaths[i] + "/" + Util.FILE_NAME_QUESTION_ANOTHER;
+                if( !(new File(queFilePath)).exists() ){
+                    continue;
+                }
             }
             String strQuestion = Util.getFileFromSD(queFilePath);
             if(strQuestion == null || strQuestion.length() < 10)return null;

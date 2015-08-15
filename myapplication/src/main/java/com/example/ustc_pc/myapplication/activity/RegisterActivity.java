@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVMobilePhoneVerifyCallback;
 import com.avos.avoscloud.AVOSCloud;
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.Course;
@@ -117,15 +118,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mStrPassword = strPassword;
 
         //TODO check SMS code
-//        AVOSCloud.verifySMSCodeInBackground(strAuthCode,mStrPhoneNumber,new AVMobilePhoneVerifyCallback() {
-//            @Override
-//            public void done(AVException e) {
-//                RegistAsyncTask registAsyncTask = new RegistAsyncTask(RegisterActivity.this);
-//                registAsyncTask.execute(mStrPhoneNumber, strPassword);
-//            }
-//        });
-        RegistAsyncTask registAsyncTask = new RegistAsyncTask(RegisterActivity.this);
-        registAsyncTask.execute(mStrPhoneNumber, strPassword);
+        AVOSCloud.verifySMSCodeInBackground(strAuthCode, mStrPhoneNumber, new AVMobilePhoneVerifyCallback() {
+            @Override
+            public void done(AVException e) {
+                RegistAsyncTask registAsyncTask = new RegistAsyncTask(RegisterActivity.this);
+                registAsyncTask.execute(mStrPhoneNumber, strPassword);
+            }
+        });
     }
 
     private void startPhoneCheck() {

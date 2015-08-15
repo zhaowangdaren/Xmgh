@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Entity mapped to table "DONE_QUESTION".
  */
-public class DoneQuestion implements Serializable{
+public class DoneQuestion implements Serializable, Comparable<DoneQuestion>{
 
     private Integer iCourseID;
     private Integer iQuestionType;
@@ -38,6 +38,11 @@ public class DoneQuestion implements Serializable{
         this.lSpendTime = lSpendTime;
         this.strQuestionKpID = strQuestionKpID;
         this.iTestID = iTestID;
+    }
+
+    @Override
+    public int compareTo(DoneQuestion doneQuestion) {
+        return this.lQuestionID.compareTo(doneQuestion.lQuestionID);
     }
 
     public Integer getICourseID() {
@@ -119,5 +124,6 @@ public class DoneQuestion implements Serializable{
     public void setITestID(Integer iTestID) {
         this.iTestID = iTestID;
     }
+
 
 }

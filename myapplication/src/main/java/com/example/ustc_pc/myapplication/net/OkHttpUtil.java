@@ -601,4 +601,8 @@ public class OkHttpUtil {
             return null;
         }
     }
+
+    public boolean resetPassword(String authCode, String newPassword) {
+        return false;
+    }
 }
