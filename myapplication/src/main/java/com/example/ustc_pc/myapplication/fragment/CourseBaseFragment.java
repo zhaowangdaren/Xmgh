@@ -169,7 +169,7 @@ public class CourseBaseFragment extends Fragment {
 
         @Override
         protected void onPreExecute(){
-            progressDialog = ProgressDialog.show(context, getString(R.string.loading),null);
+            progressDialog = ProgressDialog.show(context, null,getString(R.string.loading));
         }
         @Override
         protected List<KPs> doInBackground(Integer... integers) {

@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText mSMSAuthET, mPasswordET;
 
 // View failed
-    RelativeLayout mFailedRL;
+    RelativeLayout mGetAllCourseFailedRL;
 
     String mStrPhoneNumber, mStrPassword;
 
@@ -72,7 +72,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mSMSAuthET = (EditText)view2.findViewById(R.id.editText_auth_code_register);
         mPasswordET = (EditText)view2.findViewById(R.id.editText_password_register);
 
-        mFailedRL = (RelativeLayout)findViewById(R.id.relativeLayout_load_failed);
+        mGetAllCourseFailedRL = (RelativeLayout)findViewById(R.id.relativeLayout_load_failed);
+        mGetAllCourseFailedRL.setOnClickListener(this);
     }
 
     @Override
@@ -84,6 +85,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.button_register_submit:
                 startSubmitInfo();
                 break;
+            case R.id.relativeLayout_load_failed:
+                GetCoursesAsync getCoursesAsync = new GetCoursesAsync(this);
+                getCoursesAsync.execute();
         }
     }
 
@@ -112,6 +116,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         mStrPassword = strPassword;
 
+        //TODO check SMS code
 //        AVOSCloud.verifySMSCodeInBackground(strAuthCode,mStrPhoneNumber,new AVMobilePhoneVerifyCallback() {
 //            @Override
 //            public void done(AVException e) {
@@ -196,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
         @Override
         protected void onPreExecute(){
-            mFailedRL.setVisibility(View.GONE);
+            mGetAllCourseFailedRL.setVisibility(View.GONE);
             progressDialog = ProgressDialog.show(context, null,getString(R.string.getting_courses));
         }
 
@@ -207,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             try {
                 allCourses = okHttpUtil.getAllCoursesInfo();
             } catch (IOException e) {
-                Log.e("Error:", "Get Courses AsyncTask"+ e.toString());
+                Log.e("Error:", "Get Courses AsyncTask" + e.toString());
                 return false;
             }
             if(allCourses.isEmpty())return false;
@@ -222,7 +227,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             if(result){
                 startSelectCourseActivity();
             }else{
-               mFailedRL.setVisibility(View.VISIBLE);
+               mGetAllCourseFailedRL.setVisibility(View.VISIBLE);
             }
             progressDialog.dismiss();
         }
