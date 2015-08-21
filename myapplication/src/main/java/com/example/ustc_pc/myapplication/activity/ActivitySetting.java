@@ -229,8 +229,11 @@ public class ActivitySetting extends AppCompatActivity implements View.OnClickLi
                 int fileLength = connection.getContentLength();
                 //download the file
                 inputStream = connection.getInputStream();
-
-                outputStream = new FileOutputStream(Util.APP_PATH + params[1]);
+                File file = new File(Util.APK_DOWNLAOD_PATH);
+                if(!file.isDirectory()){
+                    file.mkdir();
+                }
+                outputStream = new FileOutputStream(Util.APK_DOWNLAOD_PATH + File.separator + params[1]);
                 byte data[] = new byte[4096];
                 long total = 0;
                 int count;
@@ -281,7 +284,7 @@ public class ActivitySetting extends AppCompatActivity implements View.OnClickLi
                 Log.e("Download error:", result);
             }else {
                 Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
-                File file = new File(Util.APP_PATH + mFileName);
+                File file = new File(Util.APK_DOWNLAOD_PATH + File.separator + mFileName);
                 installApk(file);
             }
         }
@@ -291,6 +294,7 @@ public class ActivitySetting extends AppCompatActivity implements View.OnClickLi
             intent.setAction(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
             startActivity(intent);
+            android.os.Process.killProcess(android.os.Process.myPid());
         }
 
     }

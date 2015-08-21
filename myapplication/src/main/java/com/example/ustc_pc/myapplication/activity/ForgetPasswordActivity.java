@@ -218,10 +218,11 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         }
         @Override
         protected Boolean doInBackground(String... params) {
-            String authCode = params[0];
+
+            String strPhoneNumber = params[0];
             String newPassword = params[1];
             OkHttpUtil okHttpUtil = new OkHttpUtil();
-            return okHttpUtil.resetPassword(authCode, newPassword);
+            return okHttpUtil.forgetPassword(strPhoneNumber, newPassword);
         }
 
         @Override

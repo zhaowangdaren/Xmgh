@@ -44,7 +44,9 @@ public class Util {
     public static String URL_GET_BASIC_TEST_ONLINE = URL_HOME + "/GetBasicTestOnline";
     public static String URL_UPLOAD_DONE_QUESTION = URL_HOME + "/UploadDoneQuestions";
     public static String URL_GET_ASSESSED_SCORE = URL_HOME + "/GetAssessedScore";
-    public static String URL_CHECK_UPDATE = "http://120.26.210.13:8080/xmghProject/" + "version.json";
+    public static String URL_FORGET_PASSWORD = URL_HOME + "/ForgetPassword";
+
+    public static String URL_CHECK_UPDATE = "http://home.ustc.edu.cn/~yanzhaou/xmgh/" + "version.json";
 
     public static int iNo_USERID = -1;
     public static int NO_LAST_COURSE = -1;
@@ -54,6 +56,7 @@ public class Util {
     public static Integer FIRST_LEVEL_KP = 1, SECOND_LEVEL_KP = 2, THIRD_LEVEL_KP = 3, LAST_LEVEL_KP = 4;
     public static String URL_GET_QUESTIONS = URL_HOME + "/GetQuestions";
     public static String APP_PATH = Environment.getExternalStorageDirectory()+"/.cn.edu.ustc.xmgh";
+    public static String APK_DOWNLAOD_PATH = Environment.getExternalStorageDirectory() + File.separator + "cn.edu.ustc.xmgh";
     public static int BASIC_TEST = 1, REAL_TEST = 2, SPECIAL_TEST = 3, MOCK_TEST = 4;
 
     public static final int TYPE_QUESTION_LAYOUT_HEADER = 0, TYPE_QUESTION_LAYOUT_FATHER = 1,
@@ -65,6 +68,7 @@ public class Util {
     public static final String FILE_NAME_QUESTION = "question_unMultiSonQuestion.json", FILE_NAME_QUESTION_ANOTHER = "question_MultiSonQuestion.json";
     public static final String FILE_NAME_ANALYSIS = "analysis_unMultiSonQuestion.json", FILE_NAME_ANALYSIS_ANOTHER = "analysis_MultiSonQuestion.json";
     public static final int NO_GENDER = 0, MAN = 1, WOMAN = 2;
+
 
 
     public static boolean createFile(String filePath, String fileName){
@@ -326,7 +330,10 @@ public class Util {
         List<UnmultiSonAnalysis> result = new ArrayList<>(questionsAPath.length);
         for(int i =0 ;i<questionsAPath.length; i++){
             String analysisFilePath = questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS;
-            if( !(new File(analysisFilePath).exists()))analysisFilePath = questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS_ANOTHER;
+            if( !(new File(analysisFilePath).exists())){
+                analysisFilePath = questionsAPath[i] + "/" + Util.FILE_NAME_ANALYSIS_ANOTHER;
+                if(!(new File(analysisFilePath).exists()))continue;
+            }
             String strAnalysisJson = Util.getFileFromSD(analysisFilePath);
             if(strAnalysisJson == null)continue;
             JSONObject jsonAnalysis = JSON.parseObject(strAnalysisJson);

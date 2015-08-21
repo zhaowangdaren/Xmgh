@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/gridView_answer_sheets"
             android:layout_gravity="center_vertical"
+            android:horizontalSpacing="2dp"
             android:numColumns="4"
             android:verticalSpacing="@dimen/view_margin"/>
 

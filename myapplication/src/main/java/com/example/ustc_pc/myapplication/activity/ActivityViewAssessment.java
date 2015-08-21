@@ -1,6 +1,7 @@
 package com.example.ustc_pc.myapplication.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.ustc_pc.myapplication.R;
 import com.example.ustc_pc.myapplication.dao.KPs;
+import com.example.ustc_pc.myapplication.db.KPsDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
 import com.example.ustc_pc.myapplication.unit.Util;
@@ -35,11 +37,9 @@ public class ActivityViewAssessment extends AppCompatActivity
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private ProgressDialog progressDialog;
-
     private int mICourseID = 0, mIUserID;
 
-    private List<KPs> mFirstLevelKPses, mAllKPses;
+    private List<KPs> mFirstLevelKPses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,6 @@ public class ActivityViewAssessment extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mICourseID = getIntent().getIntExtra("mICourseID",0);
-        mAllKPses = (List<KPs>) getIntent().getSerializableExtra("mAllKPses");
         UserSharedPreference userSharedPreference = new UserSharedPreference(this);
         mIUserID = userSharedPreference.getiUserID();
         initView();
@@ -73,8 +72,7 @@ public class ActivityViewAssessment extends AppCompatActivity
         if(!Util.isConnect(this)){
             mNoNetLL.setVisibility(View.VISIBLE);
         }else {
-            progressDialog = ProgressDialog.show(ActivityViewAssessment.this, null, getResources().getString(R.string.loading));
-            GetAssessmentScore getAssessmentScore = new GetAssessmentScore();
+            GetAssessmentScore getAssessmentScore = new GetAssessmentScore(this);
             getAssessmentScore.execute(mIUserID, mICourseID);
         }
     }
@@ -91,9 +89,14 @@ public class ActivityViewAssessment extends AppCompatActivity
 
     class GetAssessmentScore extends AsyncTask<Integer , Integer, AssessmentScore>{
 
+        Context context;
+        ProgressDialog progressDialog;
+        public GetAssessmentScore(Context context){
+            this.context = context;
+        }
         @Override
         protected void onPreExecute(){
-
+            progressDialog = ProgressDialog.show(context, null, getString(R.string.loading));
         }
 
         @Override
@@ -101,8 +104,10 @@ public class ActivityViewAssessment extends AppCompatActivity
             int iUserID = integers[0];
             int iCourseID = integers[1];
 
+            KPsDBHelper kPsDBHelper = KPsDBHelper.getInstance(context);
+            List<KPs> allKPses = kPsDBHelper.getCourseKPs(iCourseID);
             mFirstLevelKPses = new ArrayList<>();
-            for(KPs kPs : mAllKPses){
+            for(KPs kPs : allKPses){
                 if(kPs.getILevel() == 1)mFirstLevelKPses.add(kPs);
             }
 
@@ -110,9 +115,9 @@ public class ActivityViewAssessment extends AppCompatActivity
             AssessmentScore assessmentScore = okHttpUtil.getAssessedScore(iUserID, iCourseID);
 
             AssessmentScore assessmentScore1Level = new AssessmentScore();
-            assessmentScore1Level.setiSumSocre(assessmentScore.getiSumSocre());
+            assessmentScore1Level.setiSumScore(assessmentScore.getiSumScore());
 
-            for(AssessmentScore.AssessmentScoreKp assessmentScoreKp : assessmentScore.getAssessmentScoreKps()){
+            for(AssessmentScore.AssessmentScoreKp assessmentScoreKp : assessmentScore.getKps()){
                 for(KPs kPs : mFirstLevelKPses){
                     if(assessmentScoreKp.getStrKPID().equals(kPs.getStrKPID())){
                         assessmentScoreKp.setStrKPName(kPs.getStrName());
@@ -127,17 +132,17 @@ public class ActivityViewAssessment extends AppCompatActivity
         @Override
         protected void onPostExecute(AssessmentScore result){
             if(result != null) {
-                mScoreTV.setText(String.valueOf(result.getiSumSocre()));
+                mScoreTV.setText(String.valueOf(result.getiSumScore()));
                 // TODO : Draw a pic for sum score
                 /**
-                ViewArc viewArc = new ViewArc(ActivityViewAssessment.this, assessmentScore.getAssessmentScoreKps(), assessmentScore._iFinishedArg, 2);
+                ViewArc viewArc = new ViewArc(ActivityViewAssessment.this, assessmentScore.getKps(), assessmentScore._iFinishedArg, 2);
                 viewArc.invalidate();
                 mPercentLL.removeAllViews();
                 mPercentLL.addView(viewArc);
                 mPercentLL.getWidth();
                  */
                 //set detail list
-                ActivityViewAssessmentAdapter activityViewAssessmentAdapter = new ActivityViewAssessmentAdapter(result.getAssessmentScoreKps());
+                ActivityViewAssessmentAdapter activityViewAssessmentAdapter = new ActivityViewAssessmentAdapter(result.getKps());
                 mDetailLV.setAdapter(activityViewAssessmentAdapter);
 
                 mNoNetLL.setVisibility(View.GONE);
@@ -177,7 +182,7 @@ public class ActivityViewAssessment extends AppCompatActivity
 
     @Override
     public void onRefresh() {
-        GetAssessmentScore getAssessmentScore = new GetAssessmentScore();
+        GetAssessmentScore getAssessmentScore = new GetAssessmentScore(this);
         getAssessmentScore.execute(mIUserID, mICourseID);
     }
 

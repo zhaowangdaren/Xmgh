@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +25,9 @@ import com.example.ustc_pc.myapplication.dao.KPs;
 import com.example.ustc_pc.myapplication.db.KPsDBHelper;
 import com.example.ustc_pc.myapplication.db.UserSharedPreference;
 import com.example.ustc_pc.myapplication.net.OkHttpUtil;
+import com.example.ustc_pc.myapplication.unit.AssessmentScore;
 import com.example.ustc_pc.myapplication.unit.Util;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +50,8 @@ public class CourseBaseFragment extends Fragment {
 
     private int mScreenHeight;
     private OnFragmentInteractionListener mListener;
+
+    private int mIAssessmentScore = 0;
 
     /**
      * Use this factory method to create a new instance of
@@ -105,6 +106,19 @@ public class CourseBaseFragment extends Fragment {
         mScreenHeight = metrics.heightPixels;
         if( mKPsAdapter != null)mKPsAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+//        Toast.makeText(getActivity(), "OnDestroy()", Toast.LENGTH_SHORT).show();
+        if(mShowingKPs != null && !mShowingKPs.isEmpty()){
+            int size = mShowingKPs.size();
+            for(int i=0; i< size; i++){
+                mShowingKPs.get(i).setIsExpand(false);
+            }
+        }
+    }
+
     private void initKPs() {
         mAllKPses = new ArrayList<>();
         mShowingKPs = new ArrayList<>();
@@ -178,17 +192,15 @@ public class CourseBaseFragment extends Fragment {
             List<KPs> kPses = kPsDBHelper.getCourseKPs(iCourseID);
             if(kPses == null ||kPses.isEmpty()){//get KPs from Server
                 OkHttpUtil okHttpUtil = new OkHttpUtil();
-                try {
-                    kPses = okHttpUtil.getKPs(new UserSharedPreference(context).getiUserID(),iCourseID);
-                    if(kPses != null && !kPses.isEmpty()){
-                        for(KPs kPs : kPses){
-                            kPs.setICourseID(iCourseID);
-                            kPs.setIsExpand(false);
-                        }
-                        kPsDBHelper.insertKPses(kPses);
+                kPses = okHttpUtil.getKPs(new UserSharedPreference(context).getiUserID(),iCourseID);
+                if(kPses != null && !kPses.isEmpty()){
+                    for(KPs kPs : kPses){
+                        kPs.setICourseID(iCourseID);
+                        kPs.setIsExpand(false);
                     }
-                } catch (IOException e) {
-                    Log.e("Error: ", "GetCourseKPsAsyncTask "+ e.toString());
+                        kPsDBHelper.insertKPses(kPses);
+                }else{
+                    return null;
                 }
             }
             return kPses;
@@ -197,14 +209,51 @@ public class CourseBaseFragment extends Fragment {
         @Override
         protected void onPostExecute(List<KPs> result){
             progressDialog.dismiss();
-            if(result != null && !result.isEmpty()) mAllKPses = result;
-            List<KPs> firstLevelKPs = add1LevelKPs(mAllKPses);
-            if(firstLevelKPs != null && !firstLevelKPs.isEmpty())mShowingKPs.addAll(firstLevelKPs);
+            if(result != null && !result.isEmpty()) {
+                mAllKPses = result;
+                List<KPs> firstLevelKPs = add1LevelKPs(mAllKPses);
+                if (firstLevelKPs != null && !firstLevelKPs.isEmpty())
+                    mShowingKPs.addAll(firstLevelKPs);
 
-            mKPsAdapter.notifyDataSetChanged();
+                mKPsAdapter.notifyDataSetChanged();
+
+            }
+            GetAssessmentScoreAsync getAssessmentScoreAsync = new GetAssessmentScoreAsync(context);
+            getAssessmentScoreAsync.execute(mICourseID);
         }
     }
 
+    private class GetAssessmentScoreAsync extends AsyncTask<Integer, Integer, Integer>{
+
+        Context context;
+        public GetAssessmentScoreAsync(Context context){
+            this.context = context;
+        }
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            int iCourseID = integers[0];
+
+            UserSharedPreference userSharedPreference  = new UserSharedPreference(context);
+            int iUserID = userSharedPreference.getiUserID();
+
+            OkHttpUtil okHttpUtil = new OkHttpUtil();
+            AssessmentScore assessmentScore = okHttpUtil.getAssessedScore(iUserID, iCourseID);
+            if(assessmentScore != null){
+                userSharedPreference.setiAssessmentScore(assessmentScore.getiSumScore());
+                return assessmentScore.getiSumScore();
+            }else{
+                return userSharedPreference.getiAssessmentScore();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result){
+            if(result != null && result != -1){
+                mIAssessmentScore = result;
+                mKPsAdapter.notifyDataSetChanged();
+            }
+        }
+    }
     /**
      * add 1 level kps to showing adapter data list
      * @param allKPses
@@ -293,6 +342,8 @@ public class CourseBaseFragment extends Fragment {
     private static int TYPE_KP_HEADER = 1;
     private static int TYPE_KP_ITEM = 2;
 
+
+
     class KPsAdapter extends RecyclerView.Adapter<KPsAdapter.KPsViewHolder>{
 
         @Override
@@ -301,7 +352,7 @@ public class CourseBaseFragment extends Fragment {
             View view;
             if(viewType == TYPE_KP_HEADER){
                 view = View.inflate(getActivity(),R.layout.layout_kps_header, null);
-                float displayHeight = ((float)mScreenHeight) * 7 / 16;
+                float displayHeight = ( ((float)mScreenHeight) * 3 ) / 8;
                 view.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)displayHeight ));
                 holder = new KPsViewHolder(view,viewType);
             }else{
@@ -316,7 +367,9 @@ public class CourseBaseFragment extends Fragment {
 
             if (getItemViewType(position) == TYPE_KP_HEADER) {
                 // TODO : Set score
-                holder.contentTV.setText("0");
+                holder.contentTV.setText(String.valueOf(mIAssessmentScore));
+                float displayHeight = ( ((float)mScreenHeight) * 1 ) / 8;
+                holder.contentTV.setTextSize(displayHeight);
             } else {//KP item
                 int index = position - 1;
 

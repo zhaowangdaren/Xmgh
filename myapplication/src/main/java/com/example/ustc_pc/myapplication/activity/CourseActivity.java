@@ -46,6 +46,8 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         , CourseSpecialFragment.OnFragmentInteractionListener, CourseZhenTiFragment.OnFragmentInteractionListener
         , View.OnClickListener{
 
+    private final static int TYPE_BASE = 1, TYPE_ERROR = 2, TYPE_FAV = 3, TYPE_NOTE = 4, TYPE_SIMULATE = 5, TYPE_SPECIAL = 6, TYPE_ZHEN_TI = 7;
+
     private List<Course> mSelectedCourses;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -98,9 +100,7 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         mRelativeLayoutLeftHead.setOnClickListener(this);
         //TODO : Set user head view
         mLeftMenuHeadIV = (ImageView) findViewById(R.id.imageView_left_menu_head);
-        UserSharedPreference userSharedPreference = new UserSharedPreference(this);
-        Bitmap bitmap = userSharedPreference.getUserPhotoBitmap();
-        if(bitmap != null) mLeftMenuHeadIV.setImageBitmap(bitmap);
+
 
         mLeftMenuUserNameTV = (TextView)findViewById(R.id.textView_left_menu_username);
         showUserName();
@@ -112,6 +112,28 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         mLeftMenuLV.setAdapter(mLeftMenuLVAdapter);
         mLeftMenuLV.setOnItemClickListener(new LeftMenuLVItemClickListener());
     }
+
+    @Override
+    public void onBackPressed(){
+        if( mDrawerLayout.isDrawerOpen(mRelativeLayoutLeftMenu)){
+            mDrawerLayout.closeDrawer(mRelativeLayoutLeftMenu);
+        }
+        else if(mCurType != TYPE_BASE){
+                startBasicFragment();
+            }
+            else {
+                finish();
+            }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        UserSharedPreference userSharedPreference = new UserSharedPreference(this);
+        Bitmap bitmap = userSharedPreference.getUserPhotoBitmap();
+        if(bitmap != null) mLeftMenuHeadIV.setImageBitmap(bitmap);
+    }
+
 
     private void showUserName(){
         UserSharedPreference userSharedPreference = new UserSharedPreference(this);
@@ -140,6 +162,7 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
             case R.id.button_left_menu_add_course:
                 Intent intent1 = new Intent(this, SelectCourseActivity.class);
                 startActivity(intent1);
+                finish();
                 break;
         }
     }
@@ -152,8 +175,11 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
         }
     }
 
+    private int mCurType = TYPE_BASE;
     private void changeCourse(int position) {
-        CourseBaseFragment courseBaseFragment = CourseBaseFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_BASE;
+        CourseBaseFragment courseBaseFragment = CourseBaseFragment.newInstance(iCourseID);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseBaseFragment)
@@ -304,8 +330,10 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startCheckNoteFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
+        mCurType = TYPE_NOTE;
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
         CourseNoteFragment courseNoteFragment =
-                CourseNoteFragment.newInstance(mSelectedCourses.get(position).getICourseID(), Util.BASIC_TEST);
+                CourseNoteFragment.newInstance(iCourseID, Util.BASIC_TEST);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseNoteFragment)
@@ -316,8 +344,10 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startCheckFavoriteFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_FAV;
         CourseFavoriteFragment courseFavoriteFragment =
-                CourseFavoriteFragment.newInstance(mSelectedCourses.get(position).getICourseID(), Util.BASIC_TEST);
+                CourseFavoriteFragment.newInstance(iCourseID, Util.BASIC_TEST);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseFavoriteFragment)
@@ -328,8 +358,10 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startCheckErrorFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_ERROR;
         CourseErrorFragment courseErrorFragment =
-                CourseErrorFragment.newInstance(mSelectedCourses.get(position).getICourseID(), Util.BASIC_TEST);
+                CourseErrorFragment.newInstance(iCourseID, Util.BASIC_TEST);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseErrorFragment)
@@ -340,7 +372,9 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startBasicFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseBaseFragment courseBaseFragment = CourseBaseFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_BASE;
+        CourseBaseFragment courseBaseFragment = CourseBaseFragment.newInstance(iCourseID);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseBaseFragment)
@@ -351,7 +385,9 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startSimulateFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseSimulateFragment courseSimulateFragment = CourseSimulateFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_SIMULATE;
+        CourseSimulateFragment courseSimulateFragment = CourseSimulateFragment.newInstance(iCourseID);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseSimulateFragment)
@@ -362,7 +398,9 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startSpecialFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseSpecialFragment courseSpecialFragment = CourseSpecialFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_SPECIAL;
+        CourseSpecialFragment courseSpecialFragment = CourseSpecialFragment.newInstance(iCourseID);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseSpecialFragment)
@@ -373,7 +411,9 @@ public class CourseActivity extends AppCompatActivity implements CourseBaseFragm
 
     private void startZhenTiFragment() {
         int position = mLeftMenuLV.getCheckedItemPosition();
-        CourseZhenTiFragment courseZhenTiFragment = CourseZhenTiFragment.newInstance(mSelectedCourses.get(position).getICourseID());
+        int iCourseID = mSelectedCourses.get(position).getICourseID();
+        mCurType = TYPE_ZHEN_TI;
+        CourseZhenTiFragment courseZhenTiFragment = CourseZhenTiFragment.newInstance(iCourseID);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, courseZhenTiFragment)

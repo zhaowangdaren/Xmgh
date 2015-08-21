@@ -354,7 +354,7 @@ public class OkHttpUtil {
         return false;
     }
 
-    public ArrayList<KPs> getKPs(int iUserID, int iCourseID) throws IOException {
+    public ArrayList<KPs> getKPs(int iUserID, int iCourseID){
         ArrayList<KPs> kPses = new ArrayList<>();
         RequestBody formBody = new FormEncodingBuilder()
                 .add("iUserID", String.valueOf(iUserID))
@@ -364,16 +364,23 @@ public class OkHttpUtil {
                 .url(Util.URL_GET_KPs)
                 .post(formBody)
                 .build();
-        Response response = client.newCall(request).execute();
-        if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
-        JSONObject jsonObject = JSONObject.parseObject(response.body().string());
-        JSONArray jsonArray = jsonObject.getJSONArray("kps");
-        Gson gson = new Gson();
-        for(int i=0; i< jsonArray.size(); i++){
-            KPs kPs =gson.fromJson(jsonArray.getJSONObject(i).toJSONString(), KPs.class);
-            kPses.add(kPs);
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
+            JSONObject jsonObject = JSONObject.parseObject(response.body().string());
+            JSONArray jsonArray = jsonObject.getJSONArray("kps");
+            Gson gson = new Gson();
+            for(int i=0; i< jsonArray.size(); i++){
+                KPs kPs =gson.fromJson(jsonArray.getJSONObject(i).toJSONString(), KPs.class);
+                kPses.add(kPs);
+            }
+            return kPses;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return kPses;
+
     }
 
     /**
@@ -602,7 +609,31 @@ public class OkHttpUtil {
         }
     }
 
-    public boolean resetPassword(String authCode, String newPassword) {
-        return false;
+    public boolean forgetPassword(String strPhoneNumber, String newPassword) {
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("strPhoneNumber", strPhoneNumber)
+                .add("strNewPassword", newPassword)
+                .build();
+        Request request = new Request.Builder()
+                .url(Util.URL_FORGET_PASSWORD)
+                .post(formBody)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if(!response.isSuccessful())throw new IOException("Unexcepted cod "+ response);
+            JSONObject resultJSON = JSON.parseObject(response.body().string());
+            int iResult = resultJSON.getIntValue("iResult");
+            switch (iResult){
+                case -1:
+                    return false;
+                case 1:
+                    return true;
+                default: return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

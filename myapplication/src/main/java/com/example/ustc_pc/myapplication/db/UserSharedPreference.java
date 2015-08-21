@@ -44,6 +44,8 @@ public class UserSharedPreference {
     private int iAccountType;
 
     private Boolean isNeverSelectedCourse;
+    private Integer iAssessmentScore;
+
     public UserSharedPreference(Context context){
         mContext = context;
         mSharedPre = context.getSharedPreferences("",Activity.MODE_PRIVATE);
@@ -361,4 +363,15 @@ public class UserSharedPreference {
         editor.putBoolean("isNeverSelectedCourse", isNeverSelectedCourse);
         editor.apply();
     }
+
+    public Integer getiAssessmentScore() {
+        return mSharedPre.getInt("iAssessmentScore", -1);
+    }
+
+    public void setiAssessmentScore(int score){
+        SharedPreferences.Editor editor = mSharedPre.edit();
+        editor.putInt("iAssessmentScore", score);
+        editor.apply();
+    }
+
 }

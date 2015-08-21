@@ -7,35 +7,35 @@ import java.util.List;
  * Created by ustc-pc on 2015/3/26.
  */
 public class AssessmentScore {
-    private Integer iSumSocre;
-    private List<AssessmentScoreKp> assessmentScoreKps;
+    private Integer iSumScore;
+    private List<AssessmentScoreKp> kps;
 
     public AssessmentScore(){
-        assessmentScoreKps = new ArrayList<>();
+        kps = new ArrayList<>();
     }
 
-    public AssessmentScore(Integer iSumSocre, List<AssessmentScoreKp> AssessmentScoreKps) {
-        this.iSumSocre = iSumSocre;
-        this.assessmentScoreKps = AssessmentScoreKps;
+    public AssessmentScore(Integer iSumScore, List<AssessmentScoreKp> kps) {
+        this.iSumScore = iSumScore;
+        this.kps = kps;
     }
 
     public void addkp(AssessmentScoreKp kp){
-        this.assessmentScoreKps.add(kp);
+        this.kps.add(kp);
     }
-    public Integer getiSumSocre() {
-        return iSumSocre;
-    }
-
-    public void setiSumSocre(Integer iSumSocre) {
-        this.iSumSocre = iSumSocre;
+    public Integer getiSumScore() {
+        return iSumScore;
     }
 
-    public List<AssessmentScoreKp> getAssessmentScoreKps() {
-        return assessmentScoreKps;
+    public void setiSumScore(Integer iSumScore) {
+        this.iSumScore = iSumScore;
     }
 
-    public void setAssessmentScoreKps(List<AssessmentScoreKp> assessmentScoreKps) {
-        this.assessmentScoreKps = assessmentScoreKps;
+    public List<AssessmentScoreKp> getKps() {
+        return kps;
+    }
+
+    public void setKps(List<AssessmentScoreKp> kps) {
+        this.kps = kps;
     }
 
     public class AssessmentScoreKp {

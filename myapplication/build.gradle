@@ -15,8 +15,8 @@ android {
         applicationId "com.example.ustc_pc.myapplication"
         minSdkVersion 12
         targetSdkVersion 21
-        versionCode 5
-        versionName "2.3"
+        versionCode 10
+        versionName "2.44"
     }
     buildTypes {
         release {
